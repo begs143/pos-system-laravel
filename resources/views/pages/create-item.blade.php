@@ -55,6 +55,13 @@
                                       <option value="food">Food</option>
                                   </select>
                               </div>
+
+                               <div class="mb-3">
+                                  <label for="productCategory" class="form-label">Date</label>
+                                   <input type="text" id="pikaday" class="form-control" placeholder="">
+                              </div>
+
+
                               <div class="mb-3">
                                   <label for="productImage" class="form-label">Product Image</label>
                                   <input type="file" class="form-control" id="productImage" accept="image/*"
@@ -68,6 +75,9 @@
                                   <button type="submit" class="btn btn-primary">Add Product</button>
                                   <button type="reset" class="btn btn-secondary">Clear</button>
                               </div>
+
+                           
+
 
                           </form>
                       </div>

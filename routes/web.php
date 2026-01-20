@@ -4,7 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CreateItemController;
-use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SupplierController;    
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UnitController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,5 +38,18 @@ Route::get('/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->na
 Route::put('/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('supplier.update');
 route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 
+
+// Category Routes
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
+Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
+route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+
+// Unit Routes
+Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');
+Route::post('/unit', [UnitController::class, 'store'])->name('unit.store');
+Route::put('/unit/{unit}', [UnitController::class, 'update'])->name('unit.update');
+route::delete('/unit/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
 
 require __DIR__.'/auth.php';

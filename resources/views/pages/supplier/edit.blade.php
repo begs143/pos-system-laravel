@@ -23,7 +23,7 @@
                    </div>
                </div>
 
-              
+
 
                <div class="row ">
                    <div class="col-12">
@@ -34,24 +34,25 @@
                                    @method('PUT')
                                    <div class="row">
                                        <div class="col-md-6 mb-3">
-                                           <label for="supplierName" class="form-label">Supplier Name</label>
-                                           <input type="text" class="form-control" id="supplierName" name="name"
-                                               class="form-control @error('supplierName') is-invalid @enderror"
-                                               placeholder="Enter Supplier Name" value="{{ old('name', $supplier->name) }}" required>
+                                           <label for="name" class="form-label">Supplier Name</label>
+                                           <input type="text" class="form-control" id="name" name="name"
+                                               class="form-control @error('name') is-invalid @enderror"
+                                               placeholder="Enter Supplier Name" value="{{ old('name', $supplier->name) }}"
+                                               required>
 
-                                           @error('supplierName')
+                                           @error('name')
                                                <span class="invalid-feedback">
                                                    {{ $message }}
                                                </span>
                                            @enderror
                                        </div>
                                        <div class="col-md-6 mb-3">
-                                           <label for="contactPerson" class="form-label">Contact Person</label>
-                                           <input type="text" class="form-control" id="contactPerson"
-                                               class="form-control @error('contactPerson') is-invalid @enderror"
+                                           <label for="contact_person" class="form-label">Contact Person</label>
+                                           <input type="text" class="form-control" id="contact_person"
+                                               class="form-control @error('contact_person') is-invalid @enderror"
                                                name="contact_person" placeholder="Enter Contact Person"
                                                value="{{ old('contact_person', $supplier->contact_person) }}" required>
-                                           @error('contactPerson')
+                                           @error('contact_person')
                                                <span class="invalid-feedback">
                                                    {{ $message }}
                                                </span>
@@ -59,27 +60,26 @@
                                        </div>
                                    </div>
                                    <div class="row">
-                                       <div class="col-md-6 mb-3">
-                                           <label for="supplierPhone" class="form-label">Phone</label>
-                                           <input type="number" class="form-control" id="supplierPhone"
-                                               class="form-control @error('supplierPhone') is-invalid @enderror"
-                                               name="phone" placeholder="09xxxxxxxxx" value="{{ old('phone', $supplier->phone) }}"
-                                               required>
 
-                                           @error('supplierPhone')
-                                               <span class="invalid-feedback">
-                                                   {{ $message }}
-                                               </span>
+                                       <div class="col-md-6 mb-3">
+                                           <label for="phone" class="form-label">Phone</label>
+                                           <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                               id="phone" name="phone" placeholder="09xxxxxxxxx"
+                                               value="{{ old('phone', $supplier->phone) }}" maxlength="11" required>
+
+                                           @error('phone')
+                                               <span class="invalid-feedback">{{ $message }}</span>
                                            @enderror
                                        </div>
-                                       <div class="col-md-6 mb-3">
-                                           <label for="supplierEmail" class="form-label">Email</label>
-                                           <input type="email" class="form-control" id="supplierEmail"
-                                               class="form-control @error('supplierEmail') is-invalid @enderror"
-                                               name="email" placeholder="Enter Email"
-                                               value="{{ old('email', $supplier->email) }}" required>
 
-                                           @error('supplierEmail')
+                                       <div class="col-md-6 mb-3">
+                                           <label for="email" class="form-label">Email</label>
+                                           <input type="email" class="form-control" id="email"
+                                               class="form-control @error('email') is-invalid @enderror" name="email"
+                                               placeholder="Enter Email" value="{{ old('email', $supplier->email) }}"
+                                               required>
+
+                                           @error('email')
                                                <span class="invalid-feedback">
                                                    {{ $message }}
                                                </span>
@@ -89,11 +89,11 @@
 
 
                                    <div class="mb-3">
-                                       <label for="supplierAddress" class="form-label">Address</label>
-                                       <textarea class="form-control @error('supplierAddress') is-invalid @enderror" id="supplierAddress"
-                                           name="address" rows="4" placeholder="Enter supplier address">{{ old('address', $supplier->address) }}</textarea>
+                                       <label for="address" class="form-label">Address</label>
+                                       <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="4"
+                                           placeholder="Enter supplier address">{{ old('address', $supplier->address) }}</textarea>
 
-                                       @error('supplierAddress')
+                                       @error('address')
                                            <span class="invalid-feedback">
                                                {{ $message }}
                                            </span>

@@ -18,7 +18,19 @@
               </a>
           </li>
 
+            <li>
+              <a class="nav-link" href="{{ route('category.index') }}">
+                  <i class="ti ti-filter"></i>
+                  <span class="nav-text">Category</span>
+              </a>
+          </li>
 
+           <li>
+              <a class="nav-link" href="{{ route('unit.index') }}">
+                  <i class="ti ti-link"></i>
+                  <span class="nav-text">Unit</span>
+              </a>
+          </li>
 
 
           <li>
