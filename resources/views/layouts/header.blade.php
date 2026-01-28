@@ -35,7 +35,7 @@
                       <ul class="list-unstyled p-0 m-0">
                           <li class="p-3 border-bottom ">
                               <div class="d-flex gap-3">
-                                  <img src="./assets/images/avatar-1.jpg" alt=""
+                                  <img src="{{ asset ('assets/images/avatar-1.jpg') }}" alt=""
                                       class="avatar avatar-sm rounded-circle" />
                                   <div class="flex-grow-1 small">
                                       <p class="mb-0">New order received</p>
@@ -46,7 +46,7 @@
                           </li>
                           <li class="p-3 border-bottom ">
                               <div class="d-flex gap-3">
-                                  <img src="./assets/images/avatar-4.jpg" alt=""
+                                  <img src="{{ asset ('assets/images/avatar-4.jpg') }}" alt=""
                                       class="avatar avatar-sm rounded-circle" />
                                   <div class="flex-grow-1 small">
                                       <p class="mb-0">New user registered</p>
@@ -57,7 +57,7 @@
 
                           <li class="p-3 border-bottom">
                               <div class="d-flex gap-3">
-                                  <img src="./assets/images/avatar-2.jpg" alt=""
+                                  <img src="{{ asset ('assets/images/avatar-2.jpg') }}" alt=""
                                       class="avatar avatar-sm rounded-circle" />
                                   <div class="flex-grow-1 small">
                                       <p class="mb-0">Payment confirmed</p>
@@ -75,12 +75,12 @@
               <!-- Dropdown -->
               <li class="ms-3 dropdown">
                   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="./assets/images/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                      <img src="{{ asset ('assets/images/avatar-1.jpg')}}" alt="" class="avatar avatar-sm rounded-circle" />
                   </a>
                   <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
                       <div>
                           <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
-                              <img src="./assets/images/avatar-1.jpg" alt=""
+                              <img src="{{ asset ('assets/images/avatar-1.jpg') }}" alt=""
                                   class="avatar avatar-md rounded-circle" />
                               <div>
                                   <h4 class="mb-0 small">Shrina Tesla</h4>

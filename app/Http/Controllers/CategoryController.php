@@ -24,6 +24,7 @@ class CategoryController extends Controller
         return view('pages.category.index', compact('categories'));
 
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -33,8 +34,6 @@ class CategoryController extends Controller
 
         return redirect()->route('category.index')->with('success', 'Category created successfully.');
     }
-
-
 
     /**
      * Update the specified resource in storage.

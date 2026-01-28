@@ -1,13 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\CreateItemController;
-use App\Http\Controllers\SupplierController;    
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
-
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,12 +21,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-
+// Inventory Route
 Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-
-Route::get('/create-item', [CreateItemController::class, 'index'])->name('create-item.index');
+Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
+Route::post('/inventory/create', [InventoryController::class, 'store'])->name('inventory.store');
 
 // Supplier Routes
 Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
@@ -38,13 +34,11 @@ Route::get('/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->na
 Route::put('/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('supplier.update');
 route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 
-
 // Category Routes
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
 Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
 route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
-
 
 // Unit Routes
 Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');

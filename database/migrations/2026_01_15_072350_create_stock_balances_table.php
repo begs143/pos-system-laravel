@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('stock_balances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->integer('quantity_on_hand')->default(0);
             $table->timestamps();
         });

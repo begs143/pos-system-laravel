@@ -31,8 +31,9 @@
 
            {{-- Success Message --}}
            @include('partials.success-message')
-                                      {{-- Edit Category Modal --}}
-           
+           @include('partials.error-message')
+           {{-- Edit Category Modal --}}
+
            <div class="row py-1">
                <div class="col-12">
                    <div>
@@ -60,18 +61,17 @@
                            </thead>
                            <tbody>
                                @forelse ($categories as $category)
+                                   @include('pages.category.modal-edit')
 
-                               @include('pages.category.modal-edit')
-    
                                    <tr class="align-middle ">
                                        <td>{{ $category->name }}</td>
                                        <td>{{ $category->description }}</td>
                                        <td>{{ $category->created_at }}</td>
                                        <td class="">
                                            <a href="#" data-bs-toggle="modal"
-   data-bs-target="#editCategoryModal{{ $category->id }}">
-    <i class="ti ti-edit fs-5"></i>
-</a>
+                                               data-bs-target="#editCategoryModal{{ $category->id }}">
+                                               <i class="ti ti-edit fs-5"></i>
+                                           </a>
                                            </a>
                                            <form action="{{ route('category.destroy', $category->id) }}" method="POST"
                                                style="display: inline;">

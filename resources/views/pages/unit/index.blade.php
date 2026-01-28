@@ -31,6 +31,7 @@
 
            {{-- Success Message --}}
            @include('partials.success-message')
+           @include('partials.error-message')
 
            <div class="row py-1">
                <div class="col-12">
@@ -59,7 +60,6 @@
                            </thead>
                            <tbody>
                                @forelse ($units as $unit)
-
                                    @include('pages.unit.modal-edit')
 
                                    <tr class="align-middle ">

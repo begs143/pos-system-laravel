@@ -19,13 +19,13 @@
 
                                 <a class="btn btn-primary" href="#">
                                    <i class="ti ti-link"></i>
-                                  . <span class="nav-text">Unit</span>
+                                   <span class="nav-text">Unit</span>
                                </a>
 
-                                <a class="btn btn-primary" href="{{ route('create-item.index') }}">
+                                {{-- <a class="btn btn-primary" href="{{ route('create-item.index') }}">
                                    <i class="ti ti-truck"></i>
                                    <span class="nav-text">Add Item</span>
-                               </a>
+                               </a> --}}
                             
                            </div>
                        </div>
