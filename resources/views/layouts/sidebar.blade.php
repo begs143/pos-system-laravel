@@ -45,7 +45,7 @@
 
 
           <li>
-              <a class="nav-link" href="{{ route('supplier.index') }}">
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('supplier.index') }}">
                   <i class="ti ti-truck"></i>
                   <span class="nav-text">Supplier</span>
               </a>

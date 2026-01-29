@@ -12,7 +12,8 @@
                            </div>
 
                            <div>
-                               <a class="btn btn-primary" href="{{ route('supplier.create') }}">
+
+                               <a class="btn btn-primary" href="{{ auth()->user()->roleRoute('supplier.create') }}">
                                    <i class="ti ti-plus"></i>
                                    <span class="nav-text">Add Supplier</span>
                                </a>
@@ -29,7 +30,7 @@
                <div class="row py-1">
                    <div class="col-12">
                        <div>
-                           <form action="{{ route('supplier.index') }}" method="GET">
+                           <form action="{{ auth()->user()->roleRoute('supplier.index') }}" method="GET">
                                <div class="d-flex gap-2 mb-3" style="max-width: 230px;">
                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                                        placeholder="Search suppliers...">
@@ -62,8 +63,11 @@
                                            <td>{{ $supplier->email }}</td>
                                            <td>{{ $supplier->address }}</td>
                                            <td class="">
-                                               <a href="{{route ('supplier.edit', $supplier->id)}}" class=""><i class="ti ti-edit fs-5 "></i></a>
-                                               <form action="{{ route ('supplier.destroy', $supplier->id) }}" method="POST" style="display: inline;">
+                                               <a href="{{ auth()->user()->roleRoute('supplier.edit', $supplier->id) }}"
+                                                   class=""><i class="ti ti-edit fs-5 "></i></a>
+                                               <form
+                                                   action="{{ auth()->user()->roleRoute('supplier.destroy', $supplier->id) }}"
+                                                   method="POST" style="display: inline;">
                                                    @csrf
                                                    @method('DELETE')
                                                    <button type="submit"
@@ -97,7 +101,8 @@
                                                    {{-- Prev --}}
                                                    <li class="page-item {{ $current == 1 ? 'disabled' : '' }}">
                                                        <a class="page-link"
-                                                           href="{{ $suppliers->previousPageUrl() ?? '#' }}" tabindex="-1">
+                                                           href="{{ $suppliers->previousPageUrl() ?? '#' }}"
+                                                           tabindex="-1">
                                                            Previous
                                                        </a>
                                                    </li>

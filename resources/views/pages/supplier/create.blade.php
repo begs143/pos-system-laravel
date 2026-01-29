@@ -12,7 +12,8 @@
                            </div>
 
                            <div>
-                               <a class="btn btn-primary" href="{{ route('supplier.index') }}">
+
+                               <a class="btn btn-primary" href="{{ auth()->user()->roleRoute('supplier.index') }}">
                                    <i class="ti ti-arrow-left"></i>
                                    <span class="nav-text">Back</span>
                                </a>
@@ -29,7 +30,7 @@
                    <div class="col-12">
                        <div class="card">
                            <div class="card-body p-4">
-                               <form accept="{{ route('supplier.store') }}" method="POST">
+                               <form accept="{{ auth()->user()->roleRoute('supplier.store') }}" method="POST">
                                    @csrf
                                    <div class="row">
                                        <div class="col-md-6 mb-3">

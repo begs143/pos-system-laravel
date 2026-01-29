@@ -52,7 +52,8 @@ class SupplierController extends Controller
 
         $supplier->update($request->validated());
 
-        return redirect()->route('supplier.index')->with('success', 'Supplier updated successfully.');
+        return redirect(auth()->user()->roleRoute('supplier.index'))
+            ->with('success', 'Supplier updated successfully.');
     }
 
     public function destroy($supplierId)
@@ -60,6 +61,8 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($supplierId);
         $supplier->delete();
 
-        return redirect()->route('supplier.index')->with('success', 'Supplier deleted successfully.');
+        return redirect(auth()->user()->roleRoute('supplier.index'))
+            ->with('success', 'Supplier deleted successfully.');
+
     }
 }

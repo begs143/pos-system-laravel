@@ -30,6 +30,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/unit/{unit}', [UnitController::class, 'update'])->name('admin.unit.update');
     Route::delete('/admin/unit/{id}', [UnitController::class, 'destroy'])->name('admin.unit.destroy');
 
+    // Supplier Routes
+    Route::get('/admin/supplier', [SupplierController::class, 'index'])->name('admin.supplier.index');
+    Route::get('/admin/supplier/create', [SupplierController::class, 'create'])->name('admin.supplier.create');
+    Route::post('/admin/supplier/create', [SupplierController::class, 'store'])->name('admin.supplier.store');
+    Route::get('/admin/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->name('admin.supplier.edit');
+    Route::put('/admin/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('admin.supplier.update');
+    route::delete('/admin/supplier/{id}', [SupplierController::class, 'destroy'])->name('admin.supplier.destroy');
+
 });
 
 Route::middleware(['auth', 'role:user'])
@@ -47,6 +55,14 @@ Route::middleware(['auth', 'role:user'])
         Route::post('/unit', [UnitController::class, 'store'])->name('unit.store');
         Route::put('/unit/{unit}', [UnitController::class, 'update'])->name('unit.update');
         route::delete('/unit/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
+
+        // Supplier Routes
+        Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
+        Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
+        Route::post('/supplier/create', [SupplierController::class, 'store'])->name('supplier.store');
+        Route::get('/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+        Route::put('/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('supplier.update');
+        route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     });
 
 // Route::get('/dashboard', function () {
@@ -63,13 +79,5 @@ Route::middleware('auth')->group(function () {
 Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
 Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
 Route::post('/inventory/create', [InventoryController::class, 'store'])->name('inventory.store');
-
-// Supplier Routes
-Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
-Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
-Route::post('/supplier/create', [SupplierController::class, 'store'])->name('supplier.store');
-Route::get('/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
-Route::put('/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('supplier.update');
-route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 
 require __DIR__.'/auth.php';
