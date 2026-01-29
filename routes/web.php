@@ -14,15 +14,22 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-
+    // Dashboard Routes
     Route::get('/admin/dashboard', [AdminController::class, 'index'])
         ->name('admin.dashboard');
 
-    // Admin
+    // Category Routes
     Route::get('/admin/category', [CategoryController::class, 'index'])->name('admin.category.index');
     Route::post('/admin/category', [CategoryController::class, 'store'])->name('admin.category.store');
     Route::put('/admin/category/{category}', [CategoryController::class, 'update'])->name('admin.category.update');
     Route::delete('/admin/category/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+
+    // Unit Routes
+    Route::get('/admin/unit', [UnitController::class, 'index'])->name('admin.unit.index');
+    Route::post('/admin/unit', [UnitController::class, 'store'])->name('admin.unit.store');
+    Route::put('/admin/unit/{unit}', [UnitController::class, 'update'])->name('admin.unit.update');
+    Route::delete('/admin/unit/{id}', [UnitController::class, 'destroy'])->name('admin.unit.destroy');
+
 });
 
 Route::middleware(['auth', 'role:user'])
@@ -30,16 +37,21 @@ Route::middleware(['auth', 'role:user'])
         Route::get('/dashboard', [UserController::class, 'index'])
             ->name('dashboard'); // 👈 IMPORTANT
 
-        // User
+        // Category
         Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
         Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
         Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
         Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+        Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');
+        Route::post('/unit', [UnitController::class, 'store'])->name('unit.store');
+        Route::put('/unit/{unit}', [UnitController::class, 'update'])->name('unit.update');
+        route::delete('/unit/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
     });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -59,17 +71,5 @@ Route::post('/supplier/create', [SupplierController::class, 'store'])->name('sup
 Route::get('/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
 Route::put('/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('supplier.update');
 route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
-
-// // Category Routes
-// Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-// Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
-// Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
-// route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
-
-// Unit Routes
-Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');
-Route::post('/unit', [UnitController::class, 'store'])->name('unit.store');
-Route::put('/unit/{unit}', [UnitController::class, 'update'])->name('unit.update');
-route::delete('/unit/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
 
 require __DIR__.'/auth.php';

@@ -36,7 +36,7 @@
            <div class="row py-1">
                <div class="col-12">
                    <div>
-                       <form action="{{ route('unit.index') }}" method="GET">
+                       <form action="{{ auth()->user()->roleRoute('unit.index') }}" method="GET">
                            <div class="d-flex gap-2 mb-3" style="max-width: 230px;">
                                <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                                    placeholder="Search units...">
@@ -72,8 +72,9 @@
                                                <i class="ti ti-edit fs-5"></i>
                                            </a>
                                            </a>
-                                           <form action="{{ route('unit.destroy', $unit->id) }}" method="POST"
-                                               style="display: inline;">
+
+                                           <form action="{{ auth()->user()->roleRoute('unit.destroy', $unit->id) }}"
+                                               method="POST" style="display: inline;">
                                                @csrf
                                                @method('DELETE')
                                                <button type="submit"
@@ -82,7 +83,6 @@
                                                    <i class="ti ti-trash ms-2 fs-5"></i>
                                                </button>
                                            </form>
-
 
                                        </td>
                                    </tr>

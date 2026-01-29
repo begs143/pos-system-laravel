@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Unit;
-use Illuminate\Http\Request;
+
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
+use App\Models\Unit;
+use Illuminate\Http\Request;
 
 class UnitController extends Controller
 {
@@ -30,10 +31,10 @@ class UnitController extends Controller
     {
         Unit::create($request->validated());
 
-        return redirect()->route('unit.index')->with('success', 'Unit created successfully.');
+        return redirect(auth()->user()->roleRoute('unit.index'))
+            ->with('success', 'Unit created successfully.');
+
     }
-
-
 
     /**
      * Update the specified resource in storage.
@@ -43,7 +44,8 @@ class UnitController extends Controller
 
         $unit->update($request->validated());
 
-        return redirect()->route('unit.index')->with('success', 'Unit updated successfully.');
+        return redirect(auth()->user()->roleRoute('unit.index'))
+            ->with('success', 'Unit updated successfully.');
     }
 
     public function destroy($unitId)
@@ -51,6 +53,7 @@ class UnitController extends Controller
         $unit = Unit::findOrFail($unitId);
         $unit->delete();
 
-        return redirect()->route('unit.index')->with('success', 'Unit deleted successfully.');
+        return redirect(auth()->user()->roleRoute('unit.index'))
+            ->with('success', 'Unit deleted successfully.');
     }
 }

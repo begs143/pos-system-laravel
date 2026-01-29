@@ -45,4 +45,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function roleRoute(string $baseRouteName, $parameters = [])
+    {
+        $prefix = $this->isAdmin() ? 'admin.' : '';
+
+        return route($prefix.$baseRouteName, $parameters);
+    }
 }

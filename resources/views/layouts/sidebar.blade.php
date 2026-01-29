@@ -29,14 +29,14 @@
           <li class="px-4 py-2"><small class="nav-text">Product</small></li>
 
           <li>
-              <a class="nav-link" href="{{ route('category.index') }}">
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('category.index') }}">
                   <i class="ti ti-filter"></i>
                   <span class="nav-text">Category</span>
               </a>
           </li>
 
           <li>
-              <a class="nav-link" href="{{ route('unit.index') }}">
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('unit.index') }}">
                   <i class="ti ti-link"></i>
                   <span class="nav-text">Unit</span>
               </a>

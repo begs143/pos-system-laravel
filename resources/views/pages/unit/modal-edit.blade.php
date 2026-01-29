@@ -1,5 +1,5 @@
 {{-- Edit Unit Modal --}}
-<form method="POST" action="{{ route('unit.update', $unit->id) }}">
+<form method="POST" action="{{ auth()->user()->roleRoute('unit.update', $unit->id) }}">
     @csrf
     @method('PUT')
 
@@ -26,8 +26,7 @@
                         <label for="abbreviation{{ $unit->id }}" class="form-label">Abbreviation</label>
                         <input type="text" name="abbreviation"
                             class="form-control @error('abbreviation') is-invalid @enderror"
-                            id="abbreviation{{ $unit->id }}"
-                            value="{{ old('abbreviation', $unit->abbreviation) }}">
+                            id="abbreviation{{ $unit->id }}" value="{{ old('abbreviation', $unit->abbreviation) }}">
                         @error('abbreviation')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror

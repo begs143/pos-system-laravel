@@ -1,5 +1,5 @@
   <!-- Modal -->
-  <form id="addUnitForm" method="POST" action="{{ route('unit.store') }}">
+  <form method="POST" action="{{ auth()->user()->roleRoute('unit.store') }}">
       @csrf
       <div class="modal fade" id="addUnitModal" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog">

@@ -1,5 +1,5 @@
 {{-- Edit Category Modal --}}
-<form method="POST" action="{{ route('category.update', $category->id) }}">
+<form method="POST" action="{{ auth()->user()->roleRoute('category.update', $category->id) }}">
     @csrf
     @method('PUT')
 
@@ -15,10 +15,8 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="name{{ $category->id }}" class="form-label">Name</label>
-                        <input type="text" name="name"
-                               class="form-control @error('name') is-invalid @enderror"
-                               id="name{{ $category->id }}"
-                               value="{{ old('name', $category->name) }}" required>
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                            id="name{{ $category->id }}" value="{{ old('name', $category->name) }}" required>
                         @error('name')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -27,9 +25,9 @@
                     <div class="mb-3">
                         <label for="description{{ $category->id }}" class="form-label">Description</label>
                         <input type="text" name="description"
-                               class="form-control @error('description') is-invalid @enderror"
-                               id="description{{ $category->id }}"
-                               value="{{ old('description', $category->description) }}">
+                            class="form-control @error('description') is-invalid @enderror"
+                            id="description{{ $category->id }}"
+                            value="{{ old('description', $category->description) }}">
                         @error('description')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror

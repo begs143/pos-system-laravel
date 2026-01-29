@@ -117,7 +117,7 @@
            <div class="row py-1">
                <div class="col-12">
                    <div>
-                       <form action="{{ route('category.index') }}" method="GET">
+                       <form action="{{ auth()->user()->roleRoute('category.index') }}" method="GET">
                            <div class="d-flex gap-2 mb-3" style="max-width: 230px;">
                                <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                                    placeholder="Search categories...">
@@ -153,8 +153,8 @@
                                                <i class="ti ti-edit fs-5"></i>
                                            </a>
                                            </a>
-                                           <form action="{{ route('category.destroy', $category->id) }}" method="POST"
-                                               style="display: inline;">
+                                           <form action="{{ auth()->user()->roleRoute('category.destroy', $category->id) }}"
+                                               method="POST" style="display: inline;">
                                                @csrf
                                                @method('DELETE')
                                                <button type="submit"
@@ -179,7 +179,7 @@
 
                            <tfoot>
                                <tr>
-                                   <td class="border-bottom-0">Showing categories per page</td>
+                                   <td class="border-bottom-0">Showing 10 categories per page</td>
                                    <td colspan="9" class="border-bottom-0">
                                        <nav aria-label="Page navigation" class="d-flex justify-content-end">
                                            <ul class="pagination mb-0">

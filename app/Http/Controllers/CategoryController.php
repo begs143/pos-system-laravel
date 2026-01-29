@@ -32,7 +32,9 @@ class CategoryController extends Controller
     {
         Categories::create($request->validated());
 
-        return redirect()->route('category.index')->with('success', 'Category created successfully.');
+        return redirect(auth()->user()->roleRoute('category.index'))
+            ->with('success', 'Category created successfully.');
+
     }
 
     /**
@@ -43,7 +45,9 @@ class CategoryController extends Controller
 
         $category->update($request->validated());
 
-        return redirect()->route('category.index')->with('success', 'Category updated successfully.');
+        return redirect(auth()->user()->roleRoute('category.index'))
+            ->with('success', 'Category updated successfully.');
+
     }
 
     public function destroy($categoryId)
@@ -51,6 +55,7 @@ class CategoryController extends Controller
         $category = Categories::findOrFail($categoryId);
         $category->delete();
 
-        return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
+        return redirect(auth()->user()->roleRoute('category.index'))
+            ->with('success', 'Category deleted successfully.');
     }
 }

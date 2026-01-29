@@ -1,5 +1,5 @@
   <!-- Modal -->
-  <form id="addCategoryForm" method="POST" action="{{ route('category.store') }}">
+  <form method="POST" action="{{ auth()->user()->roleRoute('category.store') }}">
       @csrf
       <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog">
