@@ -48,7 +48,7 @@
                                    </a>
 
                                    <!-- Export -->
-                                   <a class="btn btn-primary" href="">
+                                   <a class="btn btn-primary" href="{{ auth()->user()->roleRoute('inventory.export') }}">
                                        <i class="ti ti-file-excel"></i>
                                        <span class="nav-text">Export</span>
                                    </a>

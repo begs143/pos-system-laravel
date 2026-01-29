@@ -28,6 +28,11 @@
 
           <li class="px-3 py-2"><small class="nav-text text-muted">Product</small></li>
 
+          <li><a class='nav-link' href="{{ auth()->user()->roleRoute('inventory.create') }}"><i
+                      class="ti ti-plus"></i><span class="nav-text">Add
+                      Product</span></a></li>
+
+
           <li>
               <a class="nav-link" href="{{ auth()->user()->roleRoute('category.index') }}">
                   <i class="ti ti-filter"></i>
@@ -41,8 +46,11 @@
                   <span class="nav-text">Unit</span>
               </a>
           </li>
+          <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
 
 
+          <li><a class='nav-link' href='/stock-overview'><i class="ti ti-clipboard"></i><span class="nav-text">Stock
+                      Overview</span></a></li>
 
           <li>
               <a class="nav-link" href="{{ auth()->user()->roleRoute('supplier.index') }}">
@@ -50,11 +58,6 @@
                   <span class="nav-text">Supplier</span>
               </a>
           </li>
-          <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
-
-
-          <li><a class='nav-link' href='/stock-overview'><i class="ti ti-clipboard"></i><span class="nav-text">Stock
-                      Overview</span></a></li>
           <li><a class='nav-link' href='/stock-in'><i class="ti ti-package-import"></i><span class="nav-text">Stock In /
                       Add Stock</span></a></li>
           <li><a class='nav-link' href='/stock-out'><i class="ti ti-package-export"></i><span class="nav-text">Stock Out

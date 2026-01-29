@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportProduct;
 use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Requests\UpdateInventoryRequest;
 use App\Models\Categories;
 use App\Models\Product;
 use App\Models\Unit;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -136,5 +138,10 @@ class InventoryController extends Controller
 
         return redirect()->route('admin.inventory.index')
             ->with('success', 'Product updated successfully.');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportProduct, 'product.xls');
     }
 }

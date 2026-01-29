@@ -47,6 +47,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/inventory/{product}/edit', [InventoryController::class, 'update'])->name('admin.inventory.update');
     Route::delete('/admin/inventory/{id}', [InventoryController::class, 'destroy'])->name('admin.inventory.destroy');
 
+    // Export inventory-files
+    Route::get('/admin/inventory/export-excel', [InventoryController::class, 'export'])->name('admin.inventory.export');
+
     // Reports Routes
     Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.report.index');
 
