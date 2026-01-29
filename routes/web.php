@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -36,7 +37,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/supplier/create', [SupplierController::class, 'store'])->name('admin.supplier.store');
     Route::get('/admin/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->name('admin.supplier.edit');
     Route::put('/admin/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('admin.supplier.update');
-    route::delete('/admin/supplier/{id}', [SupplierController::class, 'destroy'])->name('admin.supplier.destroy');
+    Route::delete('/admin/supplier/{id}', [SupplierController::class, 'destroy'])->name('admin.supplier.destroy');
+
+    // Reports Routes
+    Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.report.index');
 
 });
 

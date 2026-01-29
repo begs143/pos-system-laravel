@@ -31,12 +31,7 @@
 </html>
 
 <link rel="stylesheet" href="{{ asset('assets/css/plugin/pikaday.css') }}">
-<script src="{{ asset ('assets/js/plugin/pikaday.js') }}"></script>
+<script src="{{ asset('assets/js/plugin/pikaday.js') }}"></script>
 
 
-<script src="{{ asset ('assets/js/core/app-script.js') }}"></script>
-
-
-
-
-
+<script src="{{ asset('assets/js/core/app-script.js') }}"></script>

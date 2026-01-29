@@ -8,7 +8,7 @@
           </a>
       </div>
       <ul class="nav flex-column">
-          <li class="px-4 py-2"><small class="nav-text">Main</small></li>
+          <li class="px-3 py-2"><small class="nav-text text-muted">Main</small></li>
           <li><a class="nav-link" href="/dashboard"><i class="ti ti-home"></i><span
                       class="nav-text">Dashboard</span></a></li>
           <li>
@@ -20,13 +20,13 @@
 
 
           <li>
-              <a class="nav-link" href="">
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('report.index') }}">
                   <i class="ti ti-receipt"></i>
                   <span class="nav-text">Reports</span>
               </a>
           </li>
 
-          <li class="px-4 py-2"><small class="nav-text">Product</small></li>
+          <li class="px-3 py-2"><small class="nav-text text-muted">Product</small></li>
 
           <li>
               <a class="nav-link" href="{{ auth()->user()->roleRoute('category.index') }}">
@@ -50,7 +50,7 @@
                   <span class="nav-text">Supplier</span>
               </a>
           </li>
-          <li class="px-4 py-2"><small class="nav-text">Inventory / Stock</small></li>
+          <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
 
 
           <li><a class='nav-link' href='/stock-overview'><i class="ti ti-clipboard"></i><span class="nav-text">Stock
@@ -93,7 +93,7 @@
 
 
 
-          <li class="px-4 pt-4 pb-2"><small class="nav-text">Account</small></li>
+          <li class="px-3 pt-4 pb-2"><small class="nav-text text-muted">Account</small></li>
           <li>
               <form method="POST" action="{{ route('logout') }}">
                   @csrf
