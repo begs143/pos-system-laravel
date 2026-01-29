@@ -94,8 +94,15 @@
 
 
           <li class="px-4 pt-4 pb-2"><small class="nav-text">Account</small></li>
-          <li><a class="nav-link" href="signin.html"><i class="ti ti-logout"></i><span class="nav-text">Log Out
-                  </span></a>
+          <li>
+              <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+
+                  <button type="submit" class="nav-link bg-transparent border-0">
+                      <i class="ti ti-logout"></i>
+                      <span class="nav-text">Log Out</span>
+                  </button>
+              </form>
           </li>
           <li><a class="nav-link" href="signup.html"><i class="ti ti-user-plus"></i><span class="nav-text">Account
                   </span></a></li>
