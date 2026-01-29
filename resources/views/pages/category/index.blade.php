@@ -7,7 +7,7 @@
                    <div class="col-12">
                        <div class="d-flex justify-content-between align-items-center mb-4">
                            <div class="">
-                               <h1 class="fs-3 mb-1">Category</h1>
+                               <h1 class="fs-3 mb-1">Product Category</h1>
                                <p class="mb-0">Manage your product categories</p>
                            </div>
 
@@ -33,6 +33,86 @@
            @include('partials.success-message')
            @include('partials.error-message')
            {{-- Edit Category Modal --}}
+
+           <div class="row g-5 mb-3">
+               <div class="col-xl-3 col-md-6 col-12">
+                   <div class="card">
+                       <div class="card-body">
+                           <div class="d-flex align-items-start gap-3">
+                               <div class="icon-shape icon-lg bg-primary bg-opacity-10 text-primary rounded-2">
+                                   <i class="ti ti-category fs-4 "></i>
+                               </div>
+                               <div class="">
+                                   <span>Total Categories</span>
+                                   <h2 class="fw-bold mb-0">6</h2>
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+
+               </div>
+               <div class="col-xl-3 col-md-6 col-12">
+                   <div class="card">
+                       <div class="card-body">
+                           <div class="d-flex align-items-start gap-3">
+                               <div class="icon-shape icon-lg bg-info bg-opacity-10 text-info rounded-2">
+                                   <i class="ti ti-check fs-4 "></i>
+                               </div>
+                               <div class="">
+                                   <span>Active</span>
+                                   <h2 class="fw-bold mb-0">5</h2>
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+
+               </div>
+               <div class="col-xl-3 col-md-6 col-12">
+                   <div class="card">
+                       <div class="card-body">
+                           <div class="d-flex align-items-start gap-3">
+                               <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
+                                   <i class="ti ti-x fs-4 "></i>
+                               </div>
+                               <div class="">
+                                   <span>Inactive</span>
+                                   <h2 class="fw-bold mb-0">1</h2>
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+
+               </div>
+               <div class="col-xl-3 col-md-6 col-12">
+                   <div class="card">
+                       <div class="card-body">
+                           <div class="d-flex align-items-start gap-3">
+                               <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
+                                   <i class="ti ti-box-seam fs-4 "></i>
+                               </div>
+                               <div class="">
+                                   <span>Total Products</span>
+                                   <h2 class="fw-bold mb-0">356</h2>
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+
+               </div>
+
+           </div>
 
            <div class="row py-1">
                <div class="col-12">

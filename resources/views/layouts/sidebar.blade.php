@@ -4,12 +4,12 @@
           <a href="index.html" class="d-inline-flex"><img
                   src="data:image/svg+xml,%3csvg%20width='62'%20height='67'%20viewBox='0%200%2062%2067'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M30.604%2066.378L0.00805664%2048.1582V35.7825L30.604%2054.0023V66.378Z'%20fill='%23302C4D'/%3e%3cpath%20d='M61.1996%2048.1582L30.604%2066.378V54.0023L61.1996%2035.7825V48.1582Z'%20fill='%23E66239'/%3e%3cpath%20d='M30.5955%200L0%2018.2198V30.5955L30.5955%2012.3757V0Z'%20fill='%23657E92'/%3e%3cpath%20d='M61.191%2018.2198L30.5955%200V12.3757L61.191%2030.5955V18.2198Z'%20fill='%23A3B2BE'/%3e%3cpath%20d='M30.604%2048.8457L0.00805664%2030.6259V18.2498L30.604%2036.47V48.8457Z'%20fill='%23302C4D'/%3e%3cpath%20d='M61.1996%2030.6259L30.604%2048.8457V36.47L61.1996%2018.2498V30.6259Z'%20fill='%23E66239'/%3e%3c/svg%3e"
                   alt="" width="24">
-              <span class="logo-text ms-2"> <img src="{{ asset ('assets/images/logo.svg') }}" alt=""></span>
+              <span class="logo-text ms-2"> <img src="{{ asset('assets/images/logo.svg') }}" alt=""></span>
           </a>
       </div>
       <ul class="nav flex-column">
           <li class="px-4 py-2"><small class="nav-text">Main</small></li>
-          <li><a class="nav-link active" href="/dashboard"><i class="ti ti-home"></i><span
+          <li><a class="nav-link" href="/dashboard"><i class="ti ti-home"></i><span
                       class="nav-text">Dashboard</span></a></li>
           <li>
               <a class="nav-link" href="{{ route('inventory.index') }}">
@@ -18,14 +18,24 @@
               </a>
           </li>
 
-            <li>
+
+          <li>
+              <a class="nav-link" href="">
+                  <i class="ti ti-receipt"></i>
+                  <span class="nav-text">Reports</span>
+              </a>
+          </li>
+
+          <li class="px-4 py-2"><small class="nav-text">Product</small></li>
+
+          <li>
               <a class="nav-link" href="{{ route('category.index') }}">
                   <i class="ti ti-filter"></i>
                   <span class="nav-text">Category</span>
               </a>
           </li>
 
-           <li>
+          <li>
               <a class="nav-link" href="{{ route('unit.index') }}">
                   <i class="ti ti-link"></i>
                   <span class="nav-text">Unit</span>
@@ -34,12 +44,25 @@
 
 
 
-              <li>
+          <li>
               <a class="nav-link" href="{{ route('supplier.index') }}">
                   <i class="ti ti-truck"></i>
                   <span class="nav-text">Supplier</span>
               </a>
           </li>
+          <li class="px-4 py-2"><small class="nav-text">Inventory / Stock</small></li>
+
+
+          <li><a class='nav-link' href='/stock-overview'><i class="ti ti-clipboard"></i><span class="nav-text">Stock
+                      Overview</span></a></li>
+          <li><a class='nav-link' href='/stock-in'><i class="ti ti-package-import"></i><span class="nav-text">Stock In /
+                      Add Stock</span></a></li>
+          <li><a class='nav-link' href='/stock-out'><i class="ti ti-package-export"></i><span class="nav-text">Stock Out
+                      / Remove</span></a></li>
+          <li><a class='nav-link' href='/low-stock-products'><i class="ti ti-alert-triangle"></i><span
+                      class="nav-text">Low Stock Products</span></a></li>
+          <li><a class='nav-link' href='/stock-expired'><i class="ti ti-clock"></i><span class="nav-text">Expired
+                      Stock</span></a></li>
 
           <li>
               <a class="nav-link" href="#">
@@ -48,29 +71,34 @@
               </a>
           </li>
 
-
-          
-
-
-
-
-
-
-          <li><a class="nav-link" href="reports.html"><i class="ti ti-receipt"></i><span
-                      class="nav-text">Reports</span></a>
+          <li>
+              <a class="nav-link" href="#">
+                  <i class="ti ti-file-text"></i>
+                  <span class="nav-text">Stock Balance</span>
+              </a>
           </li>
+
+
+
+
+
+
+
+
+
+
           <li><a class="nav-link" href="404-error.html"><i class="ti ti-alert-circle"></i><span class="nav-text">Logs
-                      </span></a>
+                  </span></a>
           </li>
-          
+
 
 
           <li class="px-4 pt-4 pb-2"><small class="nav-text">Account</small></li>
           <li><a class="nav-link" href="signin.html"><i class="ti ti-logout"></i><span class="nav-text">Log Out
-                    </span></a>
+                  </span></a>
           </li>
           <li><a class="nav-link" href="signup.html"><i class="ti ti-user-plus"></i><span class="nav-text">Account
-                      </span></a></li>
+                  </span></a></li>
       </ul>
   </aside>
   <!-- END SIDEBAR -->
