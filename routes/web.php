@@ -39,6 +39,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('admin.supplier.update');
     Route::delete('/admin/supplier/{id}', [SupplierController::class, 'destroy'])->name('admin.supplier.destroy');
 
+    // Inventory Route
+    Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
+    Route::get('/admin/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create');
+    Route::post('/admin/inventory/create', [InventoryController::class, 'store'])->name('admin.inventory.store');
+    Route::get('/admin/inventory/{inventory}/edit', [InventoryController::class, 'edit'])->name('admin.inventory.edit');
+    Route::put('/admin/inventory/{product}/edit', [InventoryController::class, 'update'])->name('admin.inventory.update');
+    Route::delete('/admin/inventory/{id}', [InventoryController::class, 'destroy'])->name('admin.inventory.destroy');
+
     // Reports Routes
     Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.report.index');
 
@@ -78,10 +86,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-// Inventory Route
-Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
-Route::post('/inventory/create', [InventoryController::class, 'store'])->name('inventory.store');
 
 require __DIR__.'/auth.php';

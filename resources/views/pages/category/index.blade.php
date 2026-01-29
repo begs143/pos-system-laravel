@@ -167,7 +167,7 @@
                                        </td>
                                    </tr>
                                @empty
-                                   <td colspan="5" class="text-center">No categories found.</td>
+                                   <td colspan="4" class="text-center">No categories found.</td>
                                @endforelse
 
                            </tbody>

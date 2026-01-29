@@ -12,7 +12,7 @@
           <li><a class="nav-link" href="/dashboard"><i class="ti ti-home"></i><span
                       class="nav-text">Dashboard</span></a></li>
           <li>
-              <a class="nav-link" href="{{ route('inventory.index') }}">
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('inventory.index') }}">
                   <i class="ti ti-box-seam"></i>
                   <span class="nav-text">Inventory</span>
               </a>
