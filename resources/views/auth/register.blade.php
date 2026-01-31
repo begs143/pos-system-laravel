@@ -87,13 +87,6 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3 form-check">
-                        <input id="terms" class="form-check-input" type="checkbox" required>
-                        <label class="form-check-label small" for="terms">I agree to the <a href="#"
-                                class="text-decoration-none">terms and privacy</a></label>
-                        <div class="invalid-feedback">You must agree before continuing.</div>
-                    </div>
-
                     <button class="btn btn-primary w-100" type="submit">Sign up</button>
                 </form>
 

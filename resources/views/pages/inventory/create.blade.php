@@ -109,7 +109,9 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="quantity_on_hand" class="form-label">Stock Quantity</label>
                                         <input type="number" class="form-control" id="quantity_on_hand"
-                                            name="quantity_on_hand" placeholder="0" required>
+                                            name="quantity_on_hand" placeholder="0" min="1" step="1"
+                                            onkeydown="return event.key !== '-' && event.key !== '+' && event.key !== 'e' && event.key !== '.'"
+                                            required>
                                     </div>
 
 

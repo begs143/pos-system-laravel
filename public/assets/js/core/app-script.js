@@ -27,10 +27,28 @@ document.addEventListener("DOMContentLoaded", function () {
             alert.classList.remove("show");
             alert.classList.add("fade");
 
-
             setTimeout(function () {
                 alert.remove();
             }, 500); // wait small time for fade CSS to complete
         });
     }, 3000);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const typeSelect = document.querySelector(".type-select");
+    const supplierField = document.querySelector(".supplier-field");
+
+    function toggleSupplier() {
+        if (typeSelect.value === "in") {
+            supplierField.classList.remove("d-none");
+        } else {
+            supplierField.classList.add("d-none");
+        }
+    }
+
+    // Run on change
+    typeSelect.addEventListener("change", toggleSupplier);
+
+    // Run on page load (important for validation errors)
+    toggleSupplier();
 });

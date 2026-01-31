@@ -9,7 +9,7 @@
       </div>
       <ul class="nav flex-column">
           <li class="px-3 py-2"><small class="nav-text text-muted">Main</small></li>
-          <li><a class="nav-link" href="/dashboard"><i class="ti ti-home"></i><span
+          <li><a class="nav-link" href="/admin/dashboard"><i class="ti ti-home"></i><span
                       class="nav-text">Dashboard</span></a></li>
           <li>
               <a class="nav-link" href="{{ auth()->user()->roleRoute('inventory.index') }}">
@@ -46,26 +46,14 @@
                   <span class="nav-text">Unit</span>
               </a>
           </li>
+
+
           <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
 
 
-          <li><a class='nav-link' href='/stock-overview'><i class="ti ti-clipboard"></i><span class="nav-text">Stock
-                      Overview</span></a></li>
-
-          <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('supplier.index') }}">
-                  <i class="ti ti-truck"></i>
-                  <span class="nav-text">Supplier</span>
-              </a>
-          </li>
-          <li><a class='nav-link' href='/stock-in'><i class="ti ti-package-import"></i><span class="nav-text">Stock In /
-                      Add Stock</span></a></li>
-          <li><a class='nav-link' href='/stock-out'><i class="ti ti-package-export"></i><span class="nav-text">Stock Out
-                      / Remove</span></a></li>
-          <li><a class='nav-link' href='/low-stock-products'><i class="ti ti-alert-triangle"></i><span
-                      class="nav-text">Low Stock Products</span></a></li>
-          <li><a class='nav-link' href='/stock-expired'><i class="ti ti-clock"></i><span class="nav-text">Expired
-                      Stock</span></a></li>
+          <li><a class='nav-link' href="{{ auth()->user()->roleRoute('stockmovement.index') }}"><i
+                      class="ti ti-clipboard"></i><span class="nav-text">Stock
+                      Manage</span></a></li>
 
           <li>
               <a class="nav-link" href="#">
@@ -75,24 +63,27 @@
           </li>
 
           <li>
-              <a class="nav-link" href="#">
-                  <i class="ti ti-file-text"></i>
-                  <span class="nav-text">Stock Balance</span>
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('supplier.index') }}">
+                  <i class="ti ti-truck"></i>
+                  <span class="nav-text">Supplier</span>
               </a>
           </li>
 
+          <li class="px-3 py-2"><small class="nav-text text-muted">Order & Sales</small></li>
+          <li><a class='nav-link' href='/order-list'><i class="ti ti-shopping-cart"></i><span class="nav-text">Order
+                      List</span></a></li>
+          <li><a class='nav-link' href='/order-details'><i class="ti ti-file-search"></i><span class="nav-text">Order
+                      Details</span></a></li>
+          <li><a class='nav-link' href='/create-order'><i class="ti ti-folder"></i><span class="nav-text">Create New
+                      Order</span></a></li>
+          <li><a class='nav-link' href='/invoice'><i class="ti ti-file-text"></i><span
+                      class="nav-text">Invoice</span></a></li>
+          <li><a class='nav-link' href='/returns-refunds'><i class="ti ti-squares"></i><span class="nav-text">Returns /
+                      Refunds</span></a></li>
+          <li><a class='nav-link' href='/pos'><i class="ti ti-navigation-pin"></i><span class="nav-text">Pos(Point of
+                      Sale)</span></a></li>
 
 
-
-
-
-
-
-
-
-          <li><a class="nav-link" href="404-error.html"><i class="ti ti-alert-circle"></i><span class="nav-text">Logs
-                  </span></a>
-          </li>
 
 
 
@@ -107,8 +98,14 @@
                   </button>
               </form>
           </li>
-          <li><a class="nav-link" href="signup.html"><i class="ti ti-user-plus"></i><span class="nav-text">Account
+          <li><a class="nav-link" href="#"><i class="ti ti-user-plus"></i><span class="nav-text">Account
                   </span></a></li>
+
+
+          <li><a class="nav-link" href="#"><i class="ti ti-alert-circle"></i><span class="nav-text">Logs
+                  </span></a>
+          </li>
+
       </ul>
   </aside>
   <!-- END SIDEBAR -->

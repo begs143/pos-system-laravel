@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -52,6 +53,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Reports Routes
     Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.report.index');
+
+    // Stock Movement Routes
+    Route::get('/admin/stock-movement', [StockMovementController::class, 'index'])->name('admin.stockmovement.index');
+    Route::post('/admin/stock-movement', [StockMovementController::class, 'store'])->name('admin.stockmovement.store');
 
 });
 
