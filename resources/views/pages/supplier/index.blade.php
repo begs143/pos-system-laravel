@@ -93,7 +93,9 @@
 
                                <tfoot>
                                    <tr>
-                                       <td class="border-bottom-0">Showing suppliers per page</td>
+                                       <td class="border-bottom-0">
+                                           Showing {{ $suppliers->perPage() }} suppliers per page
+                                       </td>
                                        <td colspan="9" class="border-bottom-0">
                                            <nav aria-label="Page navigation" class="d-flex justify-content-end">
                                                <ul class="pagination mb-0">

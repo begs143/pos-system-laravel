@@ -132,7 +132,9 @@
 
                                <tfoot>
                                    <tr>
-                                       <td class="border-bottom-0">Showing 25 products per page</td>
+                                       <td class="border-bottom-0">
+                                           Showing {{ $products->perPage() }} products per page
+                                       </td>
                                        <td colspan="9" class="border-bottom-0">
                                            <nav aria-label="Page navigation" class="d-flex justify-content-end">
                                                <ul class="pagination mb-0">
