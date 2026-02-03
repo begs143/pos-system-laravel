@@ -7,8 +7,8 @@
                    <div class="col-12">
                        <div class="d-flex justify-content-between align-items-center mb-4">
                            <div class="">
-                               <h1 class="fs-3 mb-1">Product Inventory</h1>
-                               <p class="mb-0">Manage your product inventory</p>
+                               <h1 class="fs-3 mb-1">Order</h1>
+                               <p class="mb-0">Add to cart Item</p>
                            </div>
                            <div>
 
@@ -24,13 +24,11 @@
 
                <div class="row">
                    <div class="col-12">
-
-
                        <div>
                            <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
 
                                <!-- Left: Search form -->
-                               <form action="{{ auth()->user()->roleRoute('inventory.index') }}" method="GET"
+                               <form action="{{ auth()->user()->roleRoute('pos.sale.index') }}" method="GET"
                                    class="d-flex gap-2">
                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                                        placeholder="Search products..." style="max-width: 230px;">
@@ -38,21 +36,6 @@
                                        <i class="ti ti-search"></i>
                                    </button>
                                </form>
-
-                               <!-- Right: Action buttons -->
-                               <div class="d-flex gap-2 flex-wrap">
-                                   <!-- Add Product -->
-                                   <a class="btn btn-primary" href="{{ auth()->user()->roleRoute('inventory.create') }}">
-                                       <i class="ti ti-plus"></i>
-                                       <span class="nav-text">Add Product</span>
-                                   </a>
-
-                                   <!-- Export -->
-                                   <a class="btn btn-primary" href="{{ auth()->user()->roleRoute('inventory.export') }}">
-                                       <i class="ti ti-file-excel"></i>
-                                       <span class="nav-text">Export</span>
-                                   </a>
-                               </div>
 
                            </div>
                        </div>
@@ -63,9 +46,8 @@
                                        <th>Image</th>
                                        <th>Code</th>
                                        <th>Category</th>
-                                       <th>Cost Price</th>
-                                       <th>Selling Price</th>
-                                       <th>Quantity</th>
+                                       <th>Price</th>
+                                       <th>Stocks</th>
                                        <th>Status</th>
                                        <th>Action</th>
                                    </tr>
@@ -86,7 +68,7 @@
                                            </td>
                                            <td>{{ $product->product_code ?? '-' }}</td>
                                            <td>{{ $product->category->name ?? '-' }}</td>
-                                           <td>₱{{ number_format($product->cost_price, 2) }}</td>
+
                                            <td>₱{{ number_format($product->selling_price, 2) }}</td>
 
 
@@ -103,19 +85,16 @@
 
                                            <!-- Actions -->
                                            <td>
-                                               <a href="{{ auth()->user()->roleRoute('inventory.edit', $product->id) }}"
-                                                   class=""><i class="ti ti-edit fs-5 "></i></a>
-                                               <form
-                                                   action="{{ auth()->user()->roleRoute('inventory.destroy', $product->id) }}"
-                                                   method="POST" style="display: inline;">
-                                                   @csrf
-                                                   @method('DELETE')
-                                                   <button type="submit"
-                                                       class="btn btn-link p-0 m-0 align-baseline link-danger"
-                                                       onclick="return confirm('Are you sure you want to delete this product?');">
-                                                       <i class="ti ti-trash ms-2 fs-5"></i>
-                                                   </button>
-                                               </form>
+                                               <a href="#" class="btn btn-sm btn-secondary add-to-cart"
+                                                   data-id="{{ $product->id }}" data-name="{{ $product->name }}"
+                                                   data-price="{{ $product->selling_price }}"
+                                                   data-unit="{{ $product->unit->abbreviation ?? 'pcs' }}"
+                                                   data-image="{{ $product->product_image
+                                                       ? asset('storage/' . $product->product_image)
+                                                       : asset('assets/images/default-product.png') }}"
+                                                   data-stock="{{ $product->stockBalance->quantity_on_hand ?? 0 }}">
+                                                   Add Cart
+                                               </a>
                                            </td>
                                        </tr>
                                    @empty
@@ -170,9 +149,127 @@
 
                    </div>
 
+
+
+
+               </div>
+
+               <div class="row g-3 mt-3">
+                   <div class="col-md-8">
+                       <div class="card">
+                           <div class="card-header">
+                               <h4 class="card-title">Order Items</h4>
+
+
+                           </div>
+
+                           <div class="card-body ">
+
+
+                               <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                   <table class="table table-hover mb-0 table-centered">
+                                       <tbody id="cart-body">
+                                           <tr class="text-muted text-center" id="empty-cart">
+                                               <td colspan="5">No items in cart</td>
+                                           </tr>
+                                       </tbody>
+                                   </table>
+                               </div>
+
+                           </div>
+
+                           <!-- CARD FOOTER -->
+                           <div class="card-footer d-flex justify-content-end">
+                               <div class="d-flex m-2 gap-2 me-2">
+
+
+                               </div>
+                           </div>
+
+                       </div>
+
+                   </div>
+
+
+                   <div class="col-md-4">
+                       <div class="card">
+                           <div class="card-header">
+                               <h4 class="card-title">Order Summary</h4>
+
+                           </div>
+                           <div class="card-body">
+
+
+                               <div class="mt-2 mb-2">
+                                   <div class="table-responsive">
+                                       <table class="table table-bordered bg-light-subtle">
+                                           <h5 class="fw-semibold mb-3">Total Items: (<span class="text-muted"
+                                                   id="total-items">0</span>)
+                                           </h5>
+                                           <tbody>
+
+
+                                               </h5>
+                                               <tr>
+                                                   <td>Items :</td>
+                                                   <td class="text-end text-dark fw-medium">
+                                                       <span id="total-items1">0</span> (Items)
+                                                   </td>
+                                               </tr>
+                                               <tr>
+                                                   <td>Subtotal :</td>
+                                                   <td class="text-end text-dark fw-medium">
+                                                       ₱<span id="subtotal">0.00</span>
+                                                   </td>
+                                               </tr>
+                                               <tr>
+                                                   <td>Discount :</td>
+                                                   <td class="text-end text-dark fw-medium">
+                                                       ₱<span id="discount">0.00</span>
+                                                   </td>
+                                               </tr>
+
+
+                                               <tr>
+                                                   <td class="fw-semibold text-danger">Total Amount :</td>
+                                                   <td class="text-end text-success fw-semibold">
+                                                       ₱<span id="total-amount">0.00</span>
+                                                   </td>
+                                               </tr>
+
+
+                                           </tbody>
+
+
+                                       </table>
+                                   </div>
+                               </div>
+                               <label for="name" class="form-label fw-semibold">Cash Amount :</label>
+                               <input type="number" class="form-control" id="cash_amount" name="cash_amount"
+                                   min="1" step="1"
+                                   onkeydown="return event.key !== '-' && event.key !== '+' && event.key !== 'e' && event.key !== '.'"
+                                   placeholder="Enter Amount" required>
+
+                               <div class=" gap-1 hstack mt-3">
+
+                                   <a href="#" class="btn btn-secondary w-100" onclick="clearCart()">Clear</a>
+
+                                   <button type="button" class="btn btn-primary w-100" onclick="checkout(this)"
+                                       data-checkout-url="{{ auth()->user()->roleRoute('pos.sale.order-summary') }}">
+                                       Check Out
+                                   </button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+
                </div>
 
                <x-footer-layout />
-           </div>
        </main>
    @endsection
+
+   @push('pos-sale-script')
+       <script src="{{ asset('assets/js/core/app-pos-sale.js') }}"></script>
+   @endpush

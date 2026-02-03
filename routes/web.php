@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\POS\SaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockMovementController;
@@ -58,12 +59,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/stock-movement', [StockMovementController::class, 'index'])->name('admin.stockmovement.index');
     Route::post('/admin/stock-movement', [StockMovementController::class, 'store'])->name('admin.stockmovement.store');
 
+    Route::get('/admin/pos/order', [SaleController::class, 'index'])->name('admin.pos.sale.index');
+    Route::get('/admin/pos/order-summary', [SaleController::class, 'orderSummary'])->name('admin.pos.sale.order-summary');
+    Route::post('/admin/pos/order-summary', [SaleController::class, 'store'])->name('admin.pos.sale.store');
+    Route::get('/admin/pos/order-details/{sale}', [SaleController::class, 'orderDetails'])->name('admin.pos.sale.order-details');
+
 });
 
 Route::middleware(['auth', 'role:user'])
     ->group(function () {
         Route::get('/dashboard', [UserController::class, 'index'])
-            ->name('dashboard'); // 👈 IMPORTANT
+            ->name('dashboard'); //
 
         // Category
         Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
@@ -84,10 +90,6 @@ Route::middleware(['auth', 'role:user'])
         Route::put('/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('supplier.update');
         route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     });
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -11,12 +11,7 @@
           <li class="px-3 py-2"><small class="nav-text text-muted">Main</small></li>
           <li><a class="nav-link" href="/admin/dashboard"><i class="ti ti-home"></i><span
                       class="nav-text">Dashboard</span></a></li>
-          <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('inventory.index') }}">
-                  <i class="ti ti-box-seam"></i>
-                  <span class="nav-text">Inventory</span>
-              </a>
-          </li>
+
 
 
           <li>
@@ -50,6 +45,13 @@
 
           <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
 
+          <li>
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('inventory.index') }}">
+                  <i class="ti ti-box-seam"></i>
+                  <span class="nav-text">Inventory</span>
+              </a>
+          </li>
+
 
           <li><a class='nav-link' href="{{ auth()->user()->roleRoute('stockmovement.index') }}"><i
                       class="ti ti-clipboard"></i><span class="nav-text">Stock
@@ -70,22 +72,16 @@
           </li>
 
           <li class="px-3 py-2"><small class="nav-text text-muted">Order & Sales</small></li>
-          <li><a class='nav-link' href='/order-list'><i class="ti ti-shopping-cart"></i><span class="nav-text">Order
-                      List</span></a></li>
-          <li><a class='nav-link' href='/order-details'><i class="ti ti-file-search"></i><span class="nav-text">Order
-                      Details</span></a></li>
-          <li><a class='nav-link' href='/create-order'><i class="ti ti-folder"></i><span class="nav-text">Create New
-                      Order</span></a></li>
-          <li><a class='nav-link' href='/invoice'><i class="ti ti-file-text"></i><span
-                      class="nav-text">Invoice</span></a></li>
-          <li><a class='nav-link' href='/returns-refunds'><i class="ti ti-squares"></i><span class="nav-text">Returns /
-                      Refunds</span></a></li>
-          <li><a class='nav-link' href='/pos'><i class="ti ti-navigation-pin"></i><span class="nav-text">Pos(Point of
-                      Sale)</span></a></li>
+
+          <li><a class='nav-link' href={{ auth()->user()->roleRoute('pos.sale.index') }}><i
+                      class="ti ti-shopping-cart"></i><span class="nav-text">Order
+                  </span></a></li>
 
 
+          <li><a class='nav-link' href='/invoice'><i class="ti ti-file-text"></i><span class="nav-text">Sale
+                      Transcations</span></a></li>
 
-
+          <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
 
           <li class="px-3 pt-4 pb-2"><small class="nav-text text-muted">Account</small></li>
           <li>

@@ -1,0 +1,30 @@
+/* =========================
+   GLOBAL PRINT CLEANUP
+========================= */
+@media print {
+    /* Hide dashboard, sidebar, footer */
+    header,
+    aside,
+    nav,
+    .sidebar,
+    .navbar,
+    .no-print,
+    footer,
+    .breadcrumb,
+    .content-header {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    .content {
+        padding: 0 !important;
+    }
+
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}

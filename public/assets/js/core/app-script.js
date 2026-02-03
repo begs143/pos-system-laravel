@@ -34,21 +34,59 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 3000);
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const typeSelect = document.querySelector(".type-select");
-    const supplierField = document.querySelector(".supplier-field");
+// document.addEventListener("DOMContentLoaded", function () {
+//     const typeSelect = document.querySelector(".type-select");
+//     const supplierField = document.querySelector(".supplier-field");
 
-    function toggleSupplier() {
-        if (typeSelect.value === "in") {
-            supplierField.classList.remove("d-none");
-        } else {
-            supplierField.classList.add("d-none");
-        }
-    }
+//     function toggleSupplier() {
+//         if (typeSelect.value === "in") {
+//             supplierField.classList.remove("d-none");
+//         } else {
+//             supplierField.classList.add("d-none");
+//         }
+//     }
 
-    // Run on change
-    typeSelect.addEventListener("change", toggleSupplier);
+//     // Run on change
+//     typeSelect.addEventListener("change", toggleSupplier);
 
-    // Run on page load (important for validation errors)
-    toggleSupplier();
-});
+//     // Run on page load (important for validation errors)
+//     toggleSupplier();
+// });
+
+// for pos qty
+
+function proceedPayment() {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    fetch(window.storeSaleUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                .content,
+        },
+        body: JSON.stringify({ items: cart }),
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            if (res.success) {
+                localStorage.removeItem("cart");
+                alert("Sale stored! Invoice: " + res.invoice_no);
+                window.location.href = window.orderDetailsBaseUrl + res.sale_id;
+            }
+        });
+}
+
+function globalClearCart() {
+    localStorage.removeItem("cart");
+}
+
+function printDesktop() {
+    document.body.classList.remove("thermal-print");
+    window.print();
+}
+
+function printThermal() {
+    document.body.classList.add("thermal-print");
+    window.print();
+}
