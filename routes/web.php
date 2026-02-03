@@ -59,10 +59,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/stock-movement', [StockMovementController::class, 'index'])->name('admin.stockmovement.index');
     Route::post('/admin/stock-movement', [StockMovementController::class, 'store'])->name('admin.stockmovement.store');
 
+    // Sale Routes
     Route::get('/admin/pos/order', [SaleController::class, 'index'])->name('admin.pos.sale.index');
     Route::get('/admin/pos/order-summary', [SaleController::class, 'orderSummary'])->name('admin.pos.sale.order-summary');
     Route::post('/admin/pos/order-summary', [SaleController::class, 'store'])->name('admin.pos.sale.store');
     Route::get('/admin/pos/order-details/{sale}', [SaleController::class, 'orderDetails'])->name('admin.pos.sale.order-details');
+    Route::get('/admin/pos/order-transactions', [SaleController::class, 'orderTransactions'])->name('admin.pos.sale.order-transactions');
 
 });
 

@@ -223,4 +223,31 @@ class SaleController extends Controller
 
         return view('pages.pos.sales.order-details', compact('sale'));
     }
+
+    public function orderTransactions(Request $request)
+    {
+        $query = Sale::with('cashier')->latest('sale_date'); // Sort by latest sale date
+
+        // Search by invoice, cashier, or date
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('invoice_no', 'like', "%{$search}%")
+                ->orWhereHas('cashier', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+        }
+
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $start = $request->input('start_date');
+            $end = $request->input('end_date');
+            $query->whereBetween('sale_date', [$start.' 00:00:00', $end.' 23:59:59']);
+        }
+
+        $sales = $query->paginate(50)->withQueryString();
+
+        $current = $sales->currentPage();
+        $last = $sales->lastPage();
+
+        return view('pages.pos.sales.order-transaction', compact('sales', 'current', 'last'));
+    }
 }
