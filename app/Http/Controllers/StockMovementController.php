@@ -123,4 +123,33 @@ class StockMovementController extends Controller
                 : 'Stock removed successfully.'
             );
     }
+
+    public function show(Request $request)
+    {
+        $query = StockMovement::with(['product', 'user', 'supplier'])->latest('created_at');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                // Search by product name or code
+                $q->whereHas('product', function ($q2) use ($search) {
+                    $q2->where('name', 'like', "%{$search}%")
+                        ->orWhere('product_code', 'like', "%{$search}%");
+                })
+                // Search by supplier name
+                    ->orWhereHas('supplier', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%{$search}%");
+                    })
+                // Search by user name
+                    ->orWhereHas('user', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+        // Paginate and keep query string
+        $movements = $query->paginate(25)->withQueryString();
+
+        return view('pages.stockmovement.show', compact('movements'));
+    }
 }

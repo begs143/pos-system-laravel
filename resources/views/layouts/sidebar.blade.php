@@ -18,7 +18,6 @@
                       class="ti ti-plus"></i><span class="nav-text">Add
                       Product</span></a></li>
 
-
           <li>
               <a class="nav-link" href="{{ auth()->user()->roleRoute('category.index') }}">
                   <i class="ti ti-filter"></i>
@@ -49,7 +48,7 @@
                       Manage</span></a></li>
 
           <li>
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('stockmovement.show') }}">
                   <i class="ti ti-file-text"></i>
                   <span class="nav-text">Stock Movements</span>
               </a>

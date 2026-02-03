@@ -58,6 +58,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Stock Movement Routes
     Route::get('/admin/stock-movement', [StockMovementController::class, 'index'])->name('admin.stockmovement.index');
     Route::post('/admin/stock-movement', [StockMovementController::class, 'store'])->name('admin.stockmovement.store');
+    Route::get('/admin/stock-movement-list', [StockMovementController::class, 'show'])->name('admin.stockmovement.show');
 
     // Sale Routes
     Route::get('/admin/pos/order', [SaleController::class, 'index'])->name('admin.pos.sale.index');
