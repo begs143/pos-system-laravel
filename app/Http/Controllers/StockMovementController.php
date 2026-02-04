@@ -101,8 +101,8 @@ class StockMovementController extends Controller
         }
 
         // Convert quantity based on type
-        $quantity = $type === 'out' ? -$requestedQty : $requestedQty;
-
+        // $quantity = $type === 'out' ? -$requestedQty : $requestedQty;
+        $quantity = $requestedQty;
         // Create stock movement
         StockMovement::create([
             'product_id' => $productId,
@@ -114,7 +114,11 @@ class StockMovementController extends Controller
         ]);
 
         // Update stock balance
-        $stockBalance->quantity_on_hand += $quantity;
+        if ($type === 'in') {
+            $stockBalance->quantity_on_hand += $quantity;
+        } else {
+            $stockBalance->quantity_on_hand -= $quantity;
+        }
         $stockBalance->save();
 
         return redirect(auth()->user()->roleRoute('stockmovement.index'))
