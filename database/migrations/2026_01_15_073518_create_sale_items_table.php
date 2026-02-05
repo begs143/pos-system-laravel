@@ -15,9 +15,8 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('selling_price', 12, 2);
             $table->timestamps();
-
             $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

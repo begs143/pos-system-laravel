@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\POS;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
@@ -10,7 +9,7 @@ use App\Models\StockMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class SaleController extends Controller
+class SaleOrderController extends Controller
 {
     public function index(Request $request)
     {
@@ -41,10 +40,11 @@ class SaleController extends Controller
             ->paginate(25)
             ->withQueryString();
 
-        return view('pages.pos.sales.index', compact('products'));
+        return view('pages.sale-orders.index', compact('products'));
+
     }
 
-    public function orderSummary(Request $request)
+    public function summary(Request $request)
     {
         // Get all items except 'ca'
         $itemsInput = $request->except('ca');
@@ -55,8 +55,10 @@ class SaleController extends Controller
 
         // Validate presence of items and cash amount > 0
         if (empty($itemsInput) || $cashAmount <= 0) {
-            return redirect()->route('admin.pos.sale.index')
+
+            return redirect(auth()->user()->roleRoute('sale-orders.index'))
                 ->with('error', 'No order data provided or invalid cash amount.');
+
         }
 
         // Check if all product IDs exist
@@ -66,7 +68,7 @@ class SaleController extends Controller
         // If any ID is invalid, reject
         $invalidIds = array_diff($productIds, $validProductIds);
         if (! empty($invalidIds)) {
-            return redirect()->route('admin.pos.sale.index')
+            return redirect(auth()->user()->roleRoute('sale-orders.index'))
                 ->with('error', 'Some products in the order are invalid.');
         }
 
@@ -89,11 +91,12 @@ class SaleController extends Controller
 
         // Validate cash amount >= total
         if ($cashAmount < $totalAmount) {
-            return redirect()->route('admin.pos.sale.index')
+
+            return redirect(auth()->user()->roleRoute('sale-orders.index'))
                 ->with('error', 'Cash amount is less than the total order amount.');
         }
 
-        return view('pages.pos.sales.order-summary', [
+        return view('pages.sale-orders.summary', [
             'items' => $items,
             'cash_amount' => $cashAmount,
             'total_amount' => $totalAmount,
@@ -122,7 +125,7 @@ class SaleController extends Controller
             $this->storeSaleItems($sale, $items);
         });
 
-        return redirect()->route('admin.pos.sale.order-details', ['sale' => $sale->id])
+        return redirect(auth()->user()->roleRoute('sale-orders.details', ['sale' => $sale->id]))
             ->with('success', 'Sale added successfully.');
     }
 
@@ -217,14 +220,14 @@ class SaleController extends Controller
         return $items;
     }
 
-    public function orderDetails(Sale $sale)
+    public function details(Sale $sale)
     {
         $sale->load('items.product', 'cashier');
 
-        return view('pages.pos.sales.order-details', compact('sale'));
+        return view('pages.sale-orders.details', compact('sale'));
     }
 
-    public function orderTransactions(Request $request)
+    public function transactions(Request $request)
     {
         $query = Sale::with('cashier')->latest('sale_date'); // Sort by latest sale date
 
@@ -248,6 +251,6 @@ class SaleController extends Controller
         $current = $sales->currentPage();
         $last = $sales->lastPage();
 
-        return view('pages.pos.sales.order-transaction', compact('sales', 'current', 'last'));
+        return view('pages.sale-orders.transactions', compact('sales', 'current', 'last'));
     }
 }

@@ -3,13 +3,13 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\POS\SaleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SaleOrderController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,10 +28,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/category/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
 
     // Unit Routes
-    Route::get('/admin/unit', [UnitController::class, 'index'])->name('admin.unit.index');
-    Route::post('/admin/unit', [UnitController::class, 'store'])->name('admin.unit.store');
-    Route::put('/admin/unit/{unit}', [UnitController::class, 'update'])->name('admin.unit.update');
-    Route::delete('/admin/unit/{id}', [UnitController::class, 'destroy'])->name('admin.unit.destroy');
+    Route::get('/admin/units', [UnitController::class, 'index'])->name('admin.units.index');
+    Route::post('/admin/units', [UnitController::class, 'store'])->name('admin.units.store');
+    Route::put('/admin/units/{unit}', [UnitController::class, 'update'])->name('admin.units.update');
+    Route::delete('/admin/units/{id}', [UnitController::class, 'destroy'])->name('admin.units.destroy');
 
     // Supplier Routes
     Route::get('/admin/supplier', [SupplierController::class, 'index'])->name('admin.supplier.index');
@@ -61,38 +61,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/stock-movement-list', [StockMovementController::class, 'show'])->name('admin.stockmovement.show');
 
     // Sale Routes
-    Route::get('/admin/pos/order', [SaleController::class, 'index'])->name('admin.pos.sale.index');
-    Route::get('/admin/pos/order-summary', [SaleController::class, 'orderSummary'])->name('admin.pos.sale.order-summary');
-    Route::post('/admin/pos/order-summary', [SaleController::class, 'store'])->name('admin.pos.sale.store');
-    Route::get('/admin/pos/order-details/{sale}', [SaleController::class, 'orderDetails'])->name('admin.pos.sale.order-details');
-    Route::get('/admin/pos/order-transactions', [SaleController::class, 'orderTransactions'])->name('admin.pos.sale.order-transactions');
+    Route::get('/admin/sale-orders', [SaleOrderController::class, 'index'])->name('admin.sale-orders.index');
+    Route::get('/admin/sale-orders/summary', [SaleOrderController::class, 'summary'])->name('admin.sale-orders.summary');
+    Route::post('/admin/sale-orders/summary', [SaleOrderController::class, 'store'])->name('admin.sale-orders.store');
+    Route::get('/admin/sale-orders/{sale}/details', [SaleOrderController::class, 'details'])->name('admin.sale-orders.details');
+    Route::get('/admin/sale-orders/transactions', [SaleOrderController::class, 'transactions'])->name('admin.sale-orders.transactions');
+
+    // Purchase Route
+    Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase-orders.index');
 
 });
 
 Route::middleware(['auth', 'role:user'])
-    ->group(function () {
-        Route::get('/dashboard', [UserController::class, 'index'])
-            ->name('dashboard'); //
-
-        // Category
-        Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-        Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
-        Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
-        Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
-
-        Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');
-        Route::post('/unit', [UnitController::class, 'store'])->name('unit.store');
-        Route::put('/unit/{unit}', [UnitController::class, 'update'])->name('unit.update');
-        route::delete('/unit/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
-
-        // Supplier Routes
-        Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
-        Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
-        Route::post('/supplier/create', [SupplierController::class, 'store'])->name('supplier.store');
-        Route::get('/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
-        Route::put('/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('supplier.update');
-        route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
-    });
+    ->group(function () {});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

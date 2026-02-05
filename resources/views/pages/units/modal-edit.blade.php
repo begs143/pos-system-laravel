@@ -1,5 +1,5 @@
 {{-- Edit Unit Modal --}}
-<form method="POST" action="{{ auth()->user()->roleRoute('unit.update', $unit->id) }}">
+<form method="POST" action="{{ auth()->user()->roleRoute('units.update', $unit->id) }}">
     @csrf
     @method('PUT')
 

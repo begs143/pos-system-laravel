@@ -20,7 +20,7 @@ class UnitController extends Controller
         }
         $units = $query->paginate(10)->withQueryString();
 
-        return view('pages.unit.index', compact('units'));
+        return view('pages.units.index', compact('units'));
 
     }
 
@@ -31,7 +31,7 @@ class UnitController extends Controller
     {
         Unit::create($request->validated());
 
-        return redirect(auth()->user()->roleRoute('unit.index'))
+        return redirect(auth()->user()->roleRoute('units.index'))
             ->with('success', 'Unit created successfully.');
 
     }
@@ -44,7 +44,7 @@ class UnitController extends Controller
 
         $unit->update($request->validated());
 
-        return redirect(auth()->user()->roleRoute('unit.index'))
+        return redirect(auth()->user()->roleRoute('units.index'))
             ->with('success', 'Unit updated successfully.');
     }
 
@@ -53,7 +53,7 @@ class UnitController extends Controller
         $unit = Unit::findOrFail($unitId);
         $unit->delete();
 
-        return redirect(auth()->user()->roleRoute('unit.index'))
+        return redirect(auth()->user()->roleRoute('units.index'))
             ->with('success', 'Unit deleted successfully.');
     }
 }

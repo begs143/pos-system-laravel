@@ -88,11 +88,12 @@
                                    </div>
 
                                </div>
-                               <!-- 🔼 RECEIPT END -->
+
 
                                <!-- ===== Buttons ===== -->
                                <div class="mt-4 d-flex justify-content-center gap-2 no-print">
-                                   <a href="{{ route('admin.pos.sale.index') }}" class="btn btn-secondary">
+                                   <a href=" {{ auth()->user()->roleRoute('sale-orders.index') }}"
+                                       class="btn btn-secondary">
                                        Close
                                    </a>
 

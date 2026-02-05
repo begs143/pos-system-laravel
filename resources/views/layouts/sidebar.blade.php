@@ -26,7 +26,7 @@
           </li>
 
           <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('unit.index') }}">
+              <a class="nav-link" href="{{ auth()->user()->roleRoute('units.index') }}">
                   <i class="ti ti-link"></i>
                   <span class="nav-text">Unit</span>
               </a>
@@ -58,17 +58,18 @@
 
           <li class="px-3 py-2"><small class="nav-text text-muted">Order & Sales</small></li>
 
-          <li><a class='nav-link' href={{ auth()->user()->roleRoute('pos.sale.index') }}><i
+          <li><a class='nav-link' href={{ auth()->user()->roleRoute('sale-orders.index') }}><i
                       class="ti ti-shopping-cart"></i><span class="nav-text">Order
                   </span></a></li>
 
 
-          <li><a class='nav-link' href='{{ auth()->user()->roleRoute('pos.sale.order-transactions') }}'><i
+          <li><a class='nav-link' href='{{ auth()->user()->roleRoute('sale-orders.transactions') }}'><i
                       class="ti ti-file-text"></i><span class="nav-text">S.O
                       Transcations</span></a></li>
 
-          <li class="px-3 py-2"><small class="nav-text text-muted">Purchase Oder</small></li>
-          <li><a class='nav-link' href=><i class="ti ti-package-export"></i><span class="nav-text">Order
+          <li class="px-3 py-2"><small class="nav-text text-muted">Purchase Order</small></li>
+          <li><a class='nav-link' href='{{ auth()->user()->roleRoute('purchase-orders.index') }}'><i
+                      class="ti ti-package-export"></i><span class="nav-text">Order
                   </span></a></li>
           <li><a class='nav-link' href='/invoice'><i class="ti ti-file-text"></i><span class="nav-text">P.O
                       Transcations</span></a></li>

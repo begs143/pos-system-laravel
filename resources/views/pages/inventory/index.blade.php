@@ -58,7 +58,7 @@
                        </div>
                        <div class="card table-responsive">
                            <table class="table mb-0 text-nowrap  table-hover">
-                               <thead>
+                               <thead class="table-light border-light">
                                    <tr>
                                        <th>Image</th>
                                        <th>Code</th>

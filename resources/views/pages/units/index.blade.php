@@ -24,7 +24,7 @@
                </div>
 
                {{-- Add Unit Modal --}}
-               @include('pages.unit.modal-create')
+               @include('pages.units.modal-create')
 
 
            </div>
@@ -36,7 +36,7 @@
            <div class="row py-1">
                <div class="col-12">
                    <div>
-                       <form action="{{ auth()->user()->roleRoute('unit.index') }}" method="GET">
+                       <form action="{{ auth()->user()->roleRoute('units.index') }}" method="GET">
                            <div class="d-flex gap-2 mb-3" style="max-width: 230px;">
                                <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                                    placeholder="Search units...">
@@ -60,7 +60,7 @@
                            </thead>
                            <tbody>
                                @forelse ($units as $unit)
-                                   @include('pages.unit.modal-edit')
+                                   @include('pages.units.modal-edit')
 
                                    <tr class="align-middle ">
                                        <td>{{ $unit->name }}</td>
@@ -73,7 +73,7 @@
                                            </a>
                                            </a>
 
-                                           <form action="{{ auth()->user()->roleRoute('unit.destroy', $unit->id) }}"
+                                           <form action="{{ auth()->user()->roleRoute('units.destroy', $unit->id) }}"
                                                method="POST" style="display: inline;">
                                                @csrf
                                                @method('DELETE')

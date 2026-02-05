@@ -12,8 +12,6 @@
                            </div>
                            <div>
 
-
-
                            </div>
                        </div>
                    </div>
@@ -28,7 +26,7 @@
                            <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
 
                                <!-- Left: Search form -->
-                               <form action="{{ auth()->user()->roleRoute('pos.sale.index') }}" method="GET"
+                               <form action="{{ auth()->user()->roleRoute('sale-orders.index') }}" method="GET"
                                    class="d-flex gap-2">
                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                                        placeholder="Search products..." style="max-width: 230px;">
@@ -41,7 +39,7 @@
                        </div>
                        <div class="card table-responsive">
                            <table class="table mb-0 text-nowrap  table-hover">
-                               <thead>
+                               <thead class="table-light border-light">
                                    <tr>
                                        <th>Image</th>
                                        <th>Code</th>
@@ -257,7 +255,7 @@
                                    <a href="#" class="btn btn-secondary w-100" onclick="clearCart()">Clear</a>
 
                                    <button type="button" class="btn btn-primary w-100" onclick="checkout(this)"
-                                       data-checkout-url="{{ auth()->user()->roleRoute('pos.sale.order-summary') }}">
+                                       data-checkout-url="{{ auth()->user()->roleRoute('sale-orders.summary') }}">
                                        Check Out
                                    </button>
                                </div>

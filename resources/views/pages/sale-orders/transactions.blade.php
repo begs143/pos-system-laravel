@@ -64,7 +64,7 @@
                                             </a> --}}
 
 
-                                            <a href="{{ auth()->user()->roleRoute('pos.sale.order-details', $sale->id) }}"
+                                            <a href=" {{ auth()->user()->roleRoute('sale-orders.details', $sale->id) }}"
                                                 class="btn btn-sm btn-secondary">
                                                 <i class="ti ti-eye"></i> View
                                             </a>

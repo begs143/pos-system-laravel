@@ -15,7 +15,7 @@
 
                            <!-- Right: Back Button -->
                            <div class="">
-                               <a href="{{ route('admin.pos.sale.index') }}" class="btn btn-secondary">
+                               <a href=" {{ auth()->user()->roleRoute('sale-orders.index') }}" class="btn btn-secondary">
                                    <i class="ti ti-arrow-left"></i> Back
                                </a>
                            </div>
@@ -31,7 +31,7 @@
                                <!-- ===== Order Items Table ===== -->
                                <h2 class="fs-4 mb-2">Order Items</h2>
 
-                               <form action="{{ auth()->user()->roleRoute('pos.sale.store') }}" method="POST">
+                               <form action=" {{ auth()->user()->roleRoute('sale-orders.store') }}" method="POST">
                                    @csrf
 
                                    <div class="table-responsive">
