@@ -24,8 +24,6 @@
 
                <div class="row">
                    <div class="col-12">
-
-
                        <div>
                            <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
 

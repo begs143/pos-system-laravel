@@ -9,24 +9,35 @@
       </div>
       <ul class="nav flex-column mb-10">
           <li class="px-3 py-2"><small class="nav-text text-muted">Main</small></li>
-          <li><a class="nav-link" href="/admin/dashboard"><i class="ti ti-home"></i><span
-                      class="nav-text">Dashboard</span></a></li>
+          <li>
+              <a class="nav-link {{ request()->url() == url('/admin/dashboard') ? 'active' : '' }}"
+                  href="{{ url('/admin/dashboard') }}">
+                  <i class="ti ti-home"></i>
+                  <span class="nav-text">Dashboard</span>
+              </a>
+          </li>
 
           <li class="px-3 py-2"><small class="nav-text text-muted">Product</small></li>
 
-          <li><a class='nav-link' href="{{ auth()->user()->roleRoute('inventory.create') }}"><i
-                      class="ti ti-plus"></i><span class="nav-text">Add
-                      Product</span></a></li>
+          <li>
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('inventory.create') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('inventory.create') }}">
+                  <i class="ti ti-plus"></i>
+                  <span class="nav-text">Add Product</span>
+              </a>
+          </li>
 
           <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('category.index') }}">
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('category.index') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('category.index') }}">
                   <i class="ti ti-filter"></i>
                   <span class="nav-text">Category</span>
               </a>
           </li>
 
           <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('units.index') }}">
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('units.index') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('units.index') }}">
                   <i class="ti ti-link"></i>
                   <span class="nav-text">Unit</span>
               </a>
@@ -36,19 +47,25 @@
           <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
 
           <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('inventory.index') }}">
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('inventory.index') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('inventory.index') }}">
                   <i class="ti ti-box-seam"></i>
                   <span class="nav-text">Inventory</span>
               </a>
           </li>
 
 
-          <li><a class='nav-link' href="{{ auth()->user()->roleRoute('stockmovement.index') }}"><i
-                      class="ti ti-clipboard"></i><span class="nav-text">Stock
-                      Manage</span></a></li>
+          <li>
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('stockmovement.index') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('stockmovement.index') }}">
+                  <i class="ti ti-clipboard"></i>
+                  <span class="nav-text">Stock Manage</span>
+              </a>
+          </li>
 
           <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('stockmovement.show') }}">
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('stockmovement.show') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('stockmovement.show') }}">
                   <i class="ti ti-file-text"></i>
                   <span class="nav-text">Stock Movements</span>
               </a>
@@ -58,21 +75,30 @@
 
           <li class="px-3 py-2"><small class="nav-text text-muted">Order & Sales</small></li>
 
-          <li><a class='nav-link' href={{ auth()->user()->roleRoute('sale-orders.index') }}><i
-                      class="ti ti-shopping-cart"></i><span class="nav-text">Order
-                  </span></a></li>
+          <li>
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('sale-orders.index') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('sale-orders.index') }}">
+                  <i class="ti ti-shopping-cart"></i>
+                  <span class="nav-text">Sale Order</span>
+              </a>
+          </li>
 
 
-          <li><a class='nav-link' href='{{ auth()->user()->roleRoute('sale-orders.transactions') }}'><i
-                      class="ti ti-file-text"></i><span class="nav-text">S.O
-                      Transcations</span></a></li>
+          <li>
+              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('sale-orders.transactions') ? 'active' : '' }}"
+                  href="{{ auth()->user()->roleRoute('sale-orders.transactions') }}">
+                  <i class="ti ti-file-text"></i>
+                  <span class="nav-text">S.O Transactions</span>
+              </a>
+          </li>
 
           <li class="px-3 py-2"><small class="nav-text text-muted">Purchase Order</small></li>
+
+
           <li><a class='nav-link' href='{{ auth()->user()->roleRoute('purchase-orders.index') }}'><i
-                      class="ti ti-package-export"></i><span class="nav-text">Order
+                      class="ti ti-package-export"></i><span class="nav-text">Purchase Order
                   </span></a></li>
-          <li><a class='nav-link' href='/invoice'><i class="ti ti-file-text"></i><span class="nav-text">P.O
-                      Transcations</span></a></li>
+
 
           <li>
               <a class="nav-link" href="{{ auth()->user()->roleRoute('supplier.index') }}">

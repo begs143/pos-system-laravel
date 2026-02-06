@@ -69,6 +69,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Purchase Route
     Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase-orders.index');
+    Route::get('/admin/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase-orders.create');
+    Route::post('/admin/purchase-orders/create', [PurchaseOrderController::class, 'store'])->name('admin.purchase-orders.store');
+    Route::put('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('admin.purchase-orders.update');
+    Route::delete('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase-orders.destroy');
 
 });
 

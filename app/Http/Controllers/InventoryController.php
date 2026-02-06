@@ -54,7 +54,7 @@ class InventoryController extends Controller
 
         if ($units->isEmpty()) {
 
-            return redirect(auth()->user()->roleRoute('unit.index'))
+            return redirect(auth()->user()->roleRoute('units.index'))
                 ->with('error', 'Please add a unit first.');
         }
 
