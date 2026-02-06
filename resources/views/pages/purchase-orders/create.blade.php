@@ -40,17 +40,18 @@
                                <div class="card-body p-4">
                                    <div class="row">
                                        <div class="col-md-6 mb-3">
-                                           <label for="productName" class="form-label">Purchase No.</label>
-                                           <input type="text" class="form-control" value="{{ $poNumber }}" disabled>
+                                           <label for="po_no" class="form-label">Purchase No.</label>
+                                           <input type="text" class="form-control" id="po_no"
+                                               value="{{ $poNumber }}" disabled>
 
                                        </div>
                                        <div class="col-md-6 mb-3">
-                                           <label for="createdBy" class="form-label">Created By</label>
-                                           <input type="text" class="form-control"
+                                           <label for="created_by" class="form-label">Created By</label>
+                                           <input type="text" class="form-control" id="created_by"
                                                value="{{ auth()->user()->name ?? '' }}" disabled>
                                        </div>
                                        <div class="col-md-6 mb-3">
-                                           <label class="form-label">Supplier</label>
+                                           <label for="supplierSelect" class="form-label">Supplier</label>
                                            <select class="form-select" id="supplierSelect" name="supplier_id">
                                                <option value="">No Supplier</option>
                                                @foreach ($suppliers as $supplier)
@@ -60,8 +61,9 @@
                                        </div>
 
                                        <div class="col-md-6 mb-3">
-                                           <label class="form-label">Status</label>
-                                           <select class="form-select" id="statusSelect" name="status" required>
+                                           <label for="status" class="form-label">Status</label>
+                                           <select class="form-select" id="statusSelect" name="status" id="status"
+                                               required>
                                                <option value="pending">Pending</option>
                                                <option value="sent">Sent</option>
                                                <option value="received">Received</option>

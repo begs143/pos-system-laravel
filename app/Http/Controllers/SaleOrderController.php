@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\StockMovement;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -252,5 +253,18 @@ class SaleOrderController extends Controller
         $last = $sales->lastPage();
 
         return view('pages.sale-orders.transactions', compact('sales', 'current', 'last'));
+    }
+
+    public function downloadPDF($id)
+    {
+        // Load Sale with items and cashier
+        $sale = Sale::with(['items.product', 'cashier'])->findOrFail($id);
+
+        $pdf = Pdf::loadView('pdfs.sale-order', compact('sale'))
+            ->setPaper('A4', 'portrait')
+            ->setOption('isHtml5ParserEnabled', true)
+            ->setOption('isRemoteEnabled', true);
+
+        return $pdf->stream('sale-order-'.$sale->invoice_no.'.pdf');
     }
 }

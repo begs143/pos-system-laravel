@@ -38,7 +38,7 @@
 
             <td class="width-50">
 
-                <h2>P.O #: {{ $po->po_number }}</h2>
+                <h2>Invoice: {{ $sale->invoice_no }}</h2>
 
             </td>
 
@@ -58,7 +58,9 @@
                     <div><strong>My Company Inc.</strong></div>
                     <div>123 Business Street, City, Country</div>
                     <div>Phone: +63 912 345 6789 | Email: info@mycompany.com</div>
-                    <div>Date: {{ $po->po_date ? \Carbon\Carbon::parse($po->po_date)->format('F d, Y') : '-' }}</div>
+                    <div>Date: {{ $sale->sale_date ? \Carbon\Carbon::parse($sale->sale_date)->format('F d, Y') : '-' }}
+                    </div>
+                    <div>Cashier ID: {{ $sale->cashier?->id ?? '-' }}</div>
 
 
 
@@ -66,9 +68,9 @@
 
                 <td class="width-45">
 
-                    <div><strong>{{ $po->supplier->name ?? '-' }}</strong></div>
-                    <div>{{ $po->supplier->contact_person ?? '-' }}</div>
-                    <div>{{ $po->supplier->phone ?? '-' }} | {{ $po->supplier->email ?? '-' }}</div>
+                    <div><strong>-</strong></div>
+                    <div>-</div>
+                    <div>-</div>
 
                 </td>
 
@@ -120,7 +122,7 @@
 
 
 
-                @foreach ($po->items as $item)
+                @foreach ($sale->items as $item)
                     <tr>
 
                         <td class="width-25">
@@ -141,7 +143,7 @@
 
                         <td class="width-25">
 
-                            ₱{{ number_format($item->cost_price, 2) }}
+                            ₱{{ number_format($item->selling_price, 2) }}
 
                             {{-- {{ $value['price'] }} --}}
 
@@ -149,7 +151,7 @@
 
                         <td class="width-25">
 
-                            ₱{{ number_format($item->subtotal, 2) }}
+                            ₱{{ number_format($item->selling_price * $item->quantity, 2) }}
 
                             {{-- {{ $value['price'] }} --}}
 
@@ -157,6 +159,7 @@
 
                     </tr>
                 @endforeach
+
 
             </tbody>
 
@@ -172,23 +175,7 @@
 
                     <td class="width-15">
 
-                        ₱{{ number_format($po->subtotal ?? $po->total_amount, 2) }}
-
-                    </td>
-
-                </tr>
-
-                <tr>
-
-                    <td class="width-70" colspan="3">
-
-                        DISCOUNT:
-
-                    </td>
-
-                    <td class="width-25">
-
-                        ₱0.00
+                        ₱{{ number_format($sale->total_amount, 2) }}
 
                     </td>
 
@@ -204,10 +191,43 @@
 
                     <td class="width-25">
 
-                        <strong>₱{{ number_format($po->subtotal ?? $po->total_amount, 2) }}</strong>
+                        ₱{{ number_format($sale->total_amount, 2) }}
 
                     </td>
 
+                </tr>
+
+                <tr>
+
+                    <td class="width-70" colspan="3">
+
+                        Amount Paid:
+
+                    </td>
+
+                    <td class="width-25">
+
+                        ₱{{ number_format($sale->amount_paid, 2) }}
+
+                    </td>
+                </tr>
+
+
+
+
+                <tr>
+
+                    <td class="width-70" colspan="3">
+
+                        Change:
+
+                    </td>
+
+                    <td class="width-25">
+
+                        ₱{{ number_format($sale->change, 2) }}
+
+                    </td>
                 </tr>
 
             </tfoot>
@@ -216,15 +236,11 @@
 
     </div>
 
-
-
     <div class="footer-div">
 
         <p>THANK YOU <br />HAPPY TO SERVE</p>
 
     </div>
-
-
 
 </body>
 

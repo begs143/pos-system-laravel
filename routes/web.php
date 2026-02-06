@@ -65,6 +65,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/sale-orders/summary', [SaleOrderController::class, 'summary'])->name('admin.sale-orders.summary');
     Route::post('/admin/sale-orders/summary', [SaleOrderController::class, 'store'])->name('admin.sale-orders.store');
     Route::get('/admin/sale-orders/{sale}/details', [SaleOrderController::class, 'details'])->name('admin.sale-orders.details');
+    Route::get('/admin/sale-orders/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('admin.sale-orders.view');
     Route::get('/admin/sale-orders/transactions', [SaleOrderController::class, 'transactions'])->name('admin.sale-orders.transactions');
 
     // Purchase Route

@@ -90,6 +90,7 @@
                                     <div class="col-md-2 mb-3">
                                         <label for="reorder_level" class="form-label">Reorder Level</label>
                                         <input type="number" class="form-control" id="reorder_level" placeholder="0"
+                                            onkeydown="return event.key !== '-' && event.key !== '+' && event.key !== 'e' && event.key !== '.'"
                                             name="reorder_level">
                                     </div>
 
@@ -99,12 +100,16 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="cost_price" class="form-label">Cost Price</label>
                                         <input type="number" class="form-control" id="cost_price" placeholder="0.00"
-                                            step="0.01" name="cost_price" required>
+                                            step="0.01" name="cost_price"
+                                            onkeydown="return event.key !== '-' && event.key !== '+' && event.key !== 'e' && event.key !== '.'"
+                                            required>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="selling_price" class="form-label">Selling Price</label>
                                         <input type="number" class="form-control" name="selling_price" id="selling_price"
-                                            placeholder="0.00" step="0.01" required>
+                                            placeholder="0.00" step="0.01"
+                                            onkeydown="return event.key !== '-' && event.key !== '+' && event.key !== 'e' && event.key !== '.'"
+                                            required>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="quantity_on_hand" class="form-label">Stock Quantity</label>

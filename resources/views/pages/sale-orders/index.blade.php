@@ -20,23 +20,25 @@
                @include('partials.success-message')
                @include('partials.error-message')
 
-               <div class="row">
-                   <div class="col-12">
-                       <div>
-                           <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
+               <div>
+                   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
 
-                               <!-- Left: Search form -->
-                               <form action="{{ auth()->user()->roleRoute('sale-orders.index') }}" method="GET"
-                                   class="d-flex gap-2">
-                                   <input type="text" name="search" value="{{ request('search') }}" class="form-control"
-                                       placeholder="Search products..." style="max-width: 230px;">
-                                   <button type="submit" class="btn btn-primary">
-                                       <i class="ti ti-search"></i>
-                                   </button>
-                               </form>
+                       <!-- Left: Search form -->
+                       <form action="{{ auth()->user()->roleRoute('sale-orders.index') }}" method="GET"
+                           class="d-flex gap-2">
+                           <input type="text" name="search" value="{{ request('search') }}" class="form-control"
+                               placeholder="Search products..." style="max-width: 230px;">
+                           <button type="submit" class="btn btn-primary">
+                               <i class="ti ti-search"></i>
+                           </button>
+                       </form>
 
-                           </div>
-                       </div>
+                   </div>
+               </div>
+
+               <div class="row d-flex align-items-start g-3">
+                   <div class="col-md-8">
+
                        <div class="card table-responsive">
                            <table class="table mb-0 text-nowrap  table-hover">
                                <thead class="table-light border-light">
@@ -149,13 +151,7 @@
 
                    </div>
 
-
-
-
-               </div>
-
-               <div class="row g-3 mt-3">
-                   <div class="col-md-8">
+                   <div class="col-md-4">
                        <div class="card">
                            <div class="card-header">
                                <h4 class="card-title">Order Items</h4>
@@ -178,25 +174,6 @@
 
                            </div>
 
-                           <!-- CARD FOOTER -->
-                           <div class="card-footer d-flex justify-content-end">
-                               <div class="d-flex m-2 gap-2 me-2">
-
-
-                               </div>
-                           </div>
-
-                       </div>
-
-                   </div>
-
-
-                   <div class="col-md-4">
-                       <div class="card">
-                           <div class="card-header">
-                               <h4 class="card-title">Order Summary</h4>
-
-                           </div>
                            <div class="card-body">
 
 
@@ -245,8 +222,8 @@
                                    </div>
                                </div>
                                <label for="name" class="form-label fw-semibold">Cash Amount :</label>
-                               <input type="number" class="form-control" id="cash_amount" name="cash_amount"
-                                   min="1" step="1"
+                               <input type="number" class="form-control" id="cash_amount" name="cash_amount" min="1"
+                                   step="1"
                                    onkeydown="return event.key !== '-' && event.key !== '+' && event.key !== 'e' && event.key !== '.'"
                                    placeholder="Enter Amount" required>
 
@@ -260,9 +237,18 @@
                                    </button>
                                </div>
                            </div>
-                       </div>
-                   </div>
 
+                           <!-- CARD FOOTER -->
+                           <div class="card-footer d-flex justify-content-end">
+                               <div class="d-flex m-2 gap-2 me-2">
+
+
+                               </div>
+                           </div>
+
+                       </div>
+
+                   </div>
 
                </div>
 

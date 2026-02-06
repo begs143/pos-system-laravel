@@ -110,7 +110,7 @@
                                                    @method('DELETE')
                                                    <button type="submit"
                                                        class="btn btn-link p-0 m-0 align-baseline link-danger"
-                                                       onclick="return confirm('Are you sure you want to delete this product?');">
+                                                       onclick="return confirm('Are you sure you want to delete this product? All transaction will erased');">
                                                        <i class="ti ti-trash ms-2 fs-5"></i>
                                                    </button>
                                                </form>

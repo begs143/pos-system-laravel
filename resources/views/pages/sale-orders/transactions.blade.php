@@ -58,16 +58,14 @@
                                         <td class="">{{ number_format($sale->change ?? 0, 2) }}</td>
                                         <td>{{ $sale->cashier->name ?? 'N/A' }}</td>
                                         <td>
-                                            {{-- <a href="{{ route('sales.show', $sale->id) }}"
-                                                class="btn btn-sm btn-primary me-2">
-                                                View
-                                            </a> --}}
 
 
-                                            <a href=" {{ auth()->user()->roleRoute('sale-orders.details', $sale->id) }}"
-                                                class="btn btn-sm btn-secondary">
-                                                <i class="ti ti-eye"></i> View
+                                            <a href="{{ auth()->user()->roleRoute('sale-orders.view', $sale->id) }}"
+                                                class="text-primary" title="View/Print" target="_blank">
+                                                <i class="ti ti-printer fs-5"></i>
                                             </a>
+
+
 
 
                                         </td>

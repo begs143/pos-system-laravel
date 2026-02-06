@@ -29,12 +29,8 @@
 
     {{-- Stack for additional scripts --}}
     @stack('pos-sale-script')
-    @stack('media-print')
-
+    @stack('app-script')
 </body>
 
 </html>
-
-<link rel="stylesheet" href="{{ asset('assets/css/plugin/pikaday.css') }}">
-<script src="{{ asset('assets/js/plugin/pikaday.js') }}"></script>
 <script src="{{ asset('assets/js/core/app-script.js') }}"></script>

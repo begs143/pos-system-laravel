@@ -38,7 +38,7 @@ class SupplierController extends Controller
         Supplier::create($request->validated());
 
         return redirect(auth()->user()->roleRoute('supplier.index'))
-            ->with('success', 'Category created successfully.');
+            ->with('success', 'Supplier created successfully.');
     }
 
     public function edit(Supplier $supplier)

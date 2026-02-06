@@ -23,15 +23,6 @@
                           </select>
                       </div>
 
-                      <div class="mb-3 d-none supplier-field">
-                          <label class="form-label">Supplier</label>
-                          <select name="supplier_id" class="form-select">
-                              <option value="">Select Supplier (Optional)</option>
-                              @foreach ($suppliers as $supplier)
-                                  <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
-                              @endforeach
-                          </select>
-                      </div>
 
                       <div class="mb-3">
                           <label class="form-label">Quantity</label>
