@@ -73,6 +73,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/purchase-orders/create', [PurchaseOrderController::class, 'store'])->name('admin.purchase-orders.store');
     Route::put('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('admin.purchase-orders.update');
     Route::delete('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase-orders.destroy');
+    Route::get('/admin/purchase-orders/{id}/view', [PurchaseOrderController::class, 'downloadPDF'])->name('admin.purchase-orders.pdf');
 
 });
 

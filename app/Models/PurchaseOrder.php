@@ -15,6 +15,10 @@ class PurchaseOrder extends Model
         'created_by',
     ];
 
+    protected $casts = [
+        'po_date' => 'date',
+    ];
+
     public function items()
     {
         return $this->hasMany(PurchaseOrderItem::class);

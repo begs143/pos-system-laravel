@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use App\Models\Supplier;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -166,5 +167,18 @@ class PurchaseOrderController extends Controller
         $purchaseOrder->delete();
 
         return redirect()->back()->with('success', 'Purchase order status updated successfully.');
+    }
+
+    public function downloadPDF($id)
+    {
+        // Load PO with items and supplier
+        $po = PurchaseOrder::with(['items.product', 'supplier'])->findOrFail($id);
+
+        $pdf = Pdf::loadView('pdfs.purchase-order', compact('po'))
+            ->setPaper('A4', 'portrait')
+            ->setOption('isHtml5ParserEnabled', true)
+            ->setOption('isRemoteEnabled', true);
+
+        return $pdf->stream('purchase-order-'.$po->po_number.'.pdf');
     }
 }

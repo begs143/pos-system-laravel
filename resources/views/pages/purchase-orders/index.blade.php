@@ -90,13 +90,12 @@
                                                     data-bs-target="#editStatusModal{{ $po->id }}">
                                                     <i class="ti ti-edit fs-5"></i>
                                                 </a>
-                                                <!-- View -->
-                                                <a href="#" class="text-primary" title="View">
-                                                    <i class="ti ti-eye fs-5"></i>
-                                                </a>
 
-                                                <!-- Print -->
-                                                <a href="#" class="text-success" title="Print">
+
+
+
+                                                <a href="{{ auth()->user()->roleRoute('purchase-orders.pdf', $po->id) }}"
+                                                    class="text-primary" title="View/Print" target="_blank">
                                                     <i class="ti ti-printer fs-5"></i>
                                                 </a>
 
@@ -108,7 +107,7 @@
                                                     <button type="submit"
                                                         class="btn btn-link p-0 m-0 align-baseline link-danger"
                                                         onclick="return confirm('Are you sure you want to delete this purchase order?');">
-                                                        <i class="ti ti-trash ms-2 fs-5"></i>
+                                                        <i class="ti ti-trash fs-5"></i>
                                                     </button>
                                                 </form>
 
