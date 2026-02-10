@@ -4,6 +4,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
+<<<<<<< Updated upstream
+=======
+use App\Http\Controllers\ProfileController;
+>>>>>>> Stashed changes
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleOrderController;
@@ -86,9 +90,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route Logs
     Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 
+<<<<<<< Updated upstream
     // Route Logs
     Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 
+=======
+>>>>>>> Stashed changes
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {
