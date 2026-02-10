@@ -100,9 +100,9 @@ class StockMovementController extends Controller
                 ->with('error', 'Insufficient stock. Current stock is '.$stockBalance->quantity_on_hand.'');
         }
 
-        // Convert quantity based on type
-        // $quantity = $type === 'out' ? -$requestedQty : $requestedQty;
         $quantity = $requestedQty;
+        $beforeQty = $stockBalance->quantity_on_hand;
+
         // Create stock movement
         StockMovement::create([
             'product_id' => $productId,
@@ -120,6 +120,20 @@ class StockMovementController extends Controller
             $stockBalance->quantity_on_hand -= $quantity;
         }
         $stockBalance->save();
+
+        activity('stock')
+            ->causedBy(auth()->user())
+            ->performedOn($stockBalance)
+            ->withProperties([
+                'product_id' => $productId,
+                'type' => $type,
+                'quantity' => $requestedQty,
+                'before_stock' => $beforeQty,
+                'after_stock' => $stockBalance->quantity_on_hand,
+                'supplier_id' => $data['supplier_id'] ?? null,
+                'remarks' => $data['remarks'] ?? null,
+            ])
+            ->log($type === 'in' ? 'Stock added' : 'Stock removed');
 
         return redirect(auth()->user()->roleRoute('stockmovement.index'))
             ->with('success', $type === 'in'

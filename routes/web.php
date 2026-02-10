@@ -3,6 +3,11 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
+<<<<<<< Updated upstream
+=======
+use App\Http\Controllers\LogController;
+use App\Http\Controllers\ProfileController;
+>>>>>>> Stashed changes
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleOrderController;
@@ -81,6 +86,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('admin.purchase-orders.update');
     Route::delete('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase-orders.destroy');
     Route::get('/admin/purchase-orders/{id}/view', [PurchaseOrderController::class, 'downloadPDF'])->name('admin.purchase-orders.pdf');
+
+    // Route Logs
+    Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 
 });
 

@@ -126,6 +126,18 @@ class SaleOrderController extends Controller
             $this->storeSaleItems($sale, $items);
         });
 
+        activity('sales')
+            ->causedBy(auth()->user())
+            ->performedOn($sale)
+            ->withProperties([
+                'invoice_no' => $sale->invoice_no,
+                'total_amount' => $sale->total_amount,
+                'cash_paid' => $sale->amount_paid,
+                'change' => $sale->change,
+                'items_count' => $sale->items()->count(),
+            ])
+            ->log('Sale order created');
+
         return redirect(auth()->user()->roleRoute('sale-orders.details', ['sale' => $sale->id]))
             ->with('success', 'Sale added successfully.');
     }
@@ -203,8 +215,23 @@ class SaleOrderController extends Controller
                 ['quantity_on_hand' => 0]
             );
 
+            $oldStock = $stockBalance->quantity_on_hand;
             $stockBalance->quantity_on_hand -= $item['qty'];
             $stockBalance->save();
+
+            activity('sales')
+                ->causedBy(auth()->user())
+                ->performedOn($product)
+                ->withProperties([
+                    'sale_id' => $sale->id,
+                    'invoice_no' => $sale->invoice_no,
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'qty_sold' => $item['qty'],
+                    'old_stock' => $oldStock,
+                    'new_stock' => $stockBalance->quantity_on_hand,
+                ])
+                ->log('Product sold');
         }
     }
 

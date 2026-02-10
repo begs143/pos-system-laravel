@@ -82,12 +82,23 @@ class InventoryController extends Controller
                     ->store('products', 'public');
             }
 
-            // 1. Create product
             $product = Product::create($data);
 
-            $product->stockBalance()->create([
-                'quantity_on_hand' => $request->input('quantity_on_hand', 0), // fallback 0
+            $stockBalance = $product->stockBalance()->create([
+                'quantity_on_hand' => $request->input('quantity_on_hand', 0),
             ]);
+
+            activity('inventory')
+                ->causedBy(auth()->user())
+                ->performedOn($product)
+                ->withProperties([
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'product_code' => $product->product_code ?? null,
+                    'initial_stock' => $stockBalance->quantity_on_hand,
+                    'price' => $product->selling_price ?? null,
+                ])
+                ->log('Product created');
 
         });
 
@@ -98,6 +109,19 @@ class InventoryController extends Controller
     public function destroy($productId)
     {
         $product = Product::findOrFail($productId);
+
+        // Log BEFORE delete
+        activity('inventory')
+            ->causedBy(auth()->user())
+            ->performedOn($product)
+            ->withProperties([
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'product_code' => $product->product_code ?? null,
+                'price' => $product->selling_price ?? null,
+                'stock' => optional($product->stockBalance)->quantity_on_hand,
+            ])
+            ->log('Product deleted');
 
         // Delete file on the public disk
         if ($product->product_image && Storage::disk('public')->exists($product->product_image)) {
@@ -116,6 +140,17 @@ class InventoryController extends Controller
 
         $data = $request->validated();
 
+        $oldProduct = $product->only([
+            'name',
+            'product_code',
+            'selling_price',
+            'cost_price',
+            'unit_id',
+            'category_id',
+        ]);
+
+        $oldStock = optional($product->stockBalance)->quantity_on_hand ?? 0;
+
         // Handle product image upload
         if ($request->hasFile('product_image')) {
             // Delete old image if exists
@@ -123,18 +158,34 @@ class InventoryController extends Controller
                 Storage::disk('public')->delete($product->product_image);
             }
 
-            // Store new image
             $data['product_image'] = $request->file('product_image')->store('products', 'public');
         }
 
-        // Update product
         $product->update($data);
 
-        // Update or create stock balance
         $product->stockBalance()->updateOrCreate(
-            ['product_id' => $product->id],  // find by product
-            ['quantity_on_hand' => $request->quantity_on_hand ?? 0] // replace with new quantity
+            ['product_id' => $product->id],
+            ['quantity_on_hand' => $request->quantity_on_hand ?? 0]
         );
+
+        $newStock = $product->stockBalance->quantity_on_hand;
+
+        if ($product->wasChanged() || $oldStock != $newStock) {
+
+            activity('inventory')
+                ->causedBy(auth()->user())
+                ->performedOn($product)
+                ->withProperties([
+                    'old' => array_merge($oldProduct, [
+                        'quantity_on_hand' => $oldStock,
+                    ]),
+                    'new' => array_merge(
+                        $product->only(array_keys($oldProduct)),
+                        ['quantity_on_hand' => $newStock]
+                    ),
+                ])
+                ->log('Product updated');
+        }
 
         return redirect()->route('admin.inventory.index')
             ->with('success', 'Product updated successfully.');
