@@ -6,7 +6,10 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 use App\Http\Controllers\ProfileController;
@@ -95,9 +98,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     // Route Logs
     Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
