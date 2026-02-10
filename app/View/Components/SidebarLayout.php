@@ -22,9 +22,8 @@ class SidebarLayout extends Component
      */
     public function render(): View|Closure|string
     {
-        $role = Auth::user()->role ?? 'user'; // default to 'user' if not set
+        $role = Auth::user()->role ?? 'user'; 
 
-        // Load the sidebar based on role
         return view('layouts.'.$role.'-sidebar');
     }
 }

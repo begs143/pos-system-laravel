@@ -3,11 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
-<<<<<<< Updated upstream
-=======
 use App\Http\Controllers\LogController;
-use App\Http\Controllers\ProfileController;
->>>>>>> Stashed changes
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleOrderController;
