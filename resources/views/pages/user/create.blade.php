@@ -23,7 +23,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body p-4">
-                            <form method="POST" action="{{ auth()->user()->roleRoute('user.store') }}">
+                            <form>
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
