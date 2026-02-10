@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleOrderController;
@@ -89,15 +88,14 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     // Dashboard Routes
     Route::get('/dashboard', [UserController::class, 'index'])
         ->name('user.dashboard');
-});
 
-Route::middleware(['auth', 'role:user'])
-    ->group(function () {});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Sale Routes
+    Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('user.sale-orders.index');
+    Route::get('/sale-orders/summary', [SaleOrderController::class, 'summary'])->name('user.sale-orders.summary');
+    Route::post('/sale-orders/summary', [SaleOrderController::class, 'store'])->name('user.sale-orders.store');
+    Route::get('/sale-orders/{sale}/details', [SaleOrderController::class, 'details'])->name('user.sale-orders.details');
+    Route::get('/sale-orders/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('user.sale-orders.view');
+    Route::get('/sale-orders/transactions', [SaleOrderController::class, 'transactions'])->name('user.sale-orders.transactions');
 });
 
 require __DIR__.'/auth.php';

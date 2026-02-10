@@ -22,6 +22,7 @@
 <body>
     <div id="overlay" class="overlay"></div>
     <x-header-layout />
+
     <x-sidebar-layout />
 
     @yield('content')

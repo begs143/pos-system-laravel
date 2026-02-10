@@ -55,7 +55,11 @@ class User extends Authenticatable
 
     public function roleRoute(string $baseRouteName, $parameters = [])
     {
-        $prefix = $this->isAdmin() ? 'admin.' : '';
+        if ($this->isAdmin()) {
+            $prefix = 'admin.';
+        } else {
+            $prefix = 'user.';
+        }
 
         return route($prefix.$baseRouteName, $parameters);
     }
