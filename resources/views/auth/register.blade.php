@@ -46,16 +46,16 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
+                        <label for="username" class="form-label">Username</label>
 
-                        <input id="email" name="email" type="email"
-                            class="form-control @error('email') is-invalid @enderror" placeholder="name@example.com"
-                            value="{{ old('email') }}" required autocomplete="username">
+                        <input id="username" name="username" type="text"
+                            class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}"
+                            required autocomplete="username" placeholder="Enter username">
 
-                        @error('email')
+                        @error('username')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @else
-                            <div class="invalid-feedback">Please enter a valid email.</div>
+                            <div class="invalid-feedback">Please enter a valid username.</div>
                         @enderror
                     </div>
 

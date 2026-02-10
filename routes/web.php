@@ -10,16 +10,20 @@ use App\Http\Controllers\SaleOrderController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::fallback(function () {
+    return auth()->check() ? redirect('/dashboard') : redirect('/login');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    // Dashboard Routes
+    // Dashboard Routes     // User Role Routes
     Route::get('/admin/dashboard', [AdminController::class, 'index'])
         ->name('admin.dashboard');
+    Route::get('/admin/users', [AdminController::class, 'userRole'])->name('admin.user-role');
+    Route::get('/admin/user/create', [AdminController::class, 'create'])->name('admin.user.create');
+    Route::post('/admin/user/create', [AdminController::class, 'store'])->name('admin.user.store');
 
     // Category Routes
     Route::get('/admin/category', [CategoryController::class, 'index'])->name('admin.category.index');
@@ -76,6 +80,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase-orders.destroy');
     Route::get('/admin/purchase-orders/{id}/view', [PurchaseOrderController::class, 'downloadPDF'])->name('admin.purchase-orders.pdf');
 
+});
+
+Route::middleware(['auth', 'role:user'])->group(function () {
+    // Dashboard Routes
+    Route::get('/dashboard', [UserController::class, 'index'])
+        ->name('user.dashboard');
 });
 
 Route::middleware(['auth', 'role:user'])

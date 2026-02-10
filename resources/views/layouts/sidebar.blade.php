@@ -108,6 +108,11 @@
           </li>
 
           <li class="px-3 pt-4 pb-2"><small class="nav-text text-muted">Maintenance</small></li>
+
+          <li><a class="nav-link" href="{{ auth()->user()->roleRoute('user-role') }}"><i
+                      class="ti ti-user-plus"></i><span class="nav-text">User Role
+                  </span></a></li>
+
           <li>
               <a class="nav-link" href="{{ auth()->user()->roleRoute('report.index') }}">
                   <i class="ti ti-receipt"></i>
@@ -130,16 +135,6 @@
                   </button>
               </form>
           </li>
-
-
-          <li><a class="nav-link" href="#"><i class="ti ti-user-plus"></i><span class="nav-text">Account
-                  </span></a></li>
-
-
-
-
-
-
       </ul>
   </aside>
   <!-- END SIDEBAR -->

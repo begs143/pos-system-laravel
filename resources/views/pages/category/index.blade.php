@@ -27,24 +27,83 @@
                @include('pages.category.modal-create')
 
 
-           </div>
 
-           {{-- Success Message --}}
-           @include('partials.success-message')
-           @include('partials.error-message')
-           {{-- Edit Category Modal --}}
 
-           <div class="row g-5 mb-3">
-               <div class="col-xl-3 col-md-6 col-12">
-                   <div class="card">
-                       <div class="card-body">
-                           <div class="d-flex align-items-start gap-3">
-                               <div class="icon-shape icon-lg bg-primary bg-opacity-10 text-primary rounded-2">
-                                   <i class="ti ti-category fs-4 "></i>
+               {{-- Success Message --}}
+               @include('partials.success-message')
+               @include('partials.error-message')
+               {{-- Edit Category Modal --}}
+
+               <div class="row g-5 mb-3">
+                   <div class="col-xl-3 col-md-6 col-12">
+                       <div class="card">
+                           <div class="card-body">
+                               <div class="d-flex align-items-start gap-3">
+                                   <div class="icon-shape icon-lg bg-primary bg-opacity-10 text-primary rounded-2">
+                                       <i class="ti ti-category fs-4 "></i>
+                                   </div>
+                                   <div class="">
+                                       <span>Total Categories</span>
+                                       <h2 class="fw-bold mb-0">6</h2>
+                                   </div>
+
                                </div>
-                               <div class="">
-                                   <span>Total Categories</span>
-                                   <h2 class="fw-bold mb-0">6</h2>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+                   <div class="col-xl-3 col-md-6 col-12">
+                       <div class="card">
+                           <div class="card-body">
+                               <div class="d-flex align-items-start gap-3">
+                                   <div class="icon-shape icon-lg bg-info bg-opacity-10 text-info rounded-2">
+                                       <i class="ti ti-check fs-4 "></i>
+                                   </div>
+                                   <div class="">
+                                       <span>Active</span>
+                                       <h2 class="fw-bold mb-0">5</h2>
+                                   </div>
+
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+                   <div class="col-xl-3 col-md-6 col-12">
+                       <div class="card">
+                           <div class="card-body">
+                               <div class="d-flex align-items-start gap-3">
+                                   <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
+                                       <i class="ti ti-x fs-4 "></i>
+                                   </div>
+                                   <div class="">
+                                       <span>Inactive</span>
+                                       <h2 class="fw-bold mb-0">1</h2>
+                                   </div>
+
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+                   <div class="col-xl-3 col-md-6 col-12">
+                       <div class="card">
+                           <div class="card-body">
+                               <div class="d-flex align-items-start gap-3">
+                                   <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
+                                       <i class="ti ti-box-seam fs-4 "></i>
+                                   </div>
+                                   <div class="">
+                                       <span>Total Products</span>
+                                       <h2 class="fw-bold mb-0">356</h2>
+                                   </div>
+
                                </div>
 
                            </div>
@@ -54,171 +113,114 @@
                    </div>
 
                </div>
-               <div class="col-xl-3 col-md-6 col-12">
-                   <div class="card">
-                       <div class="card-body">
-                           <div class="d-flex align-items-start gap-3">
-                               <div class="icon-shape icon-lg bg-info bg-opacity-10 text-info rounded-2">
-                                   <i class="ti ti-check fs-4 "></i>
-                               </div>
-                               <div class="">
-                                   <span>Active</span>
-                                   <h2 class="fw-bold mb-0">5</h2>
-                               </div>
 
-                           </div>
+               <div class="row py-1">
+                   <div class="col-12">
+                       <div>
+                           <form action="{{ auth()->user()->roleRoute('category.index') }}" method="GET">
+                               <div class="d-flex gap-2 mb-3" style="max-width: 230px;">
+                                   <input type="text" name="search" value="{{ request('search') }}" class="form-control"
+                                       placeholder="Search categories...">
 
+                                   <button type="submit" class="btn btn-primary">
+                                       <i class="ti ti-search"></i>
+                                   </button>
+                               </div>
+                           </form>
                        </div>
+                       <div class="card table-responsive">
+                           <table class="table mb-0 text-nowrap">
+                               <thead class="">
+                                   <tr>
 
-                   </div>
+                                       <th>Name</th>
+                                       <th>Description</th>
+                                       <th>Created At</th>
+                                       <th>Action</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   @forelse ($categories as $category)
+                                       @include('pages.category.modal-edit')
 
-               </div>
-               <div class="col-xl-3 col-md-6 col-12">
-                   <div class="card">
-                       <div class="card-body">
-                           <div class="d-flex align-items-start gap-3">
-                               <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
-                                   <i class="ti ti-x fs-4 "></i>
-                               </div>
-                               <div class="">
-                                   <span>Inactive</span>
-                                   <h2 class="fw-bold mb-0">1</h2>
-                               </div>
+                                       <tr class="align-middle ">
+                                           <td>{{ $category->name }}</td>
+                                           <td>{{ $category->description }}</td>
+                                           <td>{{ $category->created_at }}</td>
+                                           <td class="">
+                                               <a href="#" data-bs-toggle="modal"
+                                                   data-bs-target="#editCategoryModal{{ $category->id }}">
+                                                   <i class="ti ti-edit fs-5"></i>
+                                               </a>
+                                               </a>
+                                               <form
+                                                   action="{{ auth()->user()->roleRoute('category.destroy', $category->id) }}"
+                                                   method="POST" style="display: inline;">
+                                                   @csrf
+                                                   @method('DELETE')
+                                                   <button type="submit"
+                                                       class="btn btn-link p-0 m-0 align-baseline link-danger"
+                                                       onclick="return confirm('Are you sure you want to delete this category?');">
+                                                       <i class="ti ti-trash ms-2 fs-5"></i>
+                                                   </button>
+                                               </form>
 
-                           </div>
+                                           </td>
+                                       </tr>
+                                   @empty
+                                       <td colspan="4" class="text-center">No categories found.</td>
+                                   @endforelse
 
-                       </div>
+                               </tbody>
 
-                   </div>
+                               @php
+                                   $current = $categories->currentPage();
+                                   $last = $categories->lastPage();
+                               @endphp
 
-               </div>
-               <div class="col-xl-3 col-md-6 col-12">
-                   <div class="card">
-                       <div class="card-body">
-                           <div class="d-flex align-items-start gap-3">
-                               <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
-                                   <i class="ti ti-box-seam fs-4 "></i>
-                               </div>
-                               <div class="">
-                                   <span>Total Products</span>
-                                   <h2 class="fw-bold mb-0">356</h2>
-                               </div>
+                               <tfoot>
+                                   <tr>
+                                       <td class="border-bottom-0">
+                                           Showing {{ $categories->perPage() }} categories per page
+                                       </td>
+                                       <td colspan="9" class="border-bottom-0">
+                                           <nav aria-label="Page navigation" class="d-flex justify-content-end">
+                                               <ul class="pagination mb-0">
 
-                           </div>
+                                                   {{-- Prev --}}
+                                                   <li class="page-item {{ $current == 1 ? 'disabled' : '' }}">
+                                                       <a class="page-link"
+                                                           href="{{ $categories->previousPageUrl() ?? '#' }}"
+                                                           tabindex="-1">
+                                                           Previous
+                                                       </a>
+                                                   </li>
 
-                       </div>
+                                                   {{-- Page numbers --}}
+                                                   @for ($i = 1; $i <= $last; $i++)
+                                                       <li class="page-item {{ $current == $i ? 'active' : '' }}">
+                                                           <a class="page-link"
+                                                               href="{{ $categories->url($i) }}">{{ $i }}</a>
+                                                       </li>
+                                                   @endfor
 
-                   </div>
-
-               </div>
-
-           </div>
-
-           <div class="row py-1">
-               <div class="col-12">
-                   <div>
-                       <form action="{{ auth()->user()->roleRoute('category.index') }}" method="GET">
-                           <div class="d-flex gap-2 mb-3" style="max-width: 230px;">
-                               <input type="text" name="search" value="{{ request('search') }}" class="form-control"
-                                   placeholder="Search categories...">
-
-                               <button type="submit" class="btn btn-primary">
-                                   <i class="ti ti-search"></i>
-                               </button>
-                           </div>
-                       </form>
-                   </div>
-                   <div class="card table-responsive">
-                       <table class="table mb-0 text-nowrap">
-                           <thead class="">
-                               <tr>
-
-                                   <th>Name</th>
-                                   <th>Description</th>
-                                   <th>Created At</th>
-                                   <th>Action</th>
-                               </tr>
-                           </thead>
-                           <tbody>
-                               @forelse ($categories as $category)
-                                   @include('pages.category.modal-edit')
-
-                                   <tr class="align-middle ">
-                                       <td>{{ $category->name }}</td>
-                                       <td>{{ $category->description }}</td>
-                                       <td>{{ $category->created_at }}</td>
-                                       <td class="">
-                                           <a href="#" data-bs-toggle="modal"
-                                               data-bs-target="#editCategoryModal{{ $category->id }}">
-                                               <i class="ti ti-edit fs-5"></i>
-                                           </a>
-                                           </a>
-                                           <form action="{{ auth()->user()->roleRoute('category.destroy', $category->id) }}"
-                                               method="POST" style="display: inline;">
-                                               @csrf
-                                               @method('DELETE')
-                                               <button type="submit"
-                                                   class="btn btn-link p-0 m-0 align-baseline link-danger"
-                                                   onclick="return confirm('Are you sure you want to delete this category?');">
-                                                   <i class="ti ti-trash ms-2 fs-5"></i>
-                                               </button>
-                                           </form>
-
+                                                   {{-- Next --}}
+                                                   <li class="page-item {{ $current == $last ? 'disabled' : '' }}">
+                                                       <a class="page-link" href="{{ $categories->nextPageUrl() ?? '#' }}">
+                                                           Next
+                                                       </a>
+                                                   </li>
+                                               </ul>
+                                           </nav>
                                        </td>
                                    </tr>
-                               @empty
-                                   <td colspan="4" class="text-center">No categories found.</td>
-                               @endforelse
-
-                           </tbody>
-
-                           @php
-                               $current = $categories->currentPage();
-                               $last = $categories->lastPage();
-                           @endphp
-
-                           <tfoot>
-                               <tr>
-                                   <td class="border-bottom-0">
-                                       Showing {{ $categories->perPage() }} categories per page
-                                   </td>
-                                   <td colspan="9" class="border-bottom-0">
-                                       <nav aria-label="Page navigation" class="d-flex justify-content-end">
-                                           <ul class="pagination mb-0">
-
-                                               {{-- Prev --}}
-                                               <li class="page-item {{ $current == 1 ? 'disabled' : '' }}">
-                                                   <a class="page-link" href="{{ $categories->previousPageUrl() ?? '#' }}"
-                                                       tabindex="-1">
-                                                       Previous
-                                                   </a>
-                                               </li>
-
-                                               {{-- Page numbers --}}
-                                               @for ($i = 1; $i <= $last; $i++)
-                                                   <li class="page-item {{ $current == $i ? 'active' : '' }}">
-                                                       <a class="page-link"
-                                                           href="{{ $categories->url($i) }}">{{ $i }}</a>
-                                                   </li>
-                                               @endfor
-
-                                               {{-- Next --}}
-                                               <li class="page-item {{ $current == $last ? 'disabled' : '' }}">
-                                                   <a class="page-link" href="{{ $categories->nextPageUrl() ?? '#' }}">
-                                                       Next
-                                                   </a>
-                                               </li>
-                                           </ul>
-                                       </nav>
-                                   </td>
-                               </tr>
-                           </tfoot>
-                       </table>
+                               </tfoot>
+                           </table>
+                       </div>
                    </div>
                </div>
-           </div>
 
-           <x-footer-layout />
+               <x-footer-layout />
 
            </div>
        </main>
