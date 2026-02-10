@@ -24,6 +24,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'userRole'])->name('admin.user-role');
     Route::get('/admin/user/create', [AdminController::class, 'create'])->name('admin.user.create');
     Route::post('/admin/user/create', [AdminController::class, 'store'])->name('admin.user.store');
+    Route::get('/admin/user/{id}/edit', [AdminController::class, 'edit'])->name('admin.user.edit');
+    Route::put('/admin/user/{id}', [AdminController::class, 'update'])->name('admin.user.update');
+    Route::delete('/admin/user/{id}', [AdminController::class, 'destroy'])->name('admin.user.destroy');
 
     // Category Routes
     Route::get('/admin/category', [CategoryController::class, 'index'])->name('admin.category.index');

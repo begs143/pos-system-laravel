@@ -38,6 +38,7 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username',
@@ -57,5 +58,54 @@ class AdminController extends Controller
         return redirect()
             ->route('admin.user-role')
             ->with('success', 'User created successfully.');
+    }
+
+    public function destroy($id)
+    {
+
+        $user = User::findOrFail($id);
+
+        if ($user->id === auth()->id()) {
+            return redirect()->back()->with('error', 'You cannot delete your own account.');
+        }
+
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User deleted successfully.');
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $user = User::findOrFail($id);
+
+        // Validation
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|unique:users,email,'.$user->id,
+            'username' => 'required|string|max:255|unique:users,username,'.$user->id,
+            'role' => 'required|in:admin,user',
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->role = $request->role;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.user-role')->with('success', 'User updated successfully.');
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('pages.user.edit', compact('user'));
     }
 }

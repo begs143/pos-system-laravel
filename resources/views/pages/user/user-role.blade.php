@@ -31,7 +31,6 @@
                @include('partials.error-message')
 
                {{-- Edit Category Modal --}}
-               @include('pages.user.modal-create')
                <div class="row py-1">
                    <div class="col-12">
                        <div>
@@ -65,7 +64,25 @@
                                            <td>{{ $user->email ?? '-' }}</td>
                                            <td><span class="badge bg-secondary">{{ $user->role }}</span></td>
                                            <td>{{ $user->created_at?->format('Y-m-d H:i') ?? '-' }}</td>
-                                           <td>
+                                           <td class="text-center">
+                                               <!-- Edit Button -->
+                                               <a href="{{ auth()->user()->roleRoute('user.edit', $user->id) }}"
+                                                   class="btn-primary me-1" title="Edit User">
+                                                   <i class="ti ti-edit fs-5"></i>
+                                               </a>
+
+                                               <!-- Delete Button -->
+                                               <form action="{{ auth()->user()->roleRoute('user.destroy', $user->id) }}"
+                                                   method="POST" class="d-inline">
+                                                   @csrf
+                                                   @method('DELETE')
+
+                                                   <button type="submit"
+                                                       class="btn btn-link p-0 m-0 align-baseline link-danger"
+                                                       onclick="return confirm('Are you sure you want to delete this user?');">
+                                                       <i class="ti ti-trash ms-2 fs-5"></i>
+                                                   </button>
+                                               </form>
                                            </td>
                                        </tr>
                                    @empty
