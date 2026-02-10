@@ -90,6 +90,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route Logs
     Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 
+    // Route Logs
+    Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
+
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {
