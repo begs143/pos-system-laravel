@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::fallback(function () {
     return auth()->check() ? redirect('/dashboard') : redirect('/login');
 });
-// ss
+
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Dashboard Routes     // User Role Routes
     Route::get('/admin/dashboard', [AdminController::class, 'index'])

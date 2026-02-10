@@ -105,7 +105,7 @@ class PurchaseOrderController extends Controller
             foreach ($items as $item) {
                 $subtotal = $item['price'] * $item['qty'];
 
-                PurchaseOrderItem::create([
+                $poItem = PurchaseOrderItem::create([
                     'purchase_order_id' => $purchaseOrder->id,
                     'product_id' => $item['product_id'],
                     'quantity' => $item['qty'],
@@ -114,6 +114,20 @@ class PurchaseOrderController extends Controller
                 ]);
 
                 $totalAmount += $subtotal;
+
+                // Log each item creation
+                activity('purchase_order')
+                    ->causedBy(auth()->user())
+                    ->performedOn($poItem)
+                    ->withProperties([
+                        'po_id' => $purchaseOrder->id,
+                        'po_number' => $poNumber,
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['qty'],
+                        'cost_price' => $item['price'],
+                        'subtotal' => $subtotal,
+                    ])
+                    ->log('PO Item added');
             }
 
             // Update total_amount
@@ -145,15 +159,29 @@ class PurchaseOrderController extends Controller
         return 'PO-'.$year.'-'.str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
     }
 
-    public function update(Request $request, PurchaseOrder $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'status' => 'required|in:pending,sent,received,cancelled',
         ]);
 
-        // Only update the status
-        $id->status = $request->status;
-        $id->save();
+        $purchaseOrder = PurchaseOrder::findOrFail($id);
+
+        $oldStatus = $purchaseOrder->status;
+
+        $purchaseOrder->status = $request->status;
+        $purchaseOrder->save();
+
+        activity('purchase_order')
+            ->causedBy(auth()->user())
+            ->performedOn($purchaseOrder)
+            ->withProperties([
+                'po_id' => $purchaseOrder->id,
+                'po_number' => $purchaseOrder->po_number,
+                'old_status' => $oldStatus,
+                'new_status' => $request->status,
+            ])
+            ->log('Purchase Order status updated');
 
         return redirect()->back()->with('success', 'Purchase order status updated successfully.');
     }
