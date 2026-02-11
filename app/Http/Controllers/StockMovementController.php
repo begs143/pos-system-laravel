@@ -9,7 +9,6 @@ use App\Models\StockMovement;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class StockMovementController extends Controller
 {
@@ -80,66 +79,77 @@ class StockMovementController extends Controller
 
     public function store(StoreStockMovementRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $productId = $data['product_id'];
-        $type = $data['type'];
+            $productId = $data['product_id'];
+            $type = $data['type'];
 
-        // Always force positive quantity
-        $requestedQty = abs($data['quantity']);
+            // Always force positive quantity
+            $requestedQty = abs($data['quantity']);
 
-        // Get current stock first
-        $stockBalance = StockBalance::firstOrCreate(
-            ['product_id' => $productId],
-            ['quantity_on_hand' => 0]
-        );
+            // Get current stock first
+            $stockBalance = StockBalance::firstOrCreate(
+                ['product_id' => $productId],
+                ['quantity_on_hand' => 0]
+            );
 
-        if ($type === 'out' && $requestedQty > $stockBalance->quantity_on_hand) {
+            // Check for insufficient stock if type is 'out'
+            if ($type === 'out' && $requestedQty > $stockBalance->quantity_on_hand) {
+                return redirect(auth()->user()->roleRoute('stockmovement.index'))
+                    ->with('error', 'Insufficient stock. Current stock is '.$stockBalance->quantity_on_hand);
+            }
 
-            return redirect(auth()->user()->roleRoute('stockmovement.index'))
-                ->with('error', 'Insufficient stock. Current stock is '.$stockBalance->quantity_on_hand.'');
-        }
+            $beforeQty = $stockBalance->quantity_on_hand;
 
-        $quantity = $requestedQty;
-        $beforeQty = $stockBalance->quantity_on_hand;
-
-        // Create stock movement
-        StockMovement::create([
-            'product_id' => $productId,
-            'user_id' => Auth::id(),
-            'type' => $type,
-            'quantity' => $quantity,
-            'supplier_id' => $data['supplier_id'] ?? null,
-            'remarks' => $data['remarks'] ?? null,
-        ]);
-
-        // Update stock balance
-        if ($type === 'in') {
-            $stockBalance->quantity_on_hand += $quantity;
-        } else {
-            $stockBalance->quantity_on_hand -= $quantity;
-        }
-        $stockBalance->save();
-
-        activity('stock')
-            ->causedBy(auth()->user())
-            ->performedOn($stockBalance)
-            ->withProperties([
+            // Create stock movement
+            StockMovement::create([
                 'product_id' => $productId,
+                'user_id' => auth()->id(),
                 'type' => $type,
                 'quantity' => $requestedQty,
-                'before_stock' => $beforeQty,
-                'after_stock' => $stockBalance->quantity_on_hand,
                 'supplier_id' => $data['supplier_id'] ?? null,
                 'remarks' => $data['remarks'] ?? null,
-            ])
-            ->log($type === 'in' ? 'Stock added' : 'Stock removed');
+            ]);
 
-        return redirect(auth()->user()->roleRoute('stockmovement.index'))
-            ->with('success', $type === 'in'
-                ? 'Stock added successfully.'
-                : 'Stock removed successfully.'
-            );
+            // Update stock balance
+            if ($type === 'in') {
+                $stockBalance->quantity_on_hand += $requestedQty;
+            } else {
+                $stockBalance->quantity_on_hand -= $requestedQty;
+            }
+            $stockBalance->save();
+
+            // Log activity
+            activity('stock')
+                ->causedBy(auth()->user())
+                ->performedOn($stockBalance)
+                ->withProperties([
+                    'product_id' => $productId,
+                    'type' => $type,
+                    'quantity' => $requestedQty,
+                    'before_stock' => $beforeQty,
+                    'after_stock' => $stockBalance->quantity_on_hand,
+                    'supplier_id' => $data['supplier_id'] ?? null,
+                    'remarks' => $data['remarks'] ?? null,
+                ])
+                ->log($type === 'in' ? 'Stock added' : 'Stock removed');
+
+            return redirect(auth()->user()->roleRoute('stockmovement.index'))
+                ->with('success', $type === 'in'
+                    ? 'Stock added successfully.'
+                    : 'Stock removed successfully.'
+                );
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Stock movement failed: '.$e->getMessage());
+
+            // Redirect back with friendly error
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while processing the stock movement.');
+        }
     }
 
     public function show(Request $request)

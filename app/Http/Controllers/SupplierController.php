@@ -35,10 +35,22 @@ class SupplierController extends Controller
 
     public function store(StoreSupplierRequest $request)
     {
-        Supplier::create($request->validated());
+        try {
+            // Create supplier
+            Supplier::create($request->validated());
 
-        return redirect(auth()->user()->roleRoute('supplier.index'))
-            ->with('success', 'Supplier created successfully.');
+            return redirect(auth()->user()->roleRoute('supplier.index'))
+                ->with('success', 'Supplier created successfully.');
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Supplier creation failed: '.$e->getMessage());
+
+            // Redirect back with old input and friendly error message
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while creating the supplier.');
+        }
     }
 
     public function edit(Supplier $supplier)
@@ -49,20 +61,43 @@ class SupplierController extends Controller
 
     public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
+        try {
+            // Update supplier
+            $supplier->update($request->validated());
 
-        $supplier->update($request->validated());
+            return redirect(auth()->user()->roleRoute('supplier.index'))
+                ->with('success', 'Supplier updated successfully.');
 
-        return redirect(auth()->user()->roleRoute('supplier.index'))
-            ->with('success', 'Supplier updated successfully.');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Supplier update failed: '.$e->getMessage());
+
+            // Redirect back with old input and friendly error message
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while updating the supplier.');
+        }
     }
 
     public function destroy($supplierId)
     {
-        $supplier = Supplier::findOrFail($supplierId);
-        $supplier->delete();
+        try {
+            // Find the supplier
+            $supplier = Supplier::findOrFail($supplierId);
 
-        return redirect(auth()->user()->roleRoute('supplier.index'))
-            ->with('success', 'Supplier deleted successfully.');
+            // Delete the supplier
+            $supplier->delete();
 
+            return redirect(auth()->user()->roleRoute('supplier.index'))
+                ->with('success', 'Supplier deleted successfully.');
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Supplier deletion failed: '.$e->getMessage());
+
+            // Redirect back with friendly error message
+            return redirect()->back()
+                ->with('error', 'Something went wrong while deleting the supplier.');
+        }
     }
 }

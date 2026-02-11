@@ -25,37 +25,60 @@ class CategoryController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreCategoryRequest $request)
     {
-        Categories::create($request->validated());
+        try {
+            Categories::create($request->validated());
 
-        return redirect(auth()->user()->roleRoute('category.index'))
-            ->with('success', 'Category created successfully.');
+            return redirect(auth()->user()->roleRoute('category.index'))
+                ->with('success', 'Category created successfully.');
 
+        } catch (\Exception $e) {
+
+            \Log::error('Category creation failed: '.$e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while creating the category.');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateCategoryRequest $request, Categories $category)
     {
+        try {
 
-        $category->update($request->validated());
+            $category->update($request->validated());
 
-        return redirect(auth()->user()->roleRoute('category.index'))
-            ->with('success', 'Category updated successfully.');
+            return redirect(auth()->user()->roleRoute('category.index'))
+                ->with('success', 'Category updated successfully.');
 
+        } catch (\Exception $e) {
+
+            \Log::error('Category update failed: '.$e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while updating the category.');
+        }
     }
 
     public function destroy($categoryId)
     {
-        $category = Categories::findOrFail($categoryId);
-        $category->delete();
+        try {
 
-        return redirect(auth()->user()->roleRoute('category.index'))
-            ->with('success', 'Category deleted successfully.');
+            $category = Categories::findOrFail($categoryId);
+
+            $category->delete();
+
+            return redirect(auth()->user()->roleRoute('category.index'))
+                ->with('success', 'Category deleted successfully.');
+
+        } catch (\Exception $e) {
+
+            \Log::error('Category deletion failed: '.$e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Something went wrong while deleting the category.');
+        }
     }
 }

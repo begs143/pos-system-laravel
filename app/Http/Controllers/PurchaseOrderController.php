@@ -77,68 +77,77 @@ class PurchaseOrderController extends Controller
             'items' => 'required|string',
         ]);
 
-        //  Decode items JSON
+        // Decode items JSON
         $items = json_decode($request->items, true);
 
         if (empty($items)) {
             return back()->withErrors('No items found.');
         }
 
-        DB::transaction(function () use ($request, $items) {
+        try {
+            DB::transaction(function () use ($request, $items) {
 
-            // Generate PO Number
-            $poNumber = $this->generatePoNumber();
+                // Generate PO Number
+                $poNumber = $this->generatePoNumber();
 
-            // Create Purchase Order
-            $purchaseOrder = PurchaseOrder::create([
-                'po_number' => $poNumber,
-                'supplier_id' => $request->supplier_id,
-                'po_date' => now(),
-                'status' => $request->status,
-                'created_by' => auth()->id(),
-                'total_amount' => 0, // temporary
-            ]);
-
-            $totalAmount = 0;
-
-            // Store Items
-            foreach ($items as $item) {
-                $subtotal = $item['price'] * $item['qty'];
-
-                $poItem = PurchaseOrderItem::create([
-                    'purchase_order_id' => $purchaseOrder->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['qty'],
-                    'cost_price' => $item['price'],
-                    'subtotal' => $subtotal,
+                // Create Purchase Order
+                $purchaseOrder = PurchaseOrder::create([
+                    'po_number' => $poNumber,
+                    'supplier_id' => $request->supplier_id,
+                    'po_date' => now(),
+                    'status' => $request->status,
+                    'created_by' => auth()->id(),
+                    'total_amount' => 0, // temporary
                 ]);
 
-                $totalAmount += $subtotal;
+                $totalAmount = 0;
 
-                // Log each item creation
-                activity('purchase_order')
-                    ->causedBy(auth()->user())
-                    ->performedOn($poItem)
-                    ->withProperties([
-                        'po_id' => $purchaseOrder->id,
-                        'po_number' => $poNumber,
+                // Store Items
+                foreach ($items as $item) {
+                    $subtotal = $item['price'] * $item['qty'];
+
+                    $poItem = PurchaseOrderItem::create([
+                        'purchase_order_id' => $purchaseOrder->id,
                         'product_id' => $item['product_id'],
                         'quantity' => $item['qty'],
                         'cost_price' => $item['price'],
                         'subtotal' => $subtotal,
-                    ])
-                    ->log('PO Item added');
-            }
+                    ]);
 
-            // Update total_amount
-            $purchaseOrder->update([
-                'total_amount' => $totalAmount,
-            ]);
-        });
+                    $totalAmount += $subtotal;
 
-        return redirect()
-            ->route('admin.purchase-orders.index')
-            ->with('success', 'Purchase Order created successfully!');
+                    // Log each item creation
+                    activity('purchase_order')
+                        ->causedBy(auth()->user())
+                        ->performedOn($poItem)
+                        ->withProperties([
+                            'po_id' => $purchaseOrder->id,
+                            'po_number' => $poNumber,
+                            'product_id' => $item['product_id'],
+                            'quantity' => $item['qty'],
+                            'cost_price' => $item['price'],
+                            'subtotal' => $subtotal,
+                        ])
+                        ->log('PO Item added');
+                }
+
+                $purchaseOrder->update([
+                    'total_amount' => $totalAmount,
+                ]);
+            });
+
+            return redirect()
+                ->route('admin.purchase-orders.index')
+                ->with('success', 'Purchase Order created successfully!');
+
+        } catch (\Exception $e) {
+
+            \Log::error('Purchase Order creation failed: '.$e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while creating the purchase order.');
+        }
     }
 
     private function generatePoNumber(): string
@@ -161,40 +170,62 @@ class PurchaseOrderController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Validate input
         $request->validate([
             'status' => 'required|in:pending,sent,received,cancelled',
         ]);
 
-        $purchaseOrder = PurchaseOrder::findOrFail($id);
+        try {
 
-        $oldStatus = $purchaseOrder->status;
+            $purchaseOrder = PurchaseOrder::findOrFail($id);
 
-        $purchaseOrder->status = $request->status;
-        $purchaseOrder->save();
+            $oldStatus = $purchaseOrder->status;
 
-        activity('purchase_order')
-            ->causedBy(auth()->user())
-            ->performedOn($purchaseOrder)
-            ->withProperties([
-                'po_id' => $purchaseOrder->id,
-                'po_number' => $purchaseOrder->po_number,
-                'old_status' => $oldStatus,
-                'new_status' => $request->status,
-            ])
-            ->log('Purchase Order status updated');
+            $purchaseOrder->status = $request->status;
+            $purchaseOrder->save();
 
-        return redirect()->back()->with('success', 'Purchase order status updated successfully.');
+            activity('purchase_order')
+                ->causedBy(auth()->user())
+                ->performedOn($purchaseOrder)
+                ->withProperties([
+                    'po_id' => $purchaseOrder->id,
+                    'po_number' => $purchaseOrder->po_number,
+                    'old_status' => $oldStatus,
+                    'new_status' => $request->status,
+                ])
+                ->log('Purchase Order status updated');
+
+            return redirect()->back()->with('success', 'Purchase order status updated successfully.');
+
+        } catch (\Exception $e) {
+
+            \Log::error('Purchase Order status update failed: '.$e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while updating the purchase order status.');
+        }
     }
 
     public function destroy($id)
     {
-        $purchaseOrder = PurchaseOrder::findOrFail($id);
+        try {
 
-        $purchaseOrder->items()->delete();
+            $purchaseOrder = PurchaseOrder::findOrFail($id);
 
-        $purchaseOrder->delete();
+            $purchaseOrder->items()->delete();
 
-        return redirect()->back()->with('success', 'Purchase order status updated successfully.');
+            $purchaseOrder->delete();
+
+            return redirect()->back()->with('success', 'Purchase order deleted successfully.');
+
+        } catch (\Exception $e) {
+
+            \Log::error('Purchase Order deletion failed: '.$e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Something went wrong while deleting the purchase order.');
+        }
     }
 
     public function downloadPDF($id)

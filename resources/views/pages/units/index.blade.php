@@ -87,7 +87,7 @@
                                        </td>
                                    </tr>
                                @empty
-                                   <td colspan="5" class="text-center">No units found.</td>
+                                   <td colspan="5" class="text-center text-muted">No units found.</td>
                                @endforelse
 
                            </tbody>

@@ -81,7 +81,7 @@
                                            </td>
                                        </tr>
                                    @empty
-                                       <td colspan="6" class="text-center">No suppliers found.</td>
+                                       <td colspan="6" class="text-center text-muted">No suppliers found.</td>
                                    @endforelse
 
                                </tbody>

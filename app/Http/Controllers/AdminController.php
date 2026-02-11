@@ -38,7 +38,6 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username',
@@ -47,59 +46,89 @@ class AdminController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
-        User::create([
-            'name' => $validated['name'],
-            'username' => $validated['username'],
-            'email' => $validated['email'] ?? null,
-            'role' => $validated['role'],
-            'password' => Hash::make($validated['password']),
-        ]);
+        try {
+            User::create([
+                'name' => $validated['name'],
+                'username' => $validated['username'],
+                'email' => $validated['email'] ?? null,
+                'role' => $validated['role'],
+                'password' => Hash::make($validated['password']),
+            ]);
 
-        return redirect()
-            ->route('admin.user-role')
-            ->with('success', 'User created successfully.');
+            return redirect()
+                ->route('admin.user-role')
+                ->with('success', 'User created successfully.');
+
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('User creation failed: '.$e->getMessage());
+
+            // Show friendly error
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while creating the user.');
+        }
     }
 
     public function destroy($id)
     {
+        try {
 
-        $user = User::findOrFail($id);
+            $user = User::findOrFail($id);
+            if ($user->id === auth()->id()) {
+                return redirect()->back()->with('error', 'You cannot delete your own account.');
+            }
 
-        if ($user->id === auth()->id()) {
-            return redirect()->back()->with('error', 'You cannot delete your own account.');
+            // Delete the user
+            $user->delete();
+
+            return redirect()->back()->with('success', 'User deleted successfully.');
+
+        } catch (\Exception $e) {
+
+            \Log::error('User deletion failed: '.$e->getMessage());
+
+            // Redirect back with friendly error message
+            return redirect()->back()->with('error', 'Something went wrong while deleting the user.');
         }
-
-        $user->delete();
-
-        return redirect()->back()->with('success', 'User deleted successfully.');
     }
 
     public function update(Request $request, $id)
     {
+        try {
+            // Find the user
+            $user = User::findOrFail($id);
 
-        $user = User::findOrFail($id);
+            // Validation
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'nullable|email|unique:users,email,'.$user->id,
+                'username' => 'required|string|max:255|unique:users,username,'.$user->id,
+                'role' => 'required|in:admin,user',
+                'password' => 'nullable|string|min:8|confirmed',
+            ]);
 
-        // Validation
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:users,email,'.$user->id,
-            'username' => 'required|string|max:255|unique:users,username,'.$user->id,
-            'role' => 'required|in:admin,user',
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
+            // Update user data
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->username = $request->username;
+            $user->role = $request->role;
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->username = $request->username;
-        $user->role = $request->role;
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+            }
 
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return redirect()->route('admin.user-role')->with('success', 'User updated successfully.');
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('User update failed: '.$e->getMessage());
+
+            // Redirect back with input and friendly error message
+            return redirect()->back()->withInput()->with('error', 'Something went wrong while updating the user.');
         }
-
-        $user->save();
-
-        return redirect()->route('admin.user-role')->with('success', 'User updated successfully.');
     }
 
     public function edit($id)

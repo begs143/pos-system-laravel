@@ -106,40 +106,55 @@ class SaleOrderController extends Controller
 
     public function store(Request $request)
     {
-        $sale = null;
+        try {
+            $sale = null;
 
-        DB::transaction(function () use ($request, &$sale) {
+            DB::transaction(function () use ($request, &$sale) {
+                // Normalize the items
+                $items = $this->normalizeItems($request->items);
 
-            $items = $this->normalizeItems($request->items);
+                // Calculate totals and change
+                [$totalAmount, $change] = $this->calculateTotals(
+                    $items,
+                    $request->cash_amount
+                );
 
-            [$totalAmount, $change] = $this->calculateTotals(
-                $items,
-                $request->cash_amount
-            );
+                // Create the sale
+                $sale = $this->createSale(
+                    $totalAmount,
+                    $request->cash_amount,
+                    $change
+                );
 
-            $sale = $this->createSale(
-                $totalAmount,
-                $request->cash_amount,
-                $change
-            );
+                // Store sale items
+                $this->storeSaleItems($sale, $items);
+            });
 
-            $this->storeSaleItems($sale, $items);
-        });
+            // Log activity after successful transaction
+            activity('sales')
+                ->causedBy(auth()->user())
+                ->performedOn($sale)
+                ->withProperties([
+                    'invoice_no' => $sale->invoice_no,
+                    'total_amount' => $sale->total_amount,
+                    'cash_paid' => $sale->amount_paid,
+                    'change' => $sale->change,
+                    'items_count' => $sale->items()->count(),
+                ])
+                ->log('Sale order created');
 
-        activity('sales')
-            ->causedBy(auth()->user())
-            ->performedOn($sale)
-            ->withProperties([
-                'invoice_no' => $sale->invoice_no,
-                'total_amount' => $sale->total_amount,
-                'cash_paid' => $sale->amount_paid,
-                'change' => $sale->change,
-                'items_count' => $sale->items()->count(),
-            ])
-            ->log('Sale order created');
+            return redirect(auth()->user()->roleRoute('sale-orders.details', ['sale' => $sale->id]))
+                ->with('success', 'Sale added successfully.');
 
-        return redirect(auth()->user()->roleRoute('sale-orders.details', ['sale' => $sale->id]))
-            ->with('success', 'Sale added successfully.');
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+            \Log::error('Sale creation failed: '.$e->getMessage());
+
+            // Redirect back with input and friendly error message
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Something went wrong while adding the sale.');
+        }
     }
 
     private function calculateTotals(array $items, $cashAmount): array
