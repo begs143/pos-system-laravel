@@ -27,47 +27,37 @@
                       </svg>
                       <span
                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
-                          2
+                          5
                           <span class="visually-hidden">unread messages</span>
                       </span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
                       <ul class="list-unstyled p-0 m-0">
-                          <li class="p-3 border-bottom ">
-                              <div class="d-flex gap-3">
-                                  <img src="{{ asset ('assets/images/avatar-1.jpg') }}" alt=""
-                                      class="avatar avatar-sm rounded-circle" />
-                                  <div class="flex-grow-1 small">
-                                      <p class="mb-0">New order received</p>
-                                      <p class="mb-1">Order #12345 has been placed</p>
-                                      <div class="text-secondary">5 minutes ago</div>
+                          @forelse($recentLogs as $log)
+                              <li class="p-3 border-bottom">
+                                  <div class="d-flex gap-3">
+                                      <img src="{{ asset('assets/images/avatar-1.jpg') }}" alt=""
+                                          class="avatar avatar-sm rounded-circle" />
+                                      <div class="flex-grow-1 small">
+                                          <!-- Action + User -->
+                                          <p class="mb-0">
+                                              {{ ucfirst($log->description) }}
+                                              @if ($log->causer)
+                                                  by {{ $log->causer->name }}
+                                              @endif
+                                          </p>
+                                          <!-- Time ago -->
+                                          <div class="text-secondary">{{ $log->created_at->diffForHumans() }}</div>
+                                      </div>
                                   </div>
-                              </div>
-                          </li>
-                          <li class="p-3 border-bottom ">
-                              <div class="d-flex gap-3">
-                                  <img src="{{ asset ('assets/images/avatar-4.jpg') }}" alt=""
-                                      class="avatar avatar-sm rounded-circle" />
-                                  <div class="flex-grow-1 small">
-                                      <p class="mb-0">New user registered</p>
-                                      <p class="mb-1">User @john_doe has signed up</p>
-                                      <div class="text-secondary">30 minutes ago</div>
-                                  </div>
-                          </li>
+                              </li>
+                          @empty
+                              <li class="p-3 text-center text-muted">No recent activity</li>
+                          @endforelse
 
-                          <li class="p-3 border-bottom">
-                              <div class="d-flex gap-3">
-                                  <img src="{{ asset ('assets/images/avatar-2.jpg') }}" alt=""
-                                      class="avatar avatar-sm rounded-circle" />
-                                  <div class="flex-grow-1 small">
-                                      <p class="mb-0">Payment confirmed</p>
-                                      <p class="mb-1">Payment of $299 has been received</p>
-                                      <div class="text-secondary">1 hour ago</div>
-                                  </div>
-                              </div>
-                          </li>
                           <li class="px-4 py-3 text-center">
-                              <a href="#" class="text-primary ">View all notifications</a>
+                              <a href="{{ auth()->user()->roleRoute('logs.index') }}" class="text-primary">View all
+                                  activity logs</a>
                           </li>
                       </ul>
                   </div>
@@ -75,12 +65,13 @@
               <!-- Dropdown -->
               <li class="ms-3 dropdown">
                   <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="{{ asset ('assets/images/avatar-1.jpg')}}" alt="" class="avatar avatar-sm rounded-circle" />
+                      <img src="{{ asset('assets/images/avatar-1.jpg') }}" alt=""
+                          class="avatar avatar-sm rounded-circle" />
                   </a>
                   <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
                       <div>
                           <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
-                              <img src="{{ asset ('assets/images/avatar-1.jpg') }}" alt=""
+                              <img src="{{ asset('assets/images/avatar-1.jpg') }}" alt=""
                                   class="avatar avatar-md rounded-circle" />
                               <div>
                                   <h4 class="mb-0 small">Shrina Tesla</h4>
