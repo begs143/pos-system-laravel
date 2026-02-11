@@ -32,7 +32,7 @@
 
           <li>
               <a class="nav-link {{ request()->routeIs('user.sale-orders.transactions') ? 'active' : '' }}"
-                  href="{{ route('admin.sale-orders.transactions') }}">
+                  href="{{ route('user.sale-orders.transactions') }}">
                   <i class="ti ti-file-text"></i>
                   <span class="nav-text">S.O Transactions</span>
               </a>
