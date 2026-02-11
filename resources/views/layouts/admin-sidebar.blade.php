@@ -20,24 +20,24 @@
           <li class="px-3 py-2"><small class="nav-text text-muted">Product</small></li>
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('inventory.create') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('inventory.create') }}">
+              <a class="nav-link {{ request()->routeIs('admin.inventory.create') ? 'active' : '' }}"
+                  href="{{ route('admin.inventory.create') }}">
                   <i class="ti ti-plus"></i>
                   <span class="nav-text">Add Product</span>
               </a>
           </li>
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('category.index') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('category.index') }}">
+              <a class="nav-link {{ request()->routeIs('admin.category.index') ? 'active' : '' }}"
+                  href="{{ route('admin.category.index') }}">
                   <i class="ti ti-filter"></i>
                   <span class="nav-text">Category</span>
               </a>
           </li>
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('units.index') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('units.index') }}">
+              <a class="nav-link {{ request()->routeIs('admin.units.index') ? 'active' : '' }}"
+                  href="{{ route('admin.units.index') }}">
                   <i class="ti ti-link"></i>
                   <span class="nav-text">Unit</span>
               </a>
@@ -47,8 +47,8 @@
           <li class="px-3 py-2"><small class="nav-text text-muted">Inventory / Stock</small></li>
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('inventory.index') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('inventory.index') }}">
+              <a class="nav-link {{ request()->routeIs('admin.inventory.index') ? 'active' : '' }}"
+                  href="{{ route('admin.inventory.index') }}">
                   <i class="ti ti-box-seam"></i>
                   <span class="nav-text">Inventory</span>
               </a>
@@ -56,16 +56,16 @@
 
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('stockmovement.index') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('stockmovement.index') }}">
+              <a class="nav-link {{ request()->routeIs('admin.stockmovement.index') ? 'active' : '' }}"
+                  href="{{ route('admin.stockmovement.index') }}">
                   <i class="ti ti-clipboard"></i>
                   <span class="nav-text">Stock Manage</span>
               </a>
           </li>
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('stockmovement.show') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('stockmovement.show') }}">
+              <a class="nav-link {{ request()->routeIs('admin.stockmovement.show') ? 'active' : '' }}"
+                  href="{{ route('admin.stockmovement.show') }}">
                   <i class="ti ti-file-text"></i>
                   <span class="nav-text">Stock Movements</span>
               </a>
@@ -76,8 +76,8 @@
           <li class="px-3 py-2"><small class="nav-text text-muted">Order & Sales</small></li>
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('sale-orders.index') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('sale-orders.index') }}">
+              <a class="nav-link {{ request()->routeIs('admin.sale-orders.index') ? 'active' : '' }}"
+                  href="{{ route('admin.sale-orders.index') }}">
                   <i class="ti ti-shopping-cart"></i>
                   <span class="nav-text">Sale Order</span>
               </a>
@@ -85,8 +85,8 @@
 
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('sale-orders.transactions') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('sale-orders.transactions') }}">
+              <a class="nav-link {{ request()->routeIs('admin.sale-orders.transactions') ? 'active' : '' }}"
+                  href="{{ route('admin.sale-orders.transactions') }}">
                   <i class="ti ti-file-text"></i>
                   <span class="nav-text">S.O Transactions</span>
               </a>
@@ -95,13 +95,19 @@
           <li class="px-3 py-2"><small class="nav-text text-muted">Purchase Order</small></li>
 
 
-          <li><a class='nav-link' href='{{ auth()->user()->roleRoute('purchase-orders.index') }}'><i
-                      class="ti ti-package-export"></i><span class="nav-text">Purchase Order
-                  </span></a></li>
+          <li>
+
+              <a class="nav-link {{ request()->routeIs('admin.purchase-orders.index') ? 'active' : '' }}"
+                  href="{{ route('admin.purchase-orders.index') }}">
+                  <i class="ti ti-package-export"></i>
+                  <span class="nav-text">Purchase Order</span>
+              </a>
+          </li>
 
 
           <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('supplier.index') }}">
+              <a class="nav-link {{ request()->routeIs('admin.supplier.index') ? 'active' : '' }}"
+                  href="{{ route('admin.supplier.index') }}">
                   <i class="ti ti-truck"></i>
                   <span class="nav-text">Supplier</span>
               </a>
@@ -109,18 +115,22 @@
 
           <li class="px-3 pt-4 pb-2"><small class="nav-text text-muted">Maintenance</small></li>
 
-          <li><a class="nav-link" href="{{ auth()->user()->roleRoute('user-role') }}"><i
-                      class="ti ti-user-plus"></i><span class="nav-text">User Role
-                  </span></a></li>
+          <li>
+              <a class="nav-link {{ request()->routeIs('admin.user-role') ? 'active' : '' }}"
+                  href="{{ route('admin.user-role') }}">
+                  <i class="ti ti-user-plus"></i><span class="nav-text">User Role
+                  </span></a>
+          </li>
 
           <li>
-              <a class="nav-link" href="{{ auth()->user()->roleRoute('report.index') }}">
+              <a class="nav-link" href="#">
                   <i class="ti ti-receipt"></i>
                   <span class="nav-text">Reports</span>
               </a>
           </li>
 
-          <li><a class="nav-link" href="#"><i class="ti ti-alert-circle"></i><span class="nav-text">Logs
+          <li><a class="nav-link" href="{{ route('admin.logs.index') }}"><i class="ti ti-alert-circle"></i><span
+                      class="nav-text">Logs
                   </span></a>
           </li>
 

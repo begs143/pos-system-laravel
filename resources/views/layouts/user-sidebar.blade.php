@@ -10,11 +10,11 @@
       <ul class="nav flex-column mb-10">
           <li class="px-3 py-2"><small class="nav-text text-muted">Main</small></li>
           <li>
-              {{-- <a class="nav-link {{ request()->url() == url('/admin/dashboard') ? 'active' : '' }}"
-                  href="{{ url('/admin/dashboard') }}">
+              <a class="nav-link {{ request()->url() == url('/dashboard') ? 'active' : '' }}"
+                  href="{{ url('/dashboard') }}">
                   <i class="ti ti-home"></i>
                   <span class="nav-text">Dashboard</span>
-              </a> --}}
+              </a>
           </li>
 
 
@@ -22,8 +22,8 @@
           <li class="px-3 py-2"><small class="nav-text text-muted">Order & Sales</small></li>
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('sale-orders.index') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('sale-orders.index') }}">
+              <a class="nav-link {{ request()->routeIs('user.sale-orders.index') ? 'active' : '' }}"
+                  href="{{ route('user.sale-orders.index') }}">
                   <i class="ti ti-shopping-cart"></i>
                   <span class="nav-text">Sale Order</span>
               </a>
@@ -31,8 +31,8 @@
 
 
           <li>
-              <a class="nav-link {{ request()->url() == auth()->user()->roleRoute('sale-orders.transactions') ? 'active' : '' }}"
-                  href="{{ auth()->user()->roleRoute('sale-orders.transactions') }}">
+              <a class="nav-link {{ request()->routeIs('user.sale-orders.transactions') ? 'active' : '' }}"
+                  href="{{ route('admin.sale-orders.transactions') }}">
                   <i class="ti ti-file-text"></i>
                   <span class="nav-text">S.O Transactions</span>
               </a>
@@ -43,9 +43,15 @@
           <li class="px-3 pt-4 pb-2"><small class="nav-text text-muted">Maintenance</small></li>
 
 
+          <li>
+              <a class="nav-link" href="#">
+                  <i class="ti ti-receipt"></i>
+                  <span class="nav-text">Reports</span>
+              </a>
+          </li>
 
-
-          <li><a class="nav-link" href="#"><i class="ti ti-alert-circle"></i><span class="nav-text">Logs
+          <li><a class="nav-link" href="{{ route('user.logs.index') }}"><i class="ti ti-alert-circle"></i><span
+                      class="nav-text">Logs
                   </span></a>
           </li>
 

@@ -69,11 +69,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Sale Routes
     Route::get('/admin/sale-orders', [SaleOrderController::class, 'index'])->name('admin.sale-orders.index');
-    Route::get('/admin/sale-orders/summary', [SaleOrderController::class, 'summary'])->name('admin.sale-orders.summary');
+    Route::get('/admin/sale-order/summary', [SaleOrderController::class, 'summary'])->name('admin.sale-orders.summary');
     Route::post('/admin/sale-orders/summary', [SaleOrderController::class, 'store'])->name('admin.sale-orders.store');
-    Route::get('/admin/sale-orders/{sale}/details', [SaleOrderController::class, 'details'])->name('admin.sale-orders.details');
-    Route::get('/admin/sale-orders/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('admin.sale-orders.view');
-    Route::get('/admin/sale-orders/transactions', [SaleOrderController::class, 'transactions'])->name('admin.sale-orders.transactions');
+    Route::get('/admin/sale-order/{sale}/details', [SaleOrderController::class, 'details'])->name('admin.sale-orders.details');
+    Route::get('/admin/sale-order/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('admin.sale-orders.view');
+    Route::get('/admin/sale-order/transactions', [SaleOrderController::class, 'transactions'])->name('admin.sale-orders.transactions');
 
     // Purchase Route
     Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase-orders.index');
@@ -83,8 +83,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase-orders.destroy');
     Route::get('/admin/purchase-orders/{id}/view', [PurchaseOrderController::class, 'downloadPDF'])->name('admin.purchase-orders.pdf');
 
-    // Route Logs
-    Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
     // Route Logs
     Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 });
@@ -101,6 +99,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/sale-orders/{sale}/details', [SaleOrderController::class, 'details'])->name('user.sale-orders.details');
     Route::get('/sale-orders/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('user.sale-orders.view');
     Route::get('/sale-orders/transactions', [SaleOrderController::class, 'transactions'])->name('user.sale-orders.transactions');
+
+    // Route Logs
+    Route::get('/user/logs', [LogController::class, 'index'])->name('user.logs.index');
 });
 
 require __DIR__.'/auth.php';
