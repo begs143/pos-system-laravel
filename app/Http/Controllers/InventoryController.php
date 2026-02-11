@@ -39,7 +39,12 @@ class InventoryController extends Controller
             ->paginate(25)
             ->withQueryString();
 
-        return view('pages.inventory.index', compact('products'));
+        $totalCategories = Categories::count();
+        $totalProducts = Product::count();
+        $activeProducts = Product::where('is_active', true)->count();
+        $inactiveProducts = Product::where('is_active', false)->count();
+
+        return view('pages.inventory.index', compact('products', 'totalCategories', 'totalProducts', 'activeProducts', 'inactiveProducts'));
     }
 
     public function create()

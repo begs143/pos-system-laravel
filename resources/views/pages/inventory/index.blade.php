@@ -24,6 +24,86 @@
 
                <div class="row">
                    <div class="col-12">
+
+                       <div class="row g-5 mb-3">
+                           <div class="col-xl-3 col-md-6 col-12">
+                               <div class="card">
+                                   <div class="card-body">
+                                       <div class="d-flex align-items-start gap-3">
+                                           <div class="icon-shape icon-lg bg-primary bg-opacity-10 text-primary rounded-2">
+                                               <i class="ti ti-category fs-4 "></i>
+                                           </div>
+                                           <div class="">
+                                               <span>Total Categories</span>
+                                               <h2 class="fw-bold mb-0">{{ $totalCategories }}</h2>
+                                           </div>
+
+                                       </div>
+
+                                   </div>
+
+                               </div>
+
+                           </div>
+                           <div class="col-xl-3 col-md-6 col-12">
+                               <div class="card">
+                                   <div class="card-body">
+                                       <div class="d-flex align-items-start gap-3">
+                                           <div class="icon-shape icon-lg bg-info bg-opacity-10 text-info rounded-2">
+                                               <i class="ti ti-check fs-4 "></i>
+                                           </div>
+                                           <div class="">
+                                               <span>Active</span>
+                                               <h2 class="fw-bold mb-0">{{ $activeProducts }}</h2>
+                                           </div>
+
+                                       </div>
+
+                                   </div>
+
+                               </div>
+
+                           </div>
+                           <div class="col-xl-3 col-md-6 col-12">
+                               <div class="card">
+                                   <div class="card-body">
+                                       <div class="d-flex align-items-start gap-3">
+                                           <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
+                                               <i class="ti ti-x fs-4 "></i>
+                                           </div>
+                                           <div class="">
+                                               <span>Inactive</span>
+                                               <h2 class="fw-bold mb-0">{{ $inactiveProducts }}</h2>
+                                           </div>
+
+                                       </div>
+
+                                   </div>
+
+                               </div>
+
+                           </div>
+                           <div class="col-xl-3 col-md-6 col-12">
+                               <div class="card">
+                                   <div class="card-body">
+                                       <div class="d-flex align-items-start gap-3">
+                                           <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-2">
+                                               <i class="ti ti-box-seam fs-4 "></i>
+                                           </div>
+                                           <div class="">
+                                               <span>Total Products</span>
+                                               <h2 class="fw-bold mb-0">{{ $totalProducts }}</h2>
+                                           </div>
+
+                                       </div>
+
+                                   </div>
+
+                               </div>
+
+                           </div>
+
+                       </div>
                        <div>
                            <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
 
@@ -54,6 +134,8 @@
 
                            </div>
                        </div>
+
+
                        <div class="card table-responsive">
                            <table class="table mb-0 text-nowrap  table-hover">
                                <thead class="table-light border-light">
