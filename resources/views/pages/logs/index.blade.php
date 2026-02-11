@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-12">
                     <div>
-                        <form action="" method="GET">
+                        <form action="{{ auth()->user()->roleRoute('logs.index') }}" method="GET">
                             <div class="d-flex gap-2 mb-3" style="max-width: 230px;">
                                 <input type="text" name="search" value="" class="form-control"
                                     placeholder="Search Logs...">
@@ -29,7 +29,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="card table-responsive ">
+                    <div class="card table-responsive">
                         <table class="table mb-0 text-nowrap table-hover">
                             <thead class="table-light border-light">
                                 <tr>
