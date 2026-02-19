@@ -11624,19 +11624,19 @@ var ye = (function () {
                                         .concat(e, " ")
                                         .concat(
                                             t - s,
-                                            ` 
+                                            `
              L `,
                                         )
                                         .concat(e + s, " ")
                                         .concat(
                                             t + s,
-                                            ` 
+                                            `
              L `,
                                         )
                                         .concat(e - s, " ")
                                         .concat(
                                             t + s,
-                                            ` 
+                                            `
              Z`,
                                         );
                                     break;
@@ -11646,25 +11646,25 @@ var ye = (function () {
                                         .concat(e - (s /= 1.125), " ")
                                         .concat(
                                             t - s,
-                                            ` 
+                                            `
            L `,
                                         )
                                         .concat(e + s, " ")
                                         .concat(
                                             t - s,
-                                            ` 
+                                            `
            L `,
                                         )
                                         .concat(e + s, " ")
                                         .concat(
                                             t + s,
-                                            ` 
+                                            `
            L `,
                                         )
                                         .concat(e - s, " ")
                                         .concat(
                                             t + s,
-                                            ` 
+                                            `
            Z`,
                                         );
                                     break;
@@ -11674,25 +11674,25 @@ var ye = (function () {
                                             .concat(e, " ")
                                             .concat(
                                                 t - s,
-                                                ` 
+                                                `
              L `,
                                             )
                                             .concat(e + s, " ")
                                             .concat(
                                                 t,
-                                                ` 
+                                                `
              L `,
                                             )
                                             .concat(e, " ")
                                             .concat(
                                                 t + s,
-                                                ` 
+                                                `
              L `,
                                             )
                                             .concat(e - s, " ")
                                             .concat(
                                                 t,
-                                                ` 
+                                                `
             Z`,
                                             )));
                                     break;
@@ -11701,7 +11701,7 @@ var ye = (function () {
                                         .concat(e - (s /= 1.1), " ")
                                         .concat(
                                             t,
-                                            ` 
+                                            `
            L `,
                                         )
                                         .concat(e + s, " ")
@@ -11713,19 +11713,19 @@ var ye = (function () {
                                             .concat(e, ", ")
                                             .concat(
                                                 t,
-                                                ` 
+                                                `
            m -`,
                                             )
                                             .concat(
                                                 s / 2,
-                                                `, 0 
+                                                `, 0
            a `,
                                             )
                                             .concat(s / 2, ",")
                                             .concat(s / 2, " 0 1,0 ")
                                             .concat(
                                                 s,
-                                                `,0 
+                                                `,0
            a `,
                                             )
                                             .concat(s / 2, ",")
@@ -42990,15 +42990,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("salesPurchaseChart")) {
         var n = {
                 series: [
-                    {
-                        name: "Sales",
-                        data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-                    },
-                    {
-                        name: "Purchase",
-                        data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-                    },
-                ],
+  { name: "Sales", data: window.salesPurchaseSales ?? [] },
+  { name: "Purchase", data: window.salesPurchasePurchase ?? [] },
+],
+
                 colors: ["#f7a085", "#E66239"],
                 chart: {
                     type: "bar",
@@ -43034,34 +43029,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 dataLabels: { enabled: !1 },
                 stroke: { show: !1, width: 2, colors: ["transparent"] },
                 xaxis: {
-                    categories: [
-                        "28 Jan",
-                        "29 Jan",
-                        "30 Jan",
-                        "31 Jan",
-                        "1 Feb",
-                        "2 Feb",
-                        "3 Feb",
-                        "4 Feb",
-                        "5 Feb",
-                    ],
-                    axisBorder: {
-                        show: !1,
-                        color: "#e2e8f0",
-                        height: 1,
-                        width: "100%",
-                        offsetX: 0,
-                        offsetY: 0,
-                    },
-                    axisTicks: {
-                        show: !1,
-                        borderType: "solid",
-                        color: "#e2e8f0",
-                        height: 6,
-                        offsetX: 0,
-                        offsetY: 0,
-                    },
-                },
+    categories: window.salesPurchaseLabels ?? [],
+    axisBorder: {
+        show: !1,
+        color: "#e2e8f0",
+        height: 1,
+        width: "100%",
+        offsetX: 0,
+        offsetY: 0,
+    },
+    axisTicks: {
+        show: !1,
+        borderType: "solid",
+        color: "#e2e8f0",
+        height: 6,
+        offsetX: 0,
+        offsetY: 0,
+    },
+},
                 yaxis: {
                     labels: {
                         formatter: function (i) {
@@ -43079,7 +43064,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     },
                 },
             },
-            e = new ui(document.querySelector("#salesPurchaseChart"), n);
+      e = new ApexCharts(document.querySelector("#salesPurchaseChart"), n);
         e.render();
     }
     if (document.getElementById("customerChart")) {

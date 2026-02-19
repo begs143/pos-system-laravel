@@ -12,7 +12,7 @@
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "*",
         "propaganistas/laravel-phone": "^6.0",
-        "spatie/laravel-activitylog": "^4.11"
+        "spatie/laravel-activitylog": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('assets/site.webmanifest') }}">
-
+ <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="module" crossorigin src="{{ asset('assets/js/main.js') }}"></script>
     <link rel="stylesheet" crossorigin href="{{ asset('assets/css/main.css') }}">
 
@@ -25,13 +25,12 @@
 
     <x-sidebar-layout />
 
-    @yield('content')
-
+      @yield('content')
 
     {{-- Stack for additional scripts --}}
     @stack('pos-sale-script')
     @stack('app-script')
-</body>
 
+    <script src="{{ asset('assets/js/core/app-script.js') }}"></script>
+</body>
 </html>
-<script src="{{ asset('assets/js/core/app-script.js') }}"></script>

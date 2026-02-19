@@ -12,15 +12,19 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ChartController;
 
 Route::fallback(function () {
-    return auth()->check() ? redirect('/dashboard') : redirect('/login');
+
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Dashboard Routes     // User Role Routes
     Route::get('/admin/dashboard', [AdminController::class, 'index'])
         ->name('admin.dashboard');
+        Route::get('/admin/charts/sales-purchase', [ChartController::class, 'salesPurchase'])
+    ->name('admin.charts.sales-purchase');
     Route::get('/admin/users', [AdminController::class, 'userRole'])->name('admin.user-role');
     Route::get('/admin/user/create', [AdminController::class, 'create'])->name('admin.user.create');
     Route::post('/admin/user/create', [AdminController::class, 'store'])->name('admin.user.store');
@@ -103,5 +107,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     // Route Logs
     Route::get('/user/logs', [LogController::class, 'index'])->name('user.logs.index');
 });
+
+
 
 require __DIR__.'/auth.php';

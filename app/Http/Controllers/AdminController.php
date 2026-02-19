@@ -5,14 +5,196 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
-    }
+        $now = Carbon::now();
 
+    $startThisMonth = $now->copy()->startOfMonth();
+    $endThisMonth   = $now->copy()->endOfMonth();
+
+    $startLastMonth = $now->copy()->subMonthNoOverflow()->startOfMonth();
+    $endLastMonth   = $now->copy()->subMonthNoOverflow()->endOfMonth();
+
+
+    $thisMonthSales = (float) DB::table('sales')
+        ->whereBetween('sale_date', [$startThisMonth->toDateString(), $endThisMonth->toDateString()])
+        ->sum('total_amount');
+
+    $thisMonthPurchase = (float) DB::table('purchase_orders')
+        ->whereBetween('po_date', [$startThisMonth->toDateString(), $endThisMonth->toDateString()])
+        ->sum('total_amount');
+
+
+    $lastMonthSales = (float) DB::table('sales')
+        ->whereBetween('sale_date', [$startLastMonth->toDateString(), $endLastMonth->toDateString()])
+        ->sum('total_amount');
+
+    $lastMonthPurchase = (float) DB::table('purchase_orders')
+        ->whereBetween('po_date', [$startLastMonth->toDateString(), $endLastMonth->toDateString()])
+        ->sum('total_amount');
+
+
+    $totalProfit = $thisMonthSales - $thisMonthPurchase;
+    $profitLastMonth = $lastMonthSales - $lastMonthPurchase;
+
+    $percentChange = function (float $current, float $previous) {
+        if ($previous == 0.0) return $current > 0 ? 100 : 0;
+        return (($current - $previous) / $previous) * 100;
+    };
+
+    $salesChangePercent    = $percentChange($thisMonthSales, $lastMonthSales);
+    $purchaseChangePercent = $percentChange($thisMonthPurchase, $lastMonthPurchase);
+    $profitChangePercent   = $percentChange($totalProfit, $profitLastMonth);
+
+
+    $totalReturns = 0;
+    $returnsChangePercent = 0;
+
+
+    $totalExpenseAmount = $thisMonthPurchase;
+    $expenseChangePercent = $purchaseChangePercent;
+
+
+    $suppliersCount = (int) DB::table('suppliers')->count();
+    $customersCount = (int) DB::table('users')->where('role', 'user')->count();
+    $ordersCount    = (int) DB::table('sales')->count();
+
+
+    $lowStock = DB::table('stock_balances as sb')
+        ->join('products as p', 'p.id', '=', 'sb.product_id')
+        ->select('p.id', 'p.name', 'sb.quantity_on_hand')
+        ->where('sb.quantity_on_hand', '<=', 10)
+        ->orderBy('sb.quantity_on_hand', 'asc')
+        ->limit(5)
+        ->get();
+
+
+    $topSelling = DB::table('sale_items as si')
+        ->join('products as p', 'p.id', '=', 'si.product_id')
+        ->select('p.id', 'p.name', DB::raw('SUM(si.quantity) as units_sold'))
+        ->groupBy('p.id', 'p.name')
+        ->orderByDesc('units_sold')
+        ->limit(5)
+        ->get();
+
+
+    $recentSales = DB::table('sales')
+        ->orderByDesc('sale_date')
+        ->limit(5)
+        ->get();
+   $salesChart = DB::table('sales')
+    ->selectRaw('MONTH(sale_date) as month, SUM(total_amount) as total')
+    ->whereYear('sale_date', now()->year)
+    ->groupByRaw('MONTH(sale_date)')
+    ->pluck('total', 'month');
+
+$purchaseChart = DB::table('purchase_orders')
+    ->selectRaw('MONTH(po_date) as month, SUM(total_amount) as total')
+    ->whereYear('po_date', now()->year)
+    ->groupByRaw('MONTH(po_date)')
+    ->pluck('total', 'month');
+    $chartData = [
+    'labels' => $months ?? [],
+    'sales' => $salesData ?? [],
+    'purchase' => $purchaseData ?? [],
+];
+
+$customerKey = null;
+if (\Illuminate\Support\Facades\Schema::hasColumn('sales', 'customer_id')) $customerKey = 'customer_id';
+if (\Illuminate\Support\Facades\Schema::hasColumn('sales', 'user_id')) $customerKey = 'user_id';
+
+$firstTimeCustomers = 0;
+$returnCustomers = 0;
+
+if ($customerKey) {
+    $customerSalesCounts = DB::table('sales')
+        ->select($customerKey, DB::raw('COUNT(*) as cnt'))
+        ->whereNotNull($customerKey)
+        ->groupBy($customerKey)
+        ->pluck('cnt');
+
+    $firstTimeCustomers = $customerSalesCounts->filter(fn($c) => $c == 1)->count();
+    $returnCustomers = $customerSalesCounts->filter(fn($c) => $c >= 2)->count();
+} else {
+    // fallback if no customer id column exists
+    $firstTimeCustomers = 0;
+    $returnCustomers = 0;
+}
+$year = now()->year;
+
+// sales grouped by month (sale_date)
+$salesByMonth = DB::table('sales')
+    ->selectRaw('MONTH(sale_date) as m, SUM(total_amount) as total')
+    ->whereYear('sale_date', $year)
+    ->groupByRaw('MONTH(sale_date)')
+    ->pluck('total', 'm');
+
+// purchase grouped by month (po_date)
+$purchaseByMonth = DB::table('purchase_orders')
+    ->selectRaw('MONTH(po_date) as m, SUM(total_amount) as total')
+    ->whereYear('po_date', $year)
+    ->groupByRaw('MONTH(po_date)')
+    ->pluck('total', 'm');
+
+$labels = [];
+$salesData = [];
+$purchaseData = [];
+
+for ($m = 1; $m <= 12; $m++) {
+    $labels[] = \Carbon\Carbon::create()->month($m)->format('M');
+    $salesData[] = (float) ($salesByMonth[$m] ?? 0);
+    $purchaseData[] = (float) ($purchaseByMonth[$m] ?? 0);
+}
+
+// Prepare 12 months
+$months = [];
+$salesData = [];
+$purchaseData = [];
+
+for ($i = 1; $i <= 12; $i++) {
+    $months[] = date('M', mktime(0, 0, 0, $i, 1));
+    $salesData[] = $salesChart[$i] ?? 0;
+    $purchaseData[] = $purchaseChart[$i] ?? 0;
+}
+    return view('admin.dashboard', compact(
+        'thisMonthSales',
+        'thisMonthPurchase',
+        'salesChangePercent',
+        'purchaseChangePercent',
+
+        'totalProfit',
+        'profitChangePercent',
+
+        'totalReturns',
+        'returnsChangePercent',
+
+        'totalExpenseAmount',
+        'expenseChangePercent',
+
+        'suppliersCount',
+        'customersCount',
+        'ordersCount',
+
+        'lowStock',
+        'topSelling',
+        'recentSales',
+        'months',
+'salesData',
+'purchaseData',
+   'chartData',
+   'firstTimeCustomers',
+'returnCustomers',
+'labels',
+'salesData',
+'purchaseData'
+
+ ));
+    }
     public function userRole(Request $request)
     {
 
