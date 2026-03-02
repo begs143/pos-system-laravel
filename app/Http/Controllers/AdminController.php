@@ -12,8 +12,9 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $now = Carbon::now();
+       $now = Carbon::now();
 
+    // --- DATE RANGES (THIS MONTH / LAST MONTH) -----------------
     $startThisMonth = $now->copy()->startOfMonth();
     $endThisMonth   = $now->copy()->endOfMonth();
 
@@ -29,7 +30,6 @@ class AdminController extends Controller
         ->whereBetween('po_date', [$startThisMonth->toDateString(), $endThisMonth->toDateString()])
         ->sum('total_amount');
 
-
     $lastMonthSales = (float) DB::table('sales')
         ->whereBetween('sale_date', [$startLastMonth->toDateString(), $endLastMonth->toDateString()])
         ->sum('total_amount');
@@ -37,13 +37,27 @@ class AdminController extends Controller
     $lastMonthPurchase = (float) DB::table('purchase_orders')
         ->whereBetween('po_date', [$startLastMonth->toDateString(), $endLastMonth->toDateString()])
         ->sum('total_amount');
+    $totalExpenseAmount = $thisMonthPurchase;
 
 
-    $totalProfit = $thisMonthSales - $thisMonthPurchase;
-    $profitLastMonth = $lastMonthSales - $lastMonthPurchase;
+    $totalSales       = $thisMonthSales;
+    $totalPurchase    = $thisMonthPurchase;
+    $totalexpense   =$totalExpenseAmount;
 
+    $invoiceDue    = 0;
+
+    $totalProfit      = $thisMonthSales - $thisMonthPurchase;
+    $profitLastMonth  = $lastMonthSales - $lastMonthPurchase;
+
+
+
+
+
+    // --- PERCENT CHANGE HELPER ---------------------------------
     $percentChange = function (float $current, float $previous) {
-        if ($previous == 0.0) return $current > 0 ? 100 : 0;
+        if ($previous == 0.0) {
+            return $current > 0 ? 100 : 0;
+        }
         return (($current - $previous) / $previous) * 100;
     };
 
@@ -51,20 +65,22 @@ class AdminController extends Controller
     $purchaseChangePercent = $percentChange($thisMonthPurchase, $lastMonthPurchase);
     $profitChangePercent   = $percentChange($totalProfit, $profitLastMonth);
 
+    // --- RETURNS & EXPENSES (PLACEHOLDER / SIMPLE LOGIC) -------
+    $totalReturns          = 0;
+    $returnsChangePercent  = 0;
 
-    $totalReturns = 0;
-    $returnsChangePercent = 0;
+    $totalExpenseAmount    = $thisMonthPurchase;
+    $expenseChangePercent  = $purchaseChangePercent;
 
-
-    $totalExpenseAmount = $thisMonthPurchase;
-    $expenseChangePercent = $purchaseChangePercent;
-
-
+    // --- BASIC COUNTS ------------------------------------------
     $suppliersCount = (int) DB::table('suppliers')->count();
-    $customersCount = (int) DB::table('users')->where('role', 'user')->count();
+
+    // Use customers table instead of users role
+    $customersCount = (int) DB::table('users')->count();
+
     $ordersCount    = (int) DB::table('sales')->count();
 
-
+    // --- LOW STOCK PRODUCTS ------------------------------------
     $lowStock = DB::table('stock_balances as sb')
         ->join('products as p', 'p.id', '=', 'sb.product_id')
         ->select('p.id', 'p.name', 'sb.quantity_on_hand')
@@ -73,7 +89,7 @@ class AdminController extends Controller
         ->limit(5)
         ->get();
 
-
+    // --- TOP SELLING PRODUCTS ----------------------------------
     $topSelling = DB::table('sale_items as si')
         ->join('products as p', 'p.id', '=', 'si.product_id')
         ->select('p.id', 'p.name', DB::raw('SUM(si.quantity) as units_sold'))
@@ -82,85 +98,58 @@ class AdminController extends Controller
         ->limit(5)
         ->get();
 
-
+    // --- RECENT SALES ------------------------------------------
     $recentSales = DB::table('sales')
         ->orderByDesc('sale_date')
         ->limit(5)
         ->get();
-   $salesChart = DB::table('sales')
-    ->selectRaw('MONTH(sale_date) as month, SUM(total_amount) as total')
-    ->whereYear('sale_date', now()->year)
-    ->groupByRaw('MONTH(sale_date)')
-    ->pluck('total', 'month');
 
-$purchaseChart = DB::table('purchase_orders')
-    ->selectRaw('MONTH(po_date) as month, SUM(total_amount) as total')
-    ->whereYear('po_date', now()->year)
-    ->groupByRaw('MONTH(po_date)')
-    ->pluck('total', 'month');
+    // --- SALES vs PURCHASE CHART DATA (PER MONTH, CURRENT YEAR) -
+    $year = now()->year;
+
+    $salesByMonth = DB::table('sales')
+        ->selectRaw('MONTH(sale_date) as m, SUM(total_amount) as total')
+        ->whereYear('sale_date', $year)
+        ->groupByRaw('MONTH(sale_date)')
+        ->pluck('total', 'm');
+
+    $purchaseByMonth = DB::table('purchase_orders')
+        ->selectRaw('MONTH(po_date) as m, SUM(total_amount) as total')
+        ->whereYear('po_date', $year)
+        ->groupByRaw('MONTH(po_date)')
+        ->pluck('total', 'm');
+
+    // arrays used in Blade & JS for chart
+    $months       = [];
+    $salesData    = [];
+    $purchaseData = [];
+
+    for ($m = 1; $m <= 12; $m++) {
+        $months[]       = Carbon::create()->month($m)->format('M');
+        $salesData[]    = (float) ($salesByMonth[$m] ?? 0);
+        $purchaseData[] = (float) ($purchaseByMonth[$m] ?? 0);
+    }
+
+    // Optional: packed array if you want
     $chartData = [
-    'labels' => $months ?? [],
-    'sales' => $salesData ?? [],
-    'purchase' => $purchaseData ?? [],
-];
+        'labels'   => $months,
+        'sales'    => $salesData,
+        'purchase' => $purchaseData,
+    ];
 
-$customerKey = null;
-if (\Illuminate\Support\Facades\Schema::hasColumn('sales', 'customer_id')) $customerKey = 'customer_id';
-if (\Illuminate\Support\Facades\Schema::hasColumn('sales', 'user_id')) $customerKey = 'user_id';
+    // --- CUSTOMER OVERVIEW (FIRST TIME vs RETURN) --------------
+    // Here we use customers.created_at (last 6 months)
+    $start6Months = Carbon::now()->subMonths(6)->startOfDay();
 
-$firstTimeCustomers = 0;
-$returnCustomers = 0;
+    $firstTimeCustomers = (int) DB::table('users')
+        ->where('created_at', '>=', $start6Months)
+        ->count();
 
-if ($customerKey) {
-    $customerSalesCounts = DB::table('sales')
-        ->select($customerKey, DB::raw('COUNT(*) as cnt'))
-        ->whereNotNull($customerKey)
-        ->groupBy($customerKey)
-        ->pluck('cnt');
+    $returnCustomers = (int) DB::table('users')
+        ->where('created_at', '<', $start6Months)
+        ->count();
 
-    $firstTimeCustomers = $customerSalesCounts->filter(fn($c) => $c == 1)->count();
-    $returnCustomers = $customerSalesCounts->filter(fn($c) => $c >= 2)->count();
-} else {
-    // fallback if no customer id column exists
-    $firstTimeCustomers = 0;
-    $returnCustomers = 0;
-}
-$year = now()->year;
 
-// sales grouped by month (sale_date)
-$salesByMonth = DB::table('sales')
-    ->selectRaw('MONTH(sale_date) as m, SUM(total_amount) as total')
-    ->whereYear('sale_date', $year)
-    ->groupByRaw('MONTH(sale_date)')
-    ->pluck('total', 'm');
-
-// purchase grouped by month (po_date)
-$purchaseByMonth = DB::table('purchase_orders')
-    ->selectRaw('MONTH(po_date) as m, SUM(total_amount) as total')
-    ->whereYear('po_date', $year)
-    ->groupByRaw('MONTH(po_date)')
-    ->pluck('total', 'm');
-
-$labels = [];
-$salesData = [];
-$purchaseData = [];
-
-for ($m = 1; $m <= 12; $m++) {
-    $labels[] = \Carbon\Carbon::create()->month($m)->format('M');
-    $salesData[] = (float) ($salesByMonth[$m] ?? 0);
-    $purchaseData[] = (float) ($purchaseByMonth[$m] ?? 0);
-}
-
-// Prepare 12 months
-$months = [];
-$salesData = [];
-$purchaseData = [];
-
-for ($i = 1; $i <= 12; $i++) {
-    $months[] = date('M', mktime(0, 0, 0, $i, 1));
-    $salesData[] = $salesChart[$i] ?? 0;
-    $purchaseData[] = $purchaseChart[$i] ?? 0;
-}
     return view('admin.dashboard', compact(
         'thisMonthSales',
         'thisMonthPurchase',
@@ -183,18 +172,21 @@ for ($i = 1; $i <= 12; $i++) {
         'lowStock',
         'topSelling',
         'recentSales',
-        'months',
-'salesData',
-'purchaseData',
-   'chartData',
-   'firstTimeCustomers',
-'returnCustomers',
-'labels',
-'salesData',
-'purchaseData'
 
- ));
-    }
+        'months',
+        'salesData',
+        'purchaseData',
+        'chartData',
+
+        'firstTimeCustomers',
+        'returnCustomers',
+
+    'totalSales',
+    'totalPurchase',
+    'totalexpense',
+    'invoiceDue',
+    ));
+}
     public function userRole(Request $request)
     {
 
@@ -220,11 +212,12 @@ for ($i = 1; $i <= 12; $i++) {
 
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username',
             'email' => 'nullable|email|max:255',
-            'role' => 'required|in:admin,user',
+            'role' => 'required|in:admin,inventory,cashier',
             'password' => 'required|min:8|confirmed',
         ]);
 
@@ -277,40 +270,32 @@ for ($i = 1; $i <= 12; $i++) {
 
     public function update(Request $request, $id)
     {
-        try {
-            // Find the user
-            $user = User::findOrFail($id);
+       $user = User::findOrFail($id);
 
-            // Validation
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'nullable|email|unique:users,email,'.$user->id,
-                'username' => 'required|string|max:255|unique:users,username,'.$user->id,
-                'role' => 'required|in:admin,user',
-                'password' => 'nullable|string|min:8|confirmed',
-            ]);
+    // Validation
+    $validated = $request->validate([
+        'name'     => 'required|string|max:255',
+        'email'    => 'nullable|email|unique:users,email,' . $user->id,
+        'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+        'role'     => 'required|in:admin,inventory,cashier',
+        'password' => 'nullable|string|min:8|confirmed',
+    ]);
 
-            // Update user data
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->username = $request->username;
-            $user->role = $request->role;
+    // Update user data
+    $user->name     = $validated['name'];
+    $user->email    = $validated['email'] ?? null;
+    $user->username = $validated['username'];
+    $user->role     = $validated['role'];
 
-            if ($request->filled('password')) {
-                $user->password = Hash::make($request->password);
-            }
+    if (!empty($validated['password'])) {
+        $user->password = \Illuminate\Support\Facades\Hash::make($validated['password']);
+    }
 
-            $user->save();
+    $user->save();
 
-            return redirect()->route('admin.user-role')->with('success', 'User updated successfully.');
-
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            \Log::error('User update failed: '.$e->getMessage());
-
-            // Redirect back with input and friendly error message
-            return redirect()->back()->withInput()->with('error', 'Something went wrong while updating the user.');
-        }
+    return redirect()
+        ->route('admin.user-role')
+        ->with('success', 'User updated successfully.');
     }
 
     public function edit($id)

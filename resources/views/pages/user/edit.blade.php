@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body p-4">
-                            <form method="POST" action="{{ auth()->user()->roleRoute('user.update', $user->id) }}">
+                              <form method="POST" action="{{ route('admin.user.update', $user->id) }}">
                                 @csrf
                                 @method('PUT')
 
@@ -70,8 +70,10 @@
                                             name="role" required>
                                             <option value="admin"
                                                 {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                            <option value="user"
-                                                {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>Cashier</option>
+                                            <option value="inventory"
+                                                {{ old('role', $user->role) == 'inventory' ? 'selected' : '' }}>Inventory</option>
+                                            <option value="cashier"
+                                                {{ old('role', $user->role) == 'cashier' ? 'selected' : '' }}>Cashier</option>
                                         </select>
                                         @error('role')
                                             <div class="invalid-feedback">{{ $message }}</div>

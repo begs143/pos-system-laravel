@@ -57,7 +57,7 @@
                             </div>
                             <div>
                                 <h2 class="mb-3 fs-6">Total Expenses</h2>
-                                <h3 class="fw-bold mb-0">₱{{ number_format($totalExpenses ?? 0, 2) }}</h3>
+                                <h3 class="fw-bold mb-0">₱{{ number_format($totalExpense ?? 0, 2) }}</h3>
                                 <p class="text-info mb-0 small"></p>
                             </div>
                         </div>

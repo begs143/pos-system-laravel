@@ -51,14 +51,25 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
-    }
 
+
+    }
+       public function isInventory()
+    {
+        return $this->role === 'inventory';
+    }
+    public function isCashier(): bool
+{
+    return $this->role === 'cashier';
+}
     public function roleRoute(string $baseRouteName, $parameters = [])
     {
-        if ($this->isAdmin()) {
+       if ($this->isAdmin()) {
             $prefix = 'admin.';
+        } else if ($this->role === 'inventory') {
+            $prefix = 'inventory.';
         } else {
-            $prefix = 'user.';
+            $prefix = 'cashier.';
         }
 
         return route($prefix.$baseRouteName, $parameters);

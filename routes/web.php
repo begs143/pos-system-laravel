@@ -16,13 +16,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ChartController;
 
 Route::fallback(function () {
-
+    return redirect()->route('login');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Dashboard Routes     // User Role Routes
     Route::get('/admin/dashboard', [AdminController::class, 'index'])
         ->name('admin.dashboard');
+
         Route::get('/admin/charts/sales-purchase', [ChartController::class, 'salesPurchase'])
     ->name('admin.charts.sales-purchase');
     Route::get('/admin/users', [AdminController::class, 'userRole'])->name('admin.user-role');
@@ -91,9 +92,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 });
 
-Route::middleware(['auth', 'role:user'])->group(function () {
-    // Dashboard Routes
-    Route::get('/dashboard', [UserController::class, 'index'])
+Route::middleware(['auth', 'role:user,inventory,cashier'])->group(function () {
+    Route::get('/user/dashboard', [UserController::class, 'index'])
         ->name('user.dashboard');
 
     // Sale Routes

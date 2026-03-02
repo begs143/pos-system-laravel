@@ -10,7 +10,23 @@ class DashboardController extends Controller
 {
  public function index()
     {
+ $user = auth()->user();
 
+    if (!$user) {
+        return redirect()->route('login');
+    }
+
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');      // /admin/dashboard
+    }
+
+    // cashier / inventory / other → user dashboard
+    return redirect()->route('user.dashboard');           // /user/dashboard
+
+
+
+
+    // /user/dashboard
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth   = Carbon::now()->endOfMonth();
 
@@ -129,7 +145,6 @@ class DashboardController extends Controller
             }
         }
 
-        // ---------- Recent sales ----------
         $recentSales = collect();
         if (Schema::hasTable('sales')) {
             $recentSales = DB::table('sales')
@@ -138,7 +153,7 @@ class DashboardController extends Controller
                 ->get();
         }
 
-        // Simple counts (for your "Overall Information" bottom numbers)
+
         $suppliersCount = $countFrom('suppliers');
         $customersCount = $countFrom('users'); // If you have a customers table later, change this.
         $ordersCount    = $countFrom('sales');
@@ -154,6 +169,9 @@ class DashboardController extends Controller
             'suppliersCount',
             'customersCount',
             'ordersCount'
+
+
+
         ));
     }
 }

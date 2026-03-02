@@ -23,7 +23,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body p-4">
-                            <form method="POST" action="{{ auth()->user()->roleRoute('user.store') }}">
+                            <form method="POST" action="{{ route('admin.user.store') }}">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
@@ -65,8 +65,9 @@
                                         <select class="form-select @error('role') is-invalid @enderror" id="role"
                                             name="role" required>
 
-                                            <option value="admin">Admin</option>
-                                            <option value="user">Cashier</option>
+   <option value="admin">Admin</option>
+    <option value="inventory">Inventory Personnel</option>
+    <option value="cashier">Cashier Personnel</option>
                                         </select>
                                         @error('role')
                                             <div class="invalid-feedback">{{ $message }}</div>
