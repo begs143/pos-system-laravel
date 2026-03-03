@@ -62,16 +62,24 @@ class User extends Authenticatable
 {
     return $this->role === 'cashier';
 }
-    public function roleRoute(string $baseRouteName, $parameters = [])
+   public function roleRoute(string $name)
     {
-       if ($this->isAdmin()) {
-            $prefix = 'admin.';
-        } else if ($this->role === 'inventory') {
-            $prefix = 'inventory.';
-        } else {
-            $prefix = 'cashier.';
-        }
+   switch ($this->role) {
+        case 'admin':
+            // Admin always uses admin.* routes
+            return route('admin.' . $name);
 
-        return route($prefix.$baseRouteName, $parameters);
+        case 'cashier':
+            // Cashier uses user.* routes (dashboard, sale-orders, etc.)
+            return route('user.' . $name);
+
+        case 'inventory':
+            // Inventory shares admin routes for inventory/category/units/purchase
+            // so we also use admin.* here
+            return route('admin.' . $name);
+
+        default:
+            abort(403, 'No route mapping for this role.');
     }
+}
 }

@@ -11,21 +11,72 @@ use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ChartController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-Route::fallback(function () {
-    return redirect()->route('login');
+
+// ====================
+// HOME ( / )
+// ====================
+Route::get('/', function () {
+    // If not logged in, go to login page
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    // If logged in, go to the role-based dashboard
+    return redirect()->route('dashboard');
+})->name('home');
+
+// ====================
+// ROLE-BASED DASHBOARD ( /dashboard )
+// ====================
+Route::get('/dashboard', function () {
+    $user = Auth::user();
+
+    if (!$user) {
+        return redirect()->route('login');
+    }
+
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if (in_array($user->role, ['cashier', 'inventory'])) {
+        return redirect()->route('user.dashboard');
+    }
+
+    // any other weird role
+    abort(403);
+})->middleware('auth')->name('dashboard');
+
+// ADMIN DASHBOARD
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])
+        ->name('admin.dashboard');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    // Dashboard Routes     // User Role Routes
+// USER DASHBOARD (for cashier + inventory)
+Route::middleware(['auth', 'role:user,inventory,cashier'])->group(function () {
+    Route::get('/user/dashboard', [UserController::class, 'index'])
+        ->name('user.dashboard');
+});
+
+
+
+
+
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])
         ->name('admin.dashboard');
 
-        Route::get('/admin/charts/sales-purchase', [ChartController::class, 'salesPurchase'])
-    ->name('admin.charts.sales-purchase');
+    Route::get('/admin/charts/sales-purchase', [ChartController::class, 'salesPurchase'])
+        ->name('admin.charts.sales-purchase');
+
+    // User Role Routes
     Route::get('/admin/users', [AdminController::class, 'userRole'])->name('admin.user-role');
     Route::get('/admin/user/create', [AdminController::class, 'create'])->name('admin.user.create');
     Route::post('/admin/user/create', [AdminController::class, 'store'])->name('admin.user.store');
@@ -53,7 +104,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('admin.supplier.update');
     Route::delete('/admin/supplier/{id}', [SupplierController::class, 'destroy'])->name('admin.supplier.destroy');
 
-    // Inventory Route
+    // Inventory Routes
     Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
     Route::get('/admin/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create');
     Route::post('/admin/inventory/create', [InventoryController::class, 'store'])->name('admin.inventory.store');
@@ -80,7 +131,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/sale-order/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('admin.sale-orders.view');
     Route::get('/admin/sale-order/transactions', [SaleOrderController::class, 'transactions'])->name('admin.sale-orders.transactions');
 
-    // Purchase Route
+    // Purchase Routes
     Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase-orders.index');
     Route::get('/admin/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase-orders.create');
     Route::post('/admin/purchase-orders/create', [PurchaseOrderController::class, 'store'])->name('admin.purchase-orders.store');
@@ -88,26 +139,91 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase-orders.destroy');
     Route::get('/admin/purchase-orders/{id}/view', [PurchaseOrderController::class, 'downloadPDF'])->name('admin.purchase-orders.pdf');
 
-    // Route Logs
+    // Logs
     Route::get('/admin/logs', [LogController::class, 'index'])->name('admin.logs.index');
 });
 
-Route::middleware(['auth', 'role:user,inventory,cashier'])->group(function () {
-    Route::get('/user/dashboard', [UserController::class, 'index'])
-        ->name('user.dashboard');
 
-    // Sale Routes
-    Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('user.sale-orders.index');
-    Route::get('/sale-orders/summary', [SaleOrderController::class, 'summary'])->name('user.sale-orders.summary');
-    Route::post('/sale-orders/summary', [SaleOrderController::class, 'store'])->name('user.sale-orders.store');
-    Route::get('/sale-orders/{sale}/details', [SaleOrderController::class, 'details'])->name('user.sale-orders.details');
-    Route::get('/sale-orders/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('user.sale-orders.view');
-    Route::get('/sale-orders/transactions', [SaleOrderController::class, 'transactions'])->name('user.sale-orders.transactions');
+Route::middleware(['auth', 'role:admin,inventory'])->group(function () {
 
-    // Route Logs
-    Route::get('/user/logs', [LogController::class, 'index'])->name('user.logs.index');
+    // Product: Category & Unit
+    Route::get('/admin/category', [CategoryController::class, 'index'])->name('admin.category.index');
+    Route::post('/admin/category', [CategoryController::class, 'store'])->name('admin.category.store');
+    Route::put('/admin/category/{category}', [CategoryController::class, 'update'])->name('admin.category.update');
+    Route::delete('/admin/category/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+
+    Route::get('/admin/units', [UnitController::class, 'index'])->name('admin.units.index');
+    Route::post('/admin/units', [UnitController::class, 'store'])->name('admin.units.store');
+    Route::put('/admin/units/{unit}', [UnitController::class, 'update'])->name('admin.units.update');
+    Route::delete('/admin/units/{id}', [UnitController::class, 'destroy'])->name('admin.units.destroy');
+
+    // Inventory / Stock
+    Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
+    Route::get('/admin/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create');
+    Route::post('/admin/inventory/create', [InventoryController::class, 'store'])->name('admin.inventory.store');
+    Route::get('/admin/inventory/{inventory}/edit', [InventoryController::class, 'edit'])->name('admin.inventory.edit');
+    Route::put('/admin/inventory/{product}/edit', [InventoryController::class, 'update'])->name('admin.inventory.update');
+    Route::delete('/admin/inventory/{id}', [InventoryController::class, 'destroy'])->name('admin.inventory.destroy');
+    Route::get('/admin/inventory/export-excel', [InventoryController::class, 'export'])->name('admin.inventory.export');
+
+    // Stock Movement
+    Route::get('/admin/stock-movement', [StockMovementController::class, 'index'])->name('admin.stockmovement.index');
+    Route::post('/admin/stock-movement', [StockMovementController::class, 'store'])->name('admin.stockmovement.store');
+    Route::get('/admin/stock-movement-list', [StockMovementController::class, 'show'])->name('admin.stockmovement.show');
+
+    // Purchase Order & Supplier
+    Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase-orders.index');
+    Route::get('/admin/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase-orders.create');
+    Route::post('/admin/purchase-orders/create', [PurchaseOrderController::class, 'store'])->name('admin.purchase-orders.store');
+    Route::put('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('admin.purchase-orders.update');
+    Route::delete('/admin/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase-orders.destroy');
+    Route::get('/admin/purchase-orders/{id}/view', [PurchaseOrderController::class, 'downloadPDF'])->name('admin.purchase-orders.pdf');
+
+    Route::get('/admin/supplier', [SupplierController::class, 'index'])->name('admin.supplier.index');
+    Route::get('/admin/supplier/create', [SupplierController::class, 'create'])->name('admin.supplier.create');
+    Route::post('/admin/supplier/create', [SupplierController::class, 'store'])->name('admin.supplier.store');
+    Route::get('/admin/supplier/{supplier}/edit', [SupplierController::class, 'edit'])->name('admin.supplier.edit');
+    Route::put('/admin/supplier/{supplier}/edit', [SupplierController::class, 'update'])->name('admin.supplier.update');
+    Route::delete('/admin/supplier/{id}', [SupplierController::class, 'destroy'])->name('admin.supplier.destroy');
 });
 
 
+Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
+
+
+    Route::middleware('role:cashier')->group(function () {
+        Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('user.sale-orders.index');
+        Route::get('/sale-orders/summary', [SaleOrderController::class, 'summary'])->name('user.sale-orders.summary');
+        Route::post('/sale-orders/summary', [SaleOrderController::class, 'store'])->name('user.sale-orders.store');
+        Route::get('/sale-orders/{sale}/details', [SaleOrderController::class, 'details'])->name('user.sale-orders.details');
+        Route::get('/sale-orders/{sale}/transactions', [SaleOrderController::class, 'downloadPDF'])->name('user.sale-orders.view');
+        Route::get('/sale-orders/transactions', [SaleOrderController::class, 'transactions'])->name('user.sale-orders.transactions');
+    });
+});
+// ====================
+// ADMIN DASHBOARD + ADMIN ROUTES
+// ====================
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])
+        ->name('admin.dashboard');
+
+    // ... all your other admin routes here
+});
+
+
+// ====================
+// USER DASHBOARD (cashier + inventory)
+// ====================
+Route::middleware(['auth', 'role:cashier,inventory'])->group(function () {
+    Route::get('/user/dashboard', [UserController::class, 'index'])
+        ->name('user.dashboard');
+
+    // ... routes for sale-orders, inventory-view for these roles, etc.
+});
 
 require __DIR__.'/auth.php';
+
+
+Route::fallback(function () {
+    abort(404);
+});

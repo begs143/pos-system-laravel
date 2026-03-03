@@ -7,7 +7,6 @@
                 <div class="col-12">
                     <div class="mb-6">
                         <h1 class="fs-3 mb-1">Dashboard</h1>
-                        <p>Your main content goes here…</p>
                     </div>
                 </div>
             </div>
@@ -22,8 +21,8 @@
                             </div>
                             <div>
                                 <h2 class="mb-3 fs-6">Total Sales</h2>
-                                <h3 class="fw-bold mb-0">$25,000</h3>
-                                <p class="text-primary mb-0 small">+5% since last month</p>
+                                <h3 class="fw-bold mb-0">₱{{ number_format($totalSales ?? 0, 2) }}</h3>
+                                <p class="text-primary mb-0 small"></p>
                             </div>
                         </div>
                     </div>
@@ -40,8 +39,8 @@
                             </div>
                             <div>
                                 <h2 class="mb-3 fs-6">Total Purchase</h2>
-                                <h3 class="fw-bold mb-0">$18,000</h3>
-                                <p class="text-success mb-0 small">+22% since last month</p>
+                                <h3 class="fw-bold mb-0">₱{{ number_format($totalPurchase ?? 0, 2) }}</h3>
+                                <p class="text-success mb-0 small"></p>
                             </div>
                         </div>
                     </div>
@@ -58,8 +57,8 @@
                             </div>
                             <div>
                                 <h2 class="mb-3 fs-6">Total Expenses</h2>
-                                <h3 class="fw-bold mb-0">$9,000</h3>
-                                <p class="text-info mb-0 small">+10% since last month</p>
+                                <h3 class="fw-bold mb-0">₱{{ number_format($totalExpense ?? 0, 2) }}</h3>
+                                <p class="text-info mb-0 small"></p>
                             </div>
                         </div>
                     </div>
@@ -76,8 +75,8 @@
                             </div>
                             <div>
                                 <h2 class="mb-3 fs-6">Invoice Due</h2>
-                                <h3 class="fw-bold mb-0">$25,000</h3>
-                                <p class="text-warning mb-0 small">+35% since last month</p>
+                                <h3 class="fw-bold mb-0">₱{{ number_format($invoiceDue ?? 0, 2) }}</h3>
+                                <p class="text-warning mb-0 small"></p>
                             </div>
                         </div>
                     </div>
@@ -86,84 +85,101 @@
                 </div>
 
             </div>
-            <div class="row g-3 mb-3">
-                <div class="col-lg-4 col-12">
-                    <div class="card">
-                        <div class="card-body p-4">
-                            <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
-                                <div>
-                                    <h3 class="fw-bold h4">$25,458</h3>
-                                    <span>Total Profit</span>
-                                </div>
-                                <div>
-                                    <i class="ti ti-layers-subtract fs-1 text-primary"></i>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center small">
-                                <div class="text-muted"><span class="text-success">+35%</span> vs Last Month</div>
-                                <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
-                            </div>
-                        </div>
+          <div class="row g-3 mb-3">
+    {{-- TOTAL PROFIT --}}
+    <div class="col-lg-4 col-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
+                    <div>
+                        <h3 class="fw-bold h4">₱{{ number_format($totalProfit ?? 0, 2) }}</h3>
+                        <span>Total Profit</span>
                     </div>
-
-                </div>
-                <div class="col-lg-4 col-12">
-                    <div class="card">
-                        <div class="card-body p-4">
-                            <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
-                                <div>
-                                    <h3 class="fw-bold h4">$45,458</h3>
-                                    <span>Total Payment Returns</span>
-                                </div>
-                                <div>
-                                    <i class="ti ti-credit-card fs-1 text-danger"></i>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center small">
-                                <div class="text-muted"><span class="text-danger">-20%</span> vs Last Month</div>
-                                <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
-                            </div>
-                        </div>
+                    <div>
+                        <i class="ti ti-layers-subtract fs-1 text-primary"></i>
                     </div>
-
                 </div>
-                <div class="col-lg-4 col-12">
-                    <div class="card">
-                        <div class="card-body p-4">
-                            <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
-                                <div>
-                                    <h3 class="fw-bold h4">$34,458</h3>
-                                    <span>Total Expenses</span>
-                                </div>
-                                <div>
-                                    <i class="ti ti-cash-banknote fs-1 text-warning"></i>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center small">
-                                <div class="text-muted"><span class="text-warning">-20%</span> vs Last Month</div>
-                                <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
-                            </div>
-                        </div>
+                <div class="d-flex justify-content-between align-items-center small">
+                    <div class="text-muted">
+                        <span class="{{ ($profitChangePercent ?? 0) >= 0 ? 'text-success' : 'text-danger' }}">
+                            {{ ($profitChangePercent ?? 0) >= 0 ? '+' : '' }}{{ number_format($profitChangePercent ?? 0, 0) }}%
+                        </span>
+                        vs Last Month
                     </div>
-
+                    <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
                 </div>
-
             </div>
+        </div>
+    </div>
+               <div class="col-lg-4 col-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
+                    <div>
+                        <h3 class="fw-bold h4">₱{{ number_format($totalReturns ?? 0, 2) }}</h3>
+                        <span>Total Payment Returns</span>
+                    </div>
+                    <div>
+                        <i class="ti ti-credit-card fs-1 text-danger"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center small">
+                    <div class="text-muted">
+                        <span class="{{ ($returnsChangePercent ?? 0) >= 0 ? 'text-success' : 'text-danger' }}">
+                            {{ ($returnsChangePercent ?? 0) >= 0 ? '+' : '' }}{{ number_format($returnsChangePercent ?? 0, 0) }}%
+                        </span>
+                        vs Last Month
+                    </div>
+                    <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
+                    <div>
+                        <h3 class="fw-bold h4">₱{{ number_format($totalExpenseAmount ?? 0, 2) }}</h3>
+                        <span>Total Expenses</span>
+                    </div>
+                    <div>
+                        <i class="ti ti-cash-banknote fs-1 text-warning"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center small">
+                    <div class="text-muted">
+                        <span class="{{ ($expenseChangePercent ?? 0) >= 0 ? 'text-success' : 'text-warning' }}">
+                            {{ ($expenseChangePercent ?? 0) >= 0 ? '+' : '' }}{{ number_format($expenseChangePercent ?? 0, 0) }}%
+                        </span>
+                        vs Last Month
+                    </div>
+                    <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
             <div class="row g-3 mb-3">
                 <div class="col-12 col-lg-6">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center bg-transparent px-4 py-3">
                             <h3 class="h5 mb-0">Sales vs Purchase</h3>
                             <div>
-                                <select class="form-select form-select-sm">
-                                    <option selected>This Year</option>
-                                    <option>This Month</option>
-                                    <option>This Week</option>
-                                </select>
+                              <select id="salesPurchaseFilter" class="form-select form-select-sm">
+    <option value="year" selected>This Year</option>
+    <option value="month">This Month</option>
+    <option value="week">This Week</option>
+</select>
                             </div>
                         </div>
                         <div class="card-body p-4">
-
+                                <script>
+  window.salesPurchaseLabels = @json($labels ?? []);
+  window.salesPurchaseSales = @json($salesData ?? []);
+  window.salesPurchasePurchase = @json($purchaseData ?? []);
+</script>
                             <div id="salesPurchaseChart"></div>
                         </div>
                     </div>
@@ -194,7 +210,7 @@
                                     <div class="row">
                                         <div class="col-6 border-end">
                                             <div class="text-center ">
-                                                <h2 class="mb-1">5.5K</h2>
+                                             <h2 class="mb-1">{{ number_format($firstTimeCustomers ?? 0) }}</h2>
                                                 <p class="text-success mb-2">First Time</p>
                                                 <span class="badge bg-success"><i
                                                         class="ti ti-arrow-up-left me-1"></i>25%</span>
@@ -202,7 +218,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="text-center">
-                                                <h2 class="mb-1">3.5K</h2>
+                                              <h2 class="mb-1">{{ number_format($returnCustomers ?? 0) }}</h2>
                                                 <p class="text-warning mb-2">Return</p>
                                                 <span class="badge bg-success badge-xs d-inline-flex align-items-center"><i
                                                         class="ti ti-arrow-up-left me-1"></i>21%</span>
@@ -215,15 +231,15 @@
                             </div>
                             <div class="row text-center border-top mt-4 pt-4">
                                 <div class="col-4 border-end">
-                                    <h3 class="fw-bold mb-2">6987</h3>
+                                   <h3 class="fw-bold mb-2">{{ number_format($suppliersCount ?? 0) }}</h3>
                                     <small class="text-secondary">Suppliers</small>
                                 </div>
                                 <div class="col-4 border-end">
-                                    <h3 class="fw-bold mb-2">4896</h3>
+                                    <h3 class="fw-bold mb-2">{{ number_format($customersCount ?? 0) }}</h3>
                                     <small class="text-secondary">Customers</small>
                                 </div>
                                 <div class="col-4">
-                                    <h3 class="fw-bold mb-2">487</h3>
+                                    <h3 class="fw-bold mb-2">{{ number_format($ordersCount ?? 0) }}</h3>
                                     <small class="text-secondary">Orders</small>
                                 </div>
                             </div>
@@ -237,3 +253,7 @@
         </div>
     </main>
 @endsection
+
+
+
+

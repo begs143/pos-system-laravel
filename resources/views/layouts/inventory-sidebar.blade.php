@@ -1,27 +1,21 @@
-<!-- ADMIN SIDEBAR -->
+<!-- SIDEBAR – INVENTORY -->
 <aside id="sidebar" class="sidebar overflow-auto">
     @php
         $user = auth()->user();
         $role = $user->role ?? null;
 
-        $isAdmin = $role === 'admin';
-
-        // ORDER & SALES (admin only here)
-        $saleIndexRoute   = route('admin.sale-orders.index');
-        $saleTransRoute   = route('admin.sale-orders.transactions');
-        $saleIndexRouteIs = request()->routeIs('admin.sale-orders.index');
-        $saleTransRouteIs = request()->routeIs('admin.sale-orders.transactions');
-
-        // LOGS
-        $logsRoute   = route('admin.logs.index');
-        $logsRouteIs = request()->routeIs('admin.logs.index');
+        $isInventory = $role === 'inventory';
+        $isAdmin     = $role === 'admin'; // in case admin reuses this sidebar
     @endphp
 
     <div class="logo-area">
         <a href="{{ url('/dashboard') }}" class="d-inline-flex">
             <img
-                src="{{ asset('assets/images/logo.svg') }}"
-                alt="Logo">
+                src="data:image/svg+xml,%3csvg%20width='62'%20height='67'%20viewBox='0%200%2062%2067'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M30.604%2066.378L0.00805664%2048.1582V35.7825L30.604%2054.0023V66.378Z'%20fill='%23302C4D'/%3e%3cpath%20d='M61.1996%2048.1582L30.604%2066.378V54.0023L61.1996%2035.7825V48.1582Z'%20fill='%23E66239'/%3e%3cpath%20d='M30.5955%200L0%2018.2198V30.5955L30.5955%2012.3757V0Z'%20fill='%23657E92'/%3e%3cpath%20d='M61.191%2018.2198L30.5955%200V12.3757L61.191%2030.5955V18.2198Z'%20fill='%23A3B2BE'/%3e%3cpath%20d='M30.604%2048.8457L0.00805664%2030.6259V18.2498L30.604%2036.47V48.8457Z'%20fill='%23302C4D'/%3e%3cpath%20d='M61.1996%2030.6259L30.604%2048.8457V36.47L61.1996%2018.2498V30.6259Z'%20fill='%23E66239'/%3e%3c/svg%3e"
+                alt="" width="24">
+            <span class="logo-text ms-2">
+                <img src="{{ asset('assets/images/logo.svg') }}" alt="">
+            </span>
         </a>
     </div>
 
@@ -30,7 +24,7 @@
         <li class="px-3 py-2">
             <small class="nav-text text-muted">Main</small>
         </li>
-    <li>
+     <li>
     <a class="nav-link {{ request()->routeIs('admin.dashboard', 'user.dashboard') ? 'active' : '' }}"
        href="{{ route('dashboard') }}">
         <i class="ti ti-home"></i>
@@ -38,7 +32,7 @@
     </a>
 </li>
 
-        {{-- PRODUCT --}}
+        {{-- PRODUCT: Category, Unit, Add Product (Admin + Inventory share same routes) --}}
         <li class="px-3 pt-4 pb-2">
             <small class="nav-text text-muted">Product</small>
         </li>
@@ -76,36 +70,10 @@
             </a>
         </li>
         <li>
-            <a class="nav-link {{ request()->routeIs('admin.inventory.manage') ? 'active' : '' }}"
-               href="{{ route('admin.inventory.index') }}">
-                <i class="ti ti-adjustments"></i>
-                <span class="nav-text">Stock Manage</span>
-            </a>
-        </li>
-        <li>
             <a class="nav-link {{ request()->routeIs('admin.stockmovement.*') ? 'active' : '' }}"
                href="{{ route('admin.stockmovement.index') }}">
                 <i class="ti ti-arrows-transfer-down"></i>
                 <span class="nav-text">Stock Movements</span>
-            </a>
-        </li>
-
-        {{-- ORDER & SALES --}}
-        <li class="px-3 pt-4 pb-2">
-            <small class="nav-text text-muted">Order &amp; Sales</small>
-        </li>
-        <li>
-            <a class="nav-link {{ $saleIndexRouteIs ? 'active' : '' }}"
-               href="{{ $saleIndexRoute }}">
-                <i class="ti ti-shopping-cart"></i>
-                <span class="nav-text">Sale Order</span>
-            </a>
-        </li>
-        <li>
-            <a class="nav-link {{ $saleTransRouteIs ? 'active' : '' }}"
-               href="{{ $saleTransRoute }}">
-                <i class="ti ti-file-text"></i>
-                <span class="nav-text">S.O Transactions</span>
             </a>
         </li>
 
@@ -117,40 +85,14 @@
             <a class="nav-link {{ request()->routeIs('admin.purchase-orders.index') ? 'active' : '' }}"
                href="{{ route('admin.purchase-orders.index') }}">
                 <i class="ti ti-receipt"></i>
-                <span class="nav-text">Purchase Order</span>
+                <span class="nav-text">Purchase Orders</span>
             </a>
         </li>
         <li>
             <a class="nav-link {{ request()->routeIs('admin.supplier.index') ? 'active' : '' }}"
                href="{{ route('admin.supplier.index') }}">
                 <i class="ti ti-users"></i>
-                <span class="nav-text">Supplier</span>
-            </a>
-        </li>
-
-        {{-- MAINTENANCE --}}
-        <li class="px-3 pt-4 pb-2">
-            <small class="nav-text text-muted">Maintenance</small>
-        </li>
-        <li>
-            <a class="nav-link {{ request()->routeIs('admin.user-role') ? 'active' : '' }}"
-               href="{{ route('admin.user-role') }}">
-                <i class="ti ti-user-cog"></i>
-                <span class="nav-text">User Role</span>
-            </a>
-        </li>
-        <li>
-            <a class="nav-link {{ request()->routeIs('admin.report.index') ? 'active' : '' }}"
-               href="{{ route('admin.report.index') }}">
-                <i class="ti ti-report-analytics"></i>
-                <span class="nav-text">Reports</span>
-            </a>
-        </li>
-        <li>
-            <a class="nav-link {{ $logsRouteIs ? 'active' : '' }}"
-               href="{{ $logsRoute }}">
-                <i class="ti ti-alert-circle"></i>
-                <span class="nav-text">Logs</span>
+                <span class="nav-text">Suppliers</span>
             </a>
         </li>
 
