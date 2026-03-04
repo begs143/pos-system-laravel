@@ -1,4 +1,4 @@
-  <!-- TOPBAR -->
+
   <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
       <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm ">
           <i class="ti ti-layout-sidebar-left-expand"></i>
@@ -54,11 +54,15 @@
                           @empty
                               <li class="p-3 text-center text-muted">No recent activity</li>
                           @endforelse
-
-                          <li class="px-4 py-3 text-center">
-                              <a href="{{ auth()->user()->roleRoute('logs.index') }}" class="text-primary">View all
-                                  activity logs</a>
-                          </li>
+<li class="px-4 py-3 text-center">
+    @if(auth()->user() && auth()->user()->role === 'admin')
+        <a href="{{ route('admin.logs.index') }}" class="text-primary">
+            View all activity logs
+        </a>
+    @else
+        <span class="text-muted">Activity log is admin only</span>
+    @endif
+</li>
                       </ul>
                   </div>
               </li>
@@ -108,3 +112,4 @@
       </div>
 
   </nav>
+

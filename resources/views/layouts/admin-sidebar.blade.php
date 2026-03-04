@@ -146,13 +146,13 @@
                 <span class="nav-text">Reports</span>
             </a>
         </li>
-        <li>
-            <a class="nav-link {{ $logsRouteIs ? 'active' : '' }}"
-               href="{{ $logsRoute }}">
-                <i class="ti ti-alert-circle"></i>
-                <span class="nav-text">Logs</span>
-            </a>
-        </li>
+   <li>
+    <a class="nav-link {{ request()->routeIs('admin.logs.index') ? 'active' : '' }}"
+       href="{{ route('admin.logs.index') }}">
+        <i class="ti ti-alert-circle"></i>
+        <span class="nav-text">Logs</span>
+    </a>
+</li>
 
         {{-- ACCOUNT --}}
         <li class="px-3 pt-4 pb-2">
