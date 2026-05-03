@@ -1,34 +1,18 @@
-🧾 POS System (Laravel)
+## 🚀 Features
+* **Inventory Management:** Add, edit, and track product stock levels in real-time.
+* **Sales Tracking:** Generate invoices and record daily transactions.
+* **User Authentication:** Secure login system with different access levels (Admin/Staff).
+* **PDF Reporting:** Generate professional sale order receipts in PDF format.
+* **Responsive Dashboard:** Clean UI for monitoring business performance at a glance.
 
-📌 Description
-A Point of Sale (POS) system developed using Laravel framework for managing sales, inventory, and transactions.
+## 🛠️ Technical Stack
+* **Backend:** Laravel 10.x
+* **Database:** MySQL
+* **Frontend:** Blade Templates & Bootstrap
+* **Tools:** Git for version control
 
- ⚙️ Features
-- User authentication (Admin/Cashier)
-- Sales transaction processing
-- Inventory management
-- Sales reports
-- Dashboard overview
+## ⚙️ Installation Guide
 
-🛠️ Technologies Used
-- Laravel (PHP Framework)
-- MySQL
-- Blade Templates
-- Bootstrap / CSS
-
- 📸 Screenshots
-<img width="1890" height="924" alt="image" src="https://github.com/user-attachments/assets/9be447ef-9dcf-4c02-9672-5bdb325e460f" />
-
-
- 🚀 Installation Guide
-
-1. Clone the repository
-2. Run:
-   composer install
-3. Copy .env file:
-   cp .env.example .env
-4. Configure database in .env
-5. Run migrations:
-   php artisan migrate
-6. Start server:
-   php artisan serve
+1. **Clone the project**
+   ```bash
+   git clone [https://github.com/begs143/pos-system-laravel.git](https://github.com/begs143/pos-system-laravel.git)
