@@ -37,6 +37,10 @@ class AdminController extends Controller
     $lastMonthPurchase = (float) DB::table('purchase_orders')
         ->whereBetween('po_date', [$startLastMonth->toDateString(), $endLastMonth->toDateString()])
         ->sum('total_amount');
+
+
+
+
     $totalExpenseAmount = $thisMonthPurchase;
 
 

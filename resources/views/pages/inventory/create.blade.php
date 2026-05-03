@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="row">
 
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-3 mb-3">
                                         <label for="category_id" class="form-label">Category</label>
 
                                         <select class="form-select @error('category_id') is-invalid @enderror"

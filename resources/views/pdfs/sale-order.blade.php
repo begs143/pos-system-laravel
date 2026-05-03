@@ -1,247 +1,117 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-
-    <title>{{ $title ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ public_path('assets/css/invoice.css') }}" type="text/css">
-
-</head>
+    <title>Receipt</title>
 
 <style>
-    body {
-        font-family: DejaVu Sans, sans-serif;
+    /* Remove the 'size' declaration from @page, let the driver handle the roll length */
+    @page {
+        margin: 0;
+    }
+
+    html, body {
+        width: 58mm;
+        /* Ensure height only takes up exactly what it needs */
+        height: auto;
+        margin: 0;
+        padding: 0;
+        font-family: monospace;
+        font-size: 15px;
+    }
+
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 2px;
+    }
+
+    th {
+        border-bottom: 1px dashed black;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px dashed black;
+        margin: 4px 0;
     }
 </style>
+</head>
 
-<body>
+<body onload="window.print()">
 
+    <!-- LOGO + HEADER -->
+    <div class="text-center">
+        <img src="{{ public_path('assets/images/logo.png') }}" width="80">
+        <strong>My Company Inc.</strong><br>
+        123 Business Street<br>
+        Phone: +63 912 345 6789<br>
+    </div>
 
+    <hr>
 
-    <table class="table-no-border">
+    <!-- INFO -->
+    <div>
+        Invoice: {{ $sale->invoice_no }}<br>
+      Date: {{ $sale->sale_date->timezone('Asia/Manila')->format('m/d/Y h:i A') }}<br>
+        Cashier: {{ $sale->cashier?->name ?? '-' }}
+    </div>
 
-        <tr>
+    <hr>
 
-            <td class="width-70">
-
-
-
-                <img src="{{ public_path('assets/images/logo.png') }}" alt="" width="200" />
-
-            </td>
-
-            <td class="width-50">
-
-                <h2>Invoice: {{ $sale->invoice_no }}</h2>
-
-            </td>
-
-        </tr>
-
+    <!-- ITEMS -->
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($sale->items as $item)
+                <tr>
+                    <td>{{ $item->product->name ?? '-' }}</td>
+                    <td class="text-right">{{ $item->quantity }}</td>
+                    <td class="text-right">
+                        {{ number_format($item->selling_price * $item->quantity, 2) }}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
 
-
-
-    <div class="margin-top">
-
-        <table class="table-no-border">
-
-            <tr>
-
-                <td class="width-55">
-                    <div><strong>My Company Inc.</strong></div>
-                    <div>123 Business Street, City, Country</div>
-                    <div>Phone: +63 912 345 6789 | Email: info@mycompany.com</div>
-                    <div>Date: {{ $sale->sale_date ? \Carbon\Carbon::parse($sale->sale_date)->format('F d, Y') : '-' }}
-                    </div>
-                    <div>Cashier ID: {{ $sale->cashier?->id ?? '-' }}</div>
-
-
-
-                </td>
-
-                <td class="width-45">
-
-                    <div><strong>-</strong></div>
-                    <div>-</div>
-                    <div>-</div>
-
-                </td>
-
-            </tr>
-
-        </table>
-
-    </div>
-
-
-
-    <div>
-
-        <table class="product-table">
-
-            <thead>
-
-                <tr>
-
-                    <th class="width-25">
-
-                        <strong>Product</strong>
-
-                    </th>
-
-                    <th class="width-25">
-
-                        <strong>Qty</strong>
-
-                    </th>
-
-                    <th class="width-25">
-
-                        <strong>Unit Price</strong>
-
-                    </th>
-
-                    <th class="width-25">
-
-                        <strong>Total</strong>
-
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-
-
-                @foreach ($sale->items as $item)
-                    <tr>
-
-                        <td class="width-25">
-
-                            {{ $item->product->name ?? '-' }}
-
-                            {{-- {{ $value['quantity'] }} --}}
-
-                        </td>
-
-                        <td class="width-25">
-
-                            {{ $item->quantity }}
-
-                            {{-- {{ $value['description'] }} --}}
-
-                        </td>
-
-                        <td class="width-25">
-
-                            ₱{{ number_format($item->selling_price, 2) }}
-
-                            {{-- {{ $value['price'] }} --}}
-
-                        </td>
-
-                        <td class="width-25">
-
-                            ₱{{ number_format($item->selling_price * $item->quantity, 2) }}
-
-                            {{-- {{ $value['price'] }} --}}
-
-                        </td>
-
-                    </tr>
-                @endforeach
-
-
-            </tbody>
-
-            <tfoot>
-
-                <tr>
-
-                    <td class="width-70" colspan="3">
-
-                        SUBTOTAL:
-
-                    </td>
-
-                    <td class="width-15">
-
-                        ₱{{ number_format($sale->total_amount, 2) }}
-
-                    </td>
-
-                </tr>
-
-                <tr>
-
-                    <td class="width-70" colspan="3">
-
-                        <strong>TOTAL AMOUNT:</strong>
-
-                    </td>
-
-                    <td class="width-25">
-
-                        ₱{{ number_format($sale->total_amount, 2) }}
-
-                    </td>
-
-                </tr>
-
-                <tr>
-
-                    <td class="width-70" colspan="3">
-
-                        Amount Paid:
-
-                    </td>
-
-                    <td class="width-25">
-
-                        ₱{{ number_format($sale->amount_paid, 2) }}
-
-                    </td>
-                </tr>
-
-
-
-
-                <tr>
-
-                    <td class="width-70" colspan="3">
-
-                        Change:
-
-                    </td>
-
-                    <td class="width-25">
-
-                        ₱{{ number_format($sale->change, 2) }}
-
-                    </td>
-                </tr>
-
-            </tfoot>
-
-        </table>
-
-    </div>
-
-    <div class="footer-div">
-
-        <p>THANK YOU <br />HAPPY TO SERVE</p>
-
+    <hr>
+
+    <!-- TOTALS -->
+    <table>
+        <tr>
+            <td>Subtotal</td>
+            <td class="text-right">{{ number_format($sale->total_amount, 2) }}</td>
+        </tr>
+        <tr>
+            <td>Cash</td>
+            <td class="text-right">{{ number_format($sale->amount_paid, 2) }}</td>
+        </tr>
+        <tr>
+            <td><strong>Change</strong></td>
+            <td class="text-right"><strong>{{ number_format($sale->change, 2) }}</strong></td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- FOOTER -->
+    <div class="text-center">
+        THANK YOU!<br>
+        PLEASE COME AGAIN
     </div>
 
 </body>
-
 </html>

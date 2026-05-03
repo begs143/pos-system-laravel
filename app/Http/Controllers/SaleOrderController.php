@@ -299,14 +299,9 @@ class SaleOrderController extends Controller
 
     public function downloadPDF($id)
     {
-        // Load Sale with items and cashier
-        $sale = Sale::with(['items.product', 'cashier'])->findOrFail($id);
 
-        $pdf = Pdf::loadView('pdfs.sale-order', compact('sale'))
-            ->setPaper('A4', 'portrait')
-            ->setOption('isHtml5ParserEnabled', true)
-            ->setOption('isRemoteEnabled', true);
+    $sale = Sale::with(['items.product', 'cashier'])->findOrFail($id);
 
-        return $pdf->stream('sale-order-'.$sale->invoice_no.'.pdf');
+    return view('pdfs.sale-order', compact('sale'));
     }
 }

@@ -42,7 +42,7 @@
                                            <div>123 Business Street, City, Country</div>
                                            <div>Phone: +63 912 345 6789 | Email: info@mycompany.com</div>
                                            <div>Invoice #: <strong>{{ $sale->invoice_no }}</strong></div>
-                                           <div>Date: {{ \Carbon\Carbon::parse($sale->sale_date)->format('d-m-Y H:i') }}
+                                           <div>Date: {{ $sale->sale_date->timezone('Asia/Manila')->format('m/d/Y h:i A') }}
                                            </div>
                                            <div>CID#: {{ $sale->cashier?->id ?? 'N/A' }}</div>
                                        </div>

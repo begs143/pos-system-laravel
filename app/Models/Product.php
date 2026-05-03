@@ -17,6 +17,7 @@ class Product extends Model
         'selling_price',
         'reorder_level',
         'is_active',
+        'department',
     ];
 
     public function stockBalance()

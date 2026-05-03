@@ -165,6 +165,7 @@
                                                </a>
                                            </td>
                                            <td>{{ $product->product_code ?? '-' }}</td>
+
                                            <td>{{ $product->category->name ?? '-' }}</td>
                                            <td>₱{{ number_format($product->cost_price, 2) }}</td>
                                            <td>₱{{ number_format($product->selling_price, 2) }}</td>
